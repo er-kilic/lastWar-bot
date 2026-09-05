@@ -1,0 +1,156 @@
+{
+  "game": {
+    "executable_path": "~/AppData/Local/FunFly/Last War-Survival Game/LastWarLauncher.exe",
+    "window_title_contains": "Last War",
+    "screen_area_ratio": 0.2,
+    "window_wait_seconds": 30,
+    "resize_retries": 8,
+    "resize_retry_delay_seconds": 1.0
+  },
+  "startup_actions": {
+    "enabled": true,
+    "click_delay_seconds": 0.5,
+    "click_coordinates": [
+      [1383, 908],
+      [791, 128],
+      [1090, 235]
+    ],
+    "press_escape_after_clicks": true
+  },
+  "bot": {
+    "enabled": false,
+    "image_confidence": 0.75,
+    "scan_interval_seconds": 1.0
+  },
+  "game_monitor": {
+    "region": {
+      "top_left": [701, 421],
+      "bottom_right": [1033, 591]
+    },
+    "popup_scan_region": {
+      "top_left": [701, 421],
+      "bottom_right": [1033, 591]
+    },
+    "disconnect_scan_region": {
+      "top_left": [500, 240],
+      "bottom_right": [900, 550]
+    },
+    "escape_interval_seconds": 15,
+    "popup_image_confidence": 0.7,
+    "exit_template": "oyundanCikNew.png",
+    "exit_template_scales": [0.8, 0.9, 1.0, 1.1],
+    "disconnect_template": "disconnect.png",
+    "disconnect_template_scales": [0.7, 0.8, 0.9, 1.0, 1.1],
+    "disconnect_click_coordinate": [860, 544],
+    "restart_delay_seconds": 60
+  },
+  "ocr": {
+    "tesseract_cmd": "C:/Program Files/Tesseract-OCR/tesseract.exe",
+    "language": "tur+eng",
+    "scale": 3,
+    "page_segmentation_mode": 6,
+    "target_match_threshold": 0.75
+  },
+  "controls": {
+    "stop_shortcut": "s",
+    "coordinate_shortcut": "j",
+    "text_scan_shortcut": "o",
+    "debug_screenshot_shortcut": "t",
+    "escape_monitor_shortcut": "e"
+  },
+  "scan_region": {
+    "top_left": [936, 798],
+    "bottom_right": [1026, 869]
+  },
+"scan_cases": {
+    "announcement": {
+      "templates": ["duyuru.png"],
+      "image_confidence": 0.55,
+      "template_scales": [0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1],
+      "action": "click_then_escape",
+      "escape_delay_seconds": 0.5
+    },
+    "hand": {
+      "templates": ["el.png"],
+      "image_confidence": 0.60,
+      "template_scales": [0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1],
+      "action": "click_coordinate",
+      "click_coordinate": [860, 774]
+    },
+    "new": {
+      "templates": ["new.png"],
+      "image_confidence": 0.60,
+      "template_scales": [0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1],
+      "action": "click_then_escape",
+      "escape_delay_seconds": 0.5
+    },
+    "excavation": {
+      "templates": ["kazi.png"],
+      "image_confidence": 0.65,
+      "template_scales": [0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0, 1.05],
+      "action": "click_then_text_match",
+      "target_texts": [
+        "Test Uçuşu Arızası",
+        "Hazineyi kaz"
+      ],
+      "text_scan_delay_seconds": 0.5,
+      "text_region": {
+        "top_left": [604, 165],
+        "bottom_right": [1105, 846]
+      },
+      "follow_up_action": "excavation_attack",
+      "follow_up_click_delay_seconds": 0.5,
+      "follow_up_coordinates": [
+        [852, 442],
+        [856, 592]
+      ]
+    },
+    "clover": {
+      "templates": ["yonca.png"],
+      "image_confidence": 0.78,
+      "template_scales": [0.9, 0.95, 1.0, 1.05, 1.1],
+      "action": "click_then_text_match_escape",
+      "target_texts": ["Şanslı Hediye", "anslı Hediye"],
+      "text_scan_delay_seconds": 1.0,
+      "escape_delay_seconds": 0.0,
+      "escape_press_count": 2,
+      "escape_between_presses_seconds": 0.1,
+      "click_before_escape": {
+        "delay_seconds": 0.3,
+        "coordinate": [874, 644]
+      },
+      "text_region": {
+        "top_left": [604, 165],
+        "bottom_right": [1105, 846]
+      }
+    }
+  },
+  "text_scan_region": {
+    "top_left": [604, 165],
+    "bottom_right": [1105, 846]
+  },
+  "post_attack": {
+    "duration_seconds": 45,
+    "click_coordinate": [856, 460],
+    "click_interval_seconds": 1.0,
+    "template": "paylas.png"
+  },
+  "activities": {
+    "gold_zombie": {
+      "enabled": false,
+      "shortcut": "z",
+      "description": "Altin zombi avlar",
+      "template_patterns": [
+        "gold_zombie/*.png"
+      ]
+    },
+    "excavation": {
+      "enabled": true,
+      "shortcut": "k",
+      "description": "Kazi yapar",
+      "template_patterns": [
+        "excavation/*.png"
+      ]
+    }
+  }
+}

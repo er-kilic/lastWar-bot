@@ -1,0 +1,8 @@
+PyAutoGUI
+PyGetWindow
+opencv-python
+numpy
+Pillow
+pynput
+pytesseract
+pyinstaller

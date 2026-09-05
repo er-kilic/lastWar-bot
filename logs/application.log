@@ -1,0 +1,1940 @@
+2026-09-05 10:14:00,433 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pytesseract\pytesseract.py", line 275, in run_tesseract
+    proc = subprocess.Popen(cmd_args, **subprocess_args())
+  File "C:\Users\erdem\AppData\Local\Programs\Python\Python314\Lib\subprocess.py", line 1039, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\AppData\Local\Programs\Python\Python314\Lib\subprocess.py", line 1553, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+                             # no special security
+                             ^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+                             cwd,
+                             ^^^^
+                             startupinfo)
+                             ^^^^^^^^^^^^
+  File "c:\Users\erdem\.vscode\extensions\ms-python.debugpy-2026.6.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\_pydev_bundle\pydev_monkey.py", line 911, in new_CreateProcess
+    return getattr(_subprocess, original_name)(app_name, cmd_line, *args)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] Sistem belirtilen dosyayı bulamıyor
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 406, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 389, in run_bot
+    scan_text_region(config["text_scan_region"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 232, in scan_text_region
+    text = pytesseract.image_to_string(screenshot, lang="eng").strip()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pytesseract\pytesseract.py", line 486, in image_to_string
+    return {
+           ~
+    ...<2 lines>...
+        Output.STRING: lambda: run_and_get_output(*args),
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }[output_type]()
+    ~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pytesseract\pytesseract.py", line 489, in <lambda>
+    Output.STRING: lambda: run_and_get_output(*args),
+                           ~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pytesseract\pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+    ~~~~~~~~~~~~~^^^^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pytesseract\pytesseract.py", line 280, in run_tesseract
+    raise TesseractNotFoundError()
+pytesseract.pytesseract.TesseractNotFoundError: tesseract is not installed or it's not in your PATH. See README file for more information.
+2026-09-05 10:16:02,043 [INFO] Metin taramasi: Dunya Turkce Diello | WE Lv.e7 & [>qwejrearinemuppsts |  | © Paylas |  | [Wan2JAli 0 O (Savas Alani #2279 |  | X:486 Y:374] |  | 10:06 |  | QYIPD Lv.26 [Nos }Princess Phobear | 9 Paylas |  | [Wan2]Ali 0 O (Savas Alani #2279 |  | %:486 Y:374) |  | YEED Lv.26 @[NoDs}Princess Phobear |  | | With bigger guys reinforcing |  | bir mesajt geri aldi |  | >) (ERED Lv.29 [WFPKINOXEN |  | G | Gy |  | LADY |  | Ty |  | ay) 2D Lv.27 G [EVEX|xsSilentSoulx | Q Paylas |  | [T4NK]Krishna Beri (Savas Alani #2279 | X:682 Y:28) |  | G1
+2026-09-05 10:16:24,264 [INFO] Metin taramasi: m € | Sohbet ittifak Duyurusu |  | goa Sv.120 Kiyamet Gezgini |  | & |  | 396 kilometre Saree |  uzakikea | Baslatici: OZMOND o |  | 09:55 |  | ame) 22 Lv.30 ©; chak777 |  | © Paylas |  | Test Ucusu Arizasi (Savas Alam #2279 | X:526 V:408) |  | (Quax467 bir mesajt geri ald: |  | 09:57 |  | (526,408) konumunda bulunan Chak777 Drone | onarildi ve cok sayida dil birakts. Simdi gidin ve | onlan alin!
+2026-09-05 10:17:55,820 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 425, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 398, in run_bot
+    resize_and_position_game(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 128, in resize_and_position_game
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 10:19:19,435 [INFO] Metin taramasi:
+m €
+Sohbet ittifak Duyurusu
+
+—=— SUTEUHRiemer Cees
+
+9226 kilometre =
+uzaklikta
+Baslatici: OZMOND
+
+09:55
+
+QUIP® Lv.30 G chak777
+
+Q Paylas
+
+Test Ucusu Arizasi (Savas Alani #2279
+26 Y:408)
+
+(Quax467 bir mesajt geri ald:
+
+09:57
+
+inan Chak777 Drone
+idin ve
+
+(526,408) konumunda
+
+onarildi ve cok sayida Odiil birakts.
+y
+
+onlart al
+
+cCeal
+2026-09-05 10:19:40,683 [INFO] Metin taramasi:
+Sohbet ittifak Duyurusu
+ewe soy eo
+
+9 Paylas
+
+Hazineyi kaz (Savas Alani #2279 X:541
+Y:435)
+
+YrEDLv.28@/saroiray
+
+Q Paylas } |
+
+Hazineyji kaz (Savas Alani #2279 X:541
+Y:435)
+
+)) Lv.306/ vukii>
+
+@NOXii?t 50} @Hikari 4S
+@Pattrick Stars @Joseph
+Gordon Levit
+
+| Salty Vib3X'm (541,435)'daki hazinesi gkarildi!
+
+Sh OS I ws PRAY Huntor nrinre
+2026-09-05 10:20:09,086 [INFO] Metin taramasi:
+def
+
+def
+
+resize_and_position_game(window, conf
+screen_width, screen_height = pyautog
+screen_area_ratio = config["game"]["s
+side_ratio = math.sqrt(screen_area_ra
+width = int(screen_width * side_ratio
+height = int(screen_height * side_rat
+
+window. restore()
+window.moveTo(@, @)
+window.resizeTo(width, height)
+window. activate()
+bring_game_to_front (window)
+print(
+f"Oyun penceresi {width}x{height}
+f"(ekran alaninin %{screen_area_r
+
+bring_game_to_front (window):
+"""Pencereyi Windows masaustunde goru
+window. restore()
+
+window. activate()
+2026-09-05 10:20:15,482 [INFO] Metin taramasi:
+def
+
+def
+
+resize_and_position_game(window, conf
+screen_width, screen_height = pyautog
+screen_area_ratio = config["game"]["s
+side_ratio = math.sqrt(screen_area_ra
+width = int(screen_width * side_ratio
+height = int(screen_height * side_rat
+
+window. restore()
+window.moveTo(@, @)
+window.resizeTo(width, height)
+window. activate()
+bring_game_to_front (window)
+print(
+f"Oyun penceresi {width}x{height}
+f"(ekran alaninin %{screen_area_r
+
+bring_game_to_front (window):
+"""Pencereyi Windows masaustunde goru
+window. restore()
+
+window. activate()
+2026-09-05 10:23:01,051 [INFO] Metin taramasi:
+APP LOG PATH = LOGS DIR / "application.lo
+STARTUP LOG PATH = LOGS DIR / "startup.lo
+APP LOGGER = logging.getlogger("last war
+STARTUP LOGGER = logging.getlogger("last
+def configure_logging():
+LOGS DIR.mkdir(parents-True, exist ok
+formatter = logging.Formatter(
+"%(asctime)s [%(levelname)s] %(me
+)
+APP_LOGGER. setLevel (logging. INFO)
+app handler = logging. FileHandler (APP
+app_handler.setFormatter (formatter )
+APP LOGGER.addHandler(app handler)
+STARTUP LOGGER.setLevel(logging.INFO)
+startup handler = logging.FileHandler
+STARTUP LOG PATH,
+encoding="utf-8",
+)
+startup handler. setFormatter(formatte
+2026-09-05 10:25:47,888 [INFO] Metin taramasi:
+Sohbet Ittifak Duyurusu
+396 kilometre t =
+© uzaklıkta Lİ
+Baslatıcı: ÖZMOND
+09:55
+— a Kk g Lv. 30 Gg Chak777
+7 "| © Paylaş
+mee) Test Uçuşu Arızası (Savaş Alanı #2279
+X:526 Y:408)
+Quax467 bir mesajı geri aldı
+09:57
+iğ | X
+(526,408) konumunda bulunan Chak777 Drone
+onarıldı ve çok sayıda Ödül bıraktı. Şimdi gidin ve
+onları alın!
+| evil Ea
+ieee) Şanslı seri! Hazineyi talep ederken çifte ödül kazandır *
+hil Lv.29 evil Ez| v
+2026-09-05 10:26:04,303 [INFO] Metin taramasi:
+Sohbet ittifak Duyurusu
+mai Lv.28 G/ Salty Vib3X
+uy | © Paylas
+i: Hazineyi kaz (Savaş Alanı #2279 X:541
+Y:435)
+WE Lw.28G/SALDIRAY al
+© Paylaş a |
+Hazineyi kaz (Savas Alani #2279 X:541 —
+Y:435)
+ya Lv.30 G Yuki
+(FR (Gi Yukirp
+b. ENOXiiSt SO ©Hikari 2X
+@Pattrick Stars @Joseph
+Gordon Levit
+Al
+O Gİ
+Salty Vib3X'ın (541,435)'daki hazinesi çıkarıldı! & N
+To Long time ago x <2
+2026-09-05 10:26:25,084 [INFO] Metin taramasi:
+APP LOG PATH = LOGS DIR / "application.lo
+STARTUP LOG PATH = LOGS DIR / "startup.lo
+APP LOGGER = logging.getlogger("last war
+STARTUP LOGGER = logging.getlogger("last
+def configure_logging():
+LOGS DIR.mkdir(parents-True, exist ok
+formatter = logging.Formatter(
+"%(asctime)s [%(levelname)s] %(me
+)
+APP_LOGGER. setLevel (logging. INFO)
+app handler = logging. FileHandler (APP
+app_handler.setFormatter (formatter )
+APP LOGGER.addHandler(app handler)
+STARTUP LOGGER.setLevel(logging.INFO)
+startup handler = logging.FileHandler
+STARTUP LOG PATH,
+encoding="utf-8",
+)
+startup handler. setFormatter(formatte
+2026-09-05 10:27:40,510 [INFO] Metin taramasi:
+Sohbet Ittifak Duyurusu
+wi -:.ağ
+a EN
+06:33
+os © Paylas
+Le ey [ARBz]Aedcre (Savas Alani #2286 X:453
+Y:497)
+06:39
+| ae Lv.29 Salty Nyx
+== anslı Hediye
+A Az önce 1.000 Cesaret Rozeti'u
+aldım. Gelin bu şansı paylaşalım!
+20/20 @ 20
+Sel Lv.30 Zentusuken
+> thanks
+—— AR
+QB
+m Lv.29 SimBlade
+CEN VİZE Baş DAİ 2 aınnTmurnhu
+2026-09-05 10:27:53,311 [INFO] Metin taramasi:
+APP LOG PATH = LOGS DIR / "application.lo
+STARTUP LOG PATH = LOGS DIR / "startup.lo
+APP LOGGER = logging.getlogger("last war
+STARTUP LOGGER = logging.getlogger("last
+def configure_logging():
+LOGS DIR.mkdir(parents-True, exist ok
+formatter = logging.Formatter(
+"%(asctime)s [%(levelname)s] %(me
+)
+APP_LOGGER. setLevel (logging. INFO)
+app handler = logging. FileHandler (APP
+app_handler.setFormatter (formatter )
+APP LOGGER.addHandler(app handler)
+STARTUP LOGGER.setLevel(logging.INFO)
+startup handler = logging.FileHandler
+STARTUP LOG PATH,
+encoding="utf-8",
+)
+startup handler. setFormatter(formatte
+2026-09-05 10:27:55,106 [INFO] Metin taramasi:
+APP LOG PATH = LOGS DIR / "application.lo
+STARTUP LOG PATH = LOGS DIR / "startup.lo
+APP LOGGER = logging.getlogger("last war
+STARTUP LOGGER = logging.getlogger("last
+def configure_logging():
+LOGS DIR.mkdir(parents-True, exist ok
+formatter = logging.Formatter(
+"%(asctime)s [%(levelname)s] %(me
+)
+APP_LOGGER. setLevel (logging. INFO)
+app handler = logging. FileHandler (APP
+app_handler.setFormatter (formatter )
+APP LOGGER.addHandler(app handler)
+STARTUP LOGGER.setLevel(logging.INFO)
+startup handler = logging.FileHandler
+STARTUP LOG PATH,
+encoding="utf-8",
+)
+startup handler. setFormatter(formatte
+2026-09-05 10:30:06,939 [INFO] Metin taramasi:
+CONFIG PATH = PARAMETERS DIR / "config.js
+LOGS DIR = ROOT / "logs"
+APP LOG PATH = LOGS DIR / "application.lo
+STARTUP LOG PATH = LOGS DIR / "startup.lo
+APP LOGGER = logging.getlogger("last war
+STARTUP LOGGER = logging.getlogger("last
+def configure_logging():
+LOGS DIR.mkdir(parents-True, exist ok
+formatter = logging.Formatter(
+"%(asctime)s [%(levelname)s] %(me
+)
+APP_LOGGER. setLevel (logging. INFO)
+app handler = logging. FileHandler (APP
+app_handler.setFormatter (formatter )
+APP LOGGER.addHandler(app handler)
+STARTUP LOGGER.setLevel(logging.INFO)
+startup handler = logging.FileHandler
+STARTUP LOG PATH,
+encodins="utf-8".
+2026-09-05 10:41:10,294 [INFO] Metin taramasi:
+. ——«
+Sohbet İttifak Duyurusu
+10:32
+yin 8 Lv.30 Gg whoahbud
+i Gizli Görevler rol’
+Vc pa >
+% — ([MBDV] Chi Huy 29a282282'ın Gizli
+Görevler'i (Savas Alanı #2282 X:410
+Y:173)
+ör 8 Lv.30 Gi whoahbud
+ne Gizli Görevler AA
+Qa) [MIDE] Lady Rubie'n Gizli Görevler'i
+(Savaş Alanı #2282 X:425 Y:647)
+10:38
+EZ YER Lv. 30 Gi whoahbud
+MY Şanslı Hediye
+p Az önce 5,000 Elmas'u aldım.
+10/20 Gelin bu şansı paylaşan!
+Ça) Lv. 30 Zentusuken
+== | thanks | na
+Qe SİN
+Lv.29 SimBlade
+fs} | _
+2026-09-05 10:43:31,838 [INFO] Metin taramasi:
+Sohbet ittifak Duyurusu
+ği
+E-1 | 1don'tknow what these guys
+think they are going to do
+with their rally. lol ay
+Qi
+6.83 Lv.28670Z2MOND
+{ a Ralli Daveti
+Le) . Sv.120 Kiyamet Gezgini
+9 396 kilometre
+uzaklıkta | |
+Başlatıcı: O2MOND Doldu
+09:55
+mami “ws Ly. 30G/Chak777
+z | © Paylas
+meee) Test Uçuşu Arızası (Savaş Alanı #2279
+X:526 Y:408)
+Quax467 bir mesajı geri aldı
+09:57
+. eo “a
+2026-09-05 10:43:45,228 [INFO] Metin taramasi:
+Sohbet Ittifak Duyurusu
+Lv.28 6) Salty Vib3X
+A
+NS Sli
+| | 3 Lv.29 @ Quax467
+a
+RG
+mi Lu.28 G Salty Vib3X
+E | © Paylas
+Hazineyi kaz (Savaş Alanı #2279 X:541
+Y:435)
+YEP Lv.286/SALDIRAY el
+© Paylas ai |
+Satpal
+Hazineyi kaz (Savaş Alanı #2279 X:541 —“
+Y:435)
+(FR Lv.306) Yuki»
+Ky @NOXiio! S0{ @Hikari cK es
+@Pattrick Stars @Joseph
+Gordon Levit
+2026-09-05 11:10:01,719 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 765, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 746, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 596, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 187, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 1400 - Geçersiz pencere işleci.
+2026-09-05 11:11:54,282 [INFO] Metin taramasi:
+DE SİNE ay >
+7. - 4 > mp ' ' . ~ W =
+¢ a Lee a
+İN ei esi
+TR e EN e
+“Re, 2 EPA. NN q gi lk ie: 4
+2026-09-05 11:17:01,108 [INFO] Metin taramasi:
+of « °
+oy
+=
+
+di. -
+AelMadarda Jf
+13 |
+2026-09-05 11:17:36,490 [INFO] Metin taramasi:
+7 Le Pea! x i al
+ey 2c Vi — #
+
+eet a
+: ‘ < A v ete:
+
+: a : = ¥ a N
+mr. , .. 1? Po
+y“ a çe > ;
+Yad x. ; vd v 4
+ates (ea RagingHulk En | #23
+
+Pm
+
+8 4
+
+a . - ..
+- , e
+2026-09-05 11:17:52,410 [INFO] Metin taramasi:
+| yy an LA ,3 iğ ee >
+- . eae + }
+* * 2. Ad ar
+: ? “a, t o . ..
+#2283 [WT2]BALIM C- 4%s © #2283
+0 ef ik ” .. >
+0 . S *. UP) 5 i 7 UT .
+i Le ‘ “4 8 . a ca
+N % . = ; eo . ae
+ar e, .. _ a
+a. * +: } ir e > e | Ree Z
+ JLUT2JALZİ Sİ Ly Abt ee e
+f . vg “ &
+© * ç 4 . . go
+7° oe a
+i 4 « .— d ie oy R
+b ki |
+2026-09-05 11:30:57,649 [INFO] Metin taramasi:
+x . ‘ie , —
+a Zz '
+oo . Oy"
+p | N a . . Ni '
+2B (5) Gi oo Sa
+_ - Se 6 (NWO2)Buaya Betina rm
+ği eT) SOO,
+' ! ais e 8 ae
+U Ki < A Ni ‘ . - |
+4 rf s ig . A } -b ; tt
+a ar oe ae a
+—— “a St -F*... J “og 7 oF
+#2286 [GANz]PIKACu- @ ..
+Du i 27 _
+2026-09-05 11:31:01,030 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 777, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 758, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 603, in click_matching_templates
+    scan_cases(window, config)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 584, in scan_cases
+    run_scan_case(
+    ~~~~~~~~~~~~~^
+        case_name,
+        ^^^^^^^^^^
+    ...<5 lines>...
+        config,
+        ^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 406, in run_scan_case
+    found = scan_text_region(
+        case["text_region"],
+        case.get("ocr", {}),
+        case.get("target_texts"),
+    )
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 494, in scan_text_region
+    data = pytesseract.image_to_data(
+        processed,
+    ...<2 lines>...
+        output_type=pytesseract.Output.DICT,
+    )
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pytesseract\pytesseract.py", line 596, in image_to_data
+    return {
+           ~
+    ...<6 lines>...
+        Output.STRING: lambda: run_and_get_output(*args),
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }[output_type]()
+    ~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pytesseract\pytesseract.py", line 602, in <lambda>
+    Output.DICT: lambda: file_to_dict(run_and_get_output(*args), '\t', -1),
+                                      ~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pytesseract\pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+    ~~~~~~~~~~~~~^^^^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pytesseract\pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (3, 'libpng error: IDAT: incorrect data check Error in pixReadMemPng: internal png error Error in pixReadMem: png: no pix returned src_pix != nullptr:Error:Assert failed:in file ../../../src/ccstruct/imagedata.cpp, line 222 ObjectCache(00007ffd62300860)::~ObjectCache(): WARNING! LEAK! object 00000231a30cec20 still has count 1 (id C:\\Program Files\\Tesseract-OCR/tessdata/tur.traineddatalstm-punc-dawg) ObjectCache(00007ffd62300860)::~ObjectCache(): WARNING! LEAK! object 00000231a30dbb80 still has count 1 (id C:\\Program Files\\Tesseract-OCR/tessdata/tur.traineddatalstm-word-dawg) ObjectCache(00007ffd62300860)::~ObjectCache(): WARNING! LEAK! object 00000231a30ceba0 still has count 1 (id C:\\Program Files\\Tesseract-OCR/tessdata/tur.traineddatalstm-number-dawg) ObjectCache(00007ffd62300860)::~ObjectCache(): WARNING! LEAK! object 00000231a30d9d20 still has count 1 (id C:\\Program Files\\Tesseract-OCR/tessdata/eng.traineddatalstm-punc-dawg) ObjectCache(00007ffd62300860)::~ObjectCache(): WARNING! LEAK! object 00000231a313eee0 still has count 1 (id C:\\Program Files\\Tesseract-OCR/tessdata/eng.traineddatalstm-word-dawg) ObjectCache(00007ffd62300860)::~ObjectCache(): WARNING! LEAK! object 00000231a313ef50 still has count 1 (id C:\\Program Files\\Tesseract-OCR/tessdata/eng.traineddatalstm-number-dawg)')
+2026-09-05 12:13:56,384 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 777, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 758, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 597, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 188, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 12:14:06,038 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 777, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 758, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 597, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 188, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 12:15:01,856 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 783, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 764, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 603, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 194, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 12:16:31,427 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 783, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 764, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 603, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 194, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 12:17:46,399 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 783, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 764, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 603, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 194, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 13:25:12,879 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 811, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 792, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 631, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 194, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 13:26:18,509 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 811, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 792, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 631, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 194, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 13:26:40,011 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 811, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 792, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 631, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 194, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 13:28:09,764 [INFO] Metin taramasi:
+Sohbet İttifak Duyurusu
+| 2 Şanslı Hediye
+Az önce 5,000 Elmas'ua A 12 yeni mesaj
+Gelin bu şansı paylaşalım.
+9/20 şanlı paylaşa 6
+mmm © Lv. 30 pO Hikari Wi
+| | Şanslı Hediye
+Az önce 5,000 Elmas'u aldım.
+Gelin bu şansı paylaşalım!
+9/20 şansı paylas v7
+To eee Lv.27 @y xSilentSoulx
+. — m
+amm Lv.28 49 Oceanuss
+we
+| li Lv.28 @ Salty Badger
+ne Sl
+We ud Lw.30 $9 Hikari 3 . ‘ é
+wo EY
+2026-09-05 13:28:10,233 [INFO] OCR hedefi bulundu ve tiklandi: Şanslı Hediye (859, 229)
+2026-09-05 13:29:39,096 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 820, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 801, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 640, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 194, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 1400 - Geçersiz pencere işleci.
+2026-09-05 13:33:46,465 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 920, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 896, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 724, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 252, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 1400 - Geçersiz pencere işleci.
+2026-09-05 13:35:43,763 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 922, in <module>
+    finally:
+        ^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 882, in run_bot
+    next_escape_at = time.monotonic()
+                             ~~~~~~^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 246, in restart_game_after_disconnect
+    timeout = config["game"]["window_wait_seconds"]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 167, in enforce_game_window_size
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 254, in bring_game_to_front
+    if window is None:
+    ^^^^^^^^^^^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 13:42:05,250 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1342.png
+2026-09-05 13:42:05,551 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1342.png
+2026-09-05 13:42:06,619 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1342.png
+2026-09-05 13:42:06,784 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1342.png
+2026-09-05 13:42:07,869 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1342.png
+2026-09-05 13:42:08,051 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1342.png
+2026-09-05 13:42:09,127 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1342.png
+2026-09-05 13:42:09,519 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1342.png
+2026-09-05 13:42:10,593 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1342.png
+2026-09-05 13:42:10,952 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1342.png
+2026-09-05 13:42:12,028 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1342.png
+2026-09-05 13:42:12,204 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1342.png
+2026-09-05 13:42:13,273 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1342.png
+2026-09-05 13:42:13,454 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1342.png
+2026-09-05 13:42:14,527 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1342.png
+2026-09-05 13:42:14,685 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1342.png
+2026-09-05 13:42:15,753 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1342.png
+2026-09-05 13:42:15,918 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1342.png
+2026-09-05 13:42:16,987 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1342.png
+2026-09-05 13:42:17,153 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1342.png
+2026-09-05 13:42:18,227 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1342.png
+2026-09-05 13:42:18,405 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1342.png
+2026-09-05 13:42:19,473 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1342.png
+2026-09-05 13:42:19,636 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1342.png
+2026-09-05 13:42:20,711 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1342.png
+2026-09-05 13:42:20,868 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1342.png
+2026-09-05 13:42:21,920 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1342.png
+2026-09-05 13:42:22,086 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1342.png
+2026-09-05 13:42:23,155 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1342.png
+2026-09-05 13:42:23,286 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1342.png
+2026-09-05 13:42:24,364 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1342.png
+2026-09-05 13:42:24,540 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1342.png
+2026-09-05 13:42:25,606 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1342.png
+2026-09-05 13:42:25,769 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1342.png
+2026-09-05 13:43:38,653 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1343.png
+2026-09-05 13:43:38,959 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1343.png
+2026-09-05 13:43:40,029 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1343.png
+2026-09-05 13:43:40,229 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1343.png
+2026-09-05 13:43:41,299 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1343.png
+2026-09-05 13:43:41,457 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1343.png
+2026-09-05 13:43:42,532 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1343.png
+2026-09-05 13:43:42,707 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1343.png
+2026-09-05 13:43:43,783 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1343.png
+2026-09-05 13:43:43,941 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1343.png
+2026-09-05 13:43:45,016 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1343.png
+2026-09-05 13:43:45,194 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1343.png
+2026-09-05 13:43:46,262 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1343.png
+2026-09-05 13:43:46,424 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1343.png
+2026-09-05 13:43:47,492 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1343.png
+2026-09-05 13:43:47,658 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1343.png
+2026-09-05 13:43:48,733 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1343.png
+2026-09-05 13:43:48,892 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1343.png
+2026-09-05 13:43:49,959 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\cikis_arama_05092026_1343.png
+2026-09-05 13:43:50,128 [INFO] Tarama ekran goruntusu kaydedildi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\screenShots\kazi_arama_05092026_1343.png
+2026-09-05 14:08:56,696 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 953, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 901, in run_bot
+    enforce_game_window_size(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 167, in enforce_game_window_size
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 275, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 14:27:21,897 [INFO] Metin taramasi:
+OS, A KE ae mS ed
+Me) Og. Ole e Be
+SS OREO Saas
+j az >. we Ng “Ri
+M3 İş
+a . Kos > Dİ ay. Ps 2 ; i
+| we ~ ‘ Gİ < y i >
+2026-09-05 14:27:25,134 [INFO] Metin taramasi:
+FA SA APA oR! Sa
+a eek. OF rn ©
+
+G 4 p ‘ meet ; » ; oe j vu
+A é Ne SN ğ oe ag!
+\ ği “1. Re
+> İN Sgt ahi
+
+Ps fy
+
+N R ” N | ie ©
+eth )
+2026-09-05 14:27:28,328 [INFO] Metin taramasi:
+hn, li i
+Np
+Gs: ae |
+y * “a. =~ °
+Ç | 2 2
+Pan ' | ‘
+a g* vt 7 a ‘ Ms
+2026-09-05 14:27:31,440 [INFO] Metin taramasi:
+EN om ae GO anı <
+© ç =) gh yyy İV ,»
+. oan - : a
+Wp “a. ie
+ay d : . . > Pree N
+yee, A Og :
+We o ‘NS > 3 Dı
+2026-09-05 14:32:41,771 [INFO] Metin taramasi:
+AYM, Ni N Rk? Sa
+DA ağ
+ae OF 2G . oly ; a 7
+©: ge Yo DF
+ame int
+"BROS CB” eg “Si,
+N Me ” ee |
+To sf
+a > 7 ‘ 7
+2026-09-05 14:32:46,064 [INFO] Metin taramasi:
+A A e O ni Sad
+ero Am ©
+Br ee,
+ot ee: a) “> ; wes f 7
+NOe CT, Aa - Sg İZ İdi ww
+ae aS
+Ps 7.
+. ow." << gi |
+| we | Bs? > i. a
+. ie , :
+‘Se » ; a
+A gi + g7
+2026-09-05 14:32:50,361 [INFO] Metin taramasi:
+Ba e Ga as
+gf MY eS “>. VAZ : :
+hin IPs yg
+li. İma
+pa “ . a 7 Ny ie
+\ . ği P “Ha Rie
+y” ; ii
+pa Hati, |. Pe 5
+N oe “2.
+EK — DUZ
+Ns -» 7 Py, g
+2026-09-05 14:34:02,434 [INFO] Metin taramasi:
+e EŞ ©
+. ae - ” Vadi
+pe
+N DEN e.
+DM - ‘ e. > İŞ ,
+a Rapes, » OY ir
+N SEN > gi in 7 v b
+2026-09-05 14:34:06,499 [INFO] Metin taramasi:
+a A ae ok |
+
+THe OR ee
+
+aes
+. Re , İş 4 gd *
+4. . Ay : Ds % : ge A
+“Vaiss. t ; “x
+
+, e
+a » a p
+2026-09-05 14:34:10,577 [INFO] Metin taramasi:
+is pa Ny ¥ © set pow
+DEDE. we YO
+o eledi
+wy yp Use )
+%. ene ne aes) :
+a “4 r N. v3
+a. AN oe «5. :
+2026-09-05 14:34:14,686 [INFO] Metin taramasi:
+pe, Que. save © lave Sel
+ee ” e ov
+Me GR ane
+4 d 4 , . N , . ; N se | ae
+pa “AAR, - ° ~~"
+“Yy. my
+x. SY a os
+#8 » #. Pl
+a ge «spre
+2026-09-05 14:34:18,888 [INFO] Metin taramasi:
+Aa La, AA, dk eği
+Ev EU
+oh: rae |
+wae", Lİ > b NN wy . a
+’ di NE ve ar ME iy.
+> a f “ha NN
+N <x" 3 << a ~
+an we
+N za y .
+. » < m hint A;
+2026-09-05 14:40:46,709 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 963, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 925, in run_bot
+    monitor_action, next_escape_at = monitor_game_state(
+                                     ~~~~~~~~~~~~~~~~~~^
+        config,
+        ^^^^^^^
+        next_escape_at,
+        ^^^^^^^^^^^^^^^
+        allow_escape=not monitor_state["paused"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 249, in monitor_game_state
+    exit_button = find_template_center(
+        search_image,
+    ...<2 lines>...
+        monitor.get("exit_template_scales"),
+    )
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 307, in find_template_center
+    raise RuntimeError(f"PNG okunamadi: {template_path}")
+RuntimeError: PNG okunamadi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\png\oyundanCikNew.png
+2026-09-05 14:41:02,860 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 963, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 925, in run_bot
+    monitor_action, next_escape_at = monitor_game_state(
+                                     ~~~~~~~~~~~~~~~~~~^
+        config,
+        ^^^^^^^
+        next_escape_at,
+        ^^^^^^^^^^^^^^^
+        allow_escape=not monitor_state["paused"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 249, in monitor_game_state
+    exit_button = find_template_center(
+        search_image,
+    ...<2 lines>...
+        monitor.get("exit_template_scales"),
+    )
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 307, in find_template_center
+    raise RuntimeError(f"PNG okunamadi: {template_path}")
+RuntimeError: PNG okunamadi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\png\oyundanCikNew.png
+2026-09-05 14:43:47,772 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 967, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 915, in run_bot
+    enforce_game_window_size(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 167, in enforce_game_window_size
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 289, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 1400 - Geçersiz pencere işleci.
+2026-09-05 14:48:53,897 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 967, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 946, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 779, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 289, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 1400 - Geçersiz pencere işleci.
+2026-09-05 14:55:44,588 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 984, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 936, in run_bot
+    enforce_game_window_size(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 164, in enforce_game_window_size
+    resize_and_position_game(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 142, in resize_and_position_game
+    window.resizeTo(width, height)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 258, in resizeTo
+    result = ctypes.windll.user32.SetWindowPos(self._hWnd, HWND_TOP, self.left, self.top, newWidth, newHeight, 0)
+                                                                     ^^^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\__init__.py", line 149, in left
+    return self._rect.left
+           ^^^^^^^^^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pyrect\__init__.py", line 296, in left
+    self.onRead(LEFT)
+    ~~~~~~~~~~~^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\__init__.py", line 54, in _onRead
+    r = self._getWindowRect()
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 199, in _getWindowRect
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 1400 - Geçersiz pencere işleci.
+2026-09-05 17:26:00,839 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 980, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 963, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 796, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 1400 - Geçersiz pencere işleci.
+2026-09-05 17:26:10,568 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 980, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 932, in run_bot
+    enforce_game_window_size(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 167, in enforce_game_window_size
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 17:40:29,312 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1013, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 996, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 797, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 17:47:01,947 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1062, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1045, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 797, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 18:13:44,806 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1046, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1029, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 788, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:19:55,080 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1046, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1029, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 788, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:20:30,341 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1046, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1029, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 788, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:22:36,355 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1078, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1061, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 788, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:24:15,388 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1083, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1066, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 791, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:27:10,371 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1096, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1071, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 791, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:27:28,239 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1096, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1071, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 791, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:27:57,915 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1096, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1071, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 791, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:29:02,563 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1096, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1071, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 791, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:30:49,108 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1108, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1032, in run_bot
+    enforce_game_window_size(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 167, in enforce_game_window_size
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:31:39,382 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1108, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1083, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 791, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:35:56,494 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1131, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1055, in run_bot
+    enforce_game_window_size(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 167, in enforce_game_window_size
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:46:52,252 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1144, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1090, in run_bot
+    handle_uyari_scan(window, config, debug_capture["enabled"])
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1013, in handle_uyari_scan
+    found_plus = is_green_plus_present(screenshot_arti)
+                 ^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'is_green_plus_present' is not defined. Did you mean: 'is_green_present'?
+2026-09-05 19:52:34,178 [INFO] Metin taramasi:
+g | vo
+Sv‘30
+KıyametEliti
+“22 kilometre uzaklıkta
+2026-09-05 19:52:39,903 [INFO] Metin taramasi:
+g | vo
+Svi25
+KıyametEliti
+7416 kilometre uzaklıkta
+2026-09-05 19:52:45,538 [INFO] Metin taramasi:
+g | vo
+Svi25
+KıyametEliti
+“20 kilometre uzaklıkta
+2026-09-05 19:52:51,205 [INFO] Metin taramasi:
+157 kilometre uzaklıkta
+2026-09-05 20:01:57,213 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1198, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1173, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 801, in click_matching_templates
+    scan_cases(window, config, monitor_state)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 762, in scan_cases
+    for template_name in case["templates"]:
+                         ~~~~^^^^^^^^^^^^^
+KeyError: 'templates'
+2026-09-05 20:02:13,180 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1198, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1173, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 801, in click_matching_templates
+    scan_cases(window, config, monitor_state)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 762, in scan_cases
+    for template_name in case["templates"]:
+                         ~~~~^^^^^^^^^^^^^
+KeyError: 'templates'
+2026-09-05 20:05:19,918 [INFO] Metin taramasi:
+Sohbet Ittifak Duyurusu
+pri) | Lwant to ,
+A
+No? Si
+Wil Lv.28(ğ/ Masters chép
+A © Paylas
+Bİ JEVEXJMasters chöp (Savaş Alanı #2279
+X:538 Y:417)
+e YG TEE Lv.28(ğ Masters chép
+Or CO
+İde. =
+RZ 2 YEM LV.29G Ci Map Bang
+yas @kohiganteng
+dı Mı
+——~ 0 r
+me ele |) Lv.29 Salty Nyx
+© Paylas
+ia şi [NAR3]wawi3 (Savas Alanı #2279 X:346
+Y:907)
+| 812 Lv.29 Salty Nyx
+UP d=) someone come shield me?
+i İİ
+Se
+2026-09-05 20:05:52,090 [INFO] Metin taramasi:
+Sohbet Ittifak Duyurusu
+Oxi) | Lwant to
+AR
+NN Ci
+Wil Lv.28(ğ/ Masters chép
+A © Paylas
+Bİ JEVEXJMasters chöp (Savaş Alanı #2279
+X:538 Y:417)
+çe YG TEE Lv.28(ğ Masters chép
+ya
+İ ZZ...
+RZ 2 W238 LV.29 G'câ Map Bang
+yas @kohiganteng
+* AR
+@:
+ee ee
+me ele |) Lv.29 Salty Nyx
+© Paylas
+İL (NAR3Juawi3 (Savaş Alanı #2279 X:346
+Y:907)
+| 812 Lv.29 Salty Nyx
+pairs; someone come shieldme? | aN
+6 _ |
+Se
+2026-09-05 20:06:18,484 [INFO] Metin taramasi:
+. , . @
+Sohbet Ittifak Duyurusu
+| maylgetafew garrisons
+until I can shield please?
+Ma
+|
+—— 7 C23 Lv.28 g@ Ruinnnn
+: - © Paylas
+ye [EVEX] Ruinnnn (Savaş Alanı #2279
+X:526 Y:423)
+Y YP Lv.28 (gi Salty Badger
+} yoo,
+J Wie,
+OT”
+> 4 Lv.28 BIGG PIGG
+ee a) © Paylaş
+yi
+DİR eg Hazineyi kaz (Savaş Alanı #2279 X:517
+Y:434)
+Wil Lv.28(ğ/ Masters chép
+bi I want to
+LAR
+a a |
+) eles Lw.28@/ Masters chép
+A © Paylas
+EA) [EVEX]Masters chép (Savaş Alani #2279
+X:538 Y:417)
+( smmm | <#7E Lv.28@) Masters chép
+2026-09-05 20:06:52,256 [INFO] Metin taramasi:
+Sohbet ittifak Duyurusu
+| BW Dü CEO LUZUNEI! ,
+le di © Paylaş Kamyon 1?
+=P #2282 [KiTa]Cikaaaaa“'™*'in UR
+kamyonu (Savaş Alanı #2282 X:846
+Y:216)
+11:00
+DEMİ SALDIRAY vay
+“5 whoahbud'un Şanslı Hediyesinden en ee
+7 CAIDIRAY | eos (dm.
+MELEN) fazla Elmas kazanan kisi!
+11:06
+NOXiiOt EOJ bir mesajı geri aldı
+11:07
+YE NA. 113 Lv.28 NOXiiOt SOJ
+. e
+; pa e©Yukirb @Hikari Xi
+RG
+repeat vw: Lv.28 noxiict 50]
+vi : | © Paylas
+a
+=P) Test Uçuşu Arızası (Savaş Alanı #2279
+X:541Y:444)
+2026-09-05 20:06:55,989 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1198, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1173, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 795, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 20:12:04,902 [INFO] Metin taramasi:
+. a ae ae me N z :
+a : pe We ei Wak Toplanma NOKtası \oe
+en [EVEXISALDIRAYG .. een Epe um
+pe Ww N Ja Sve Ça ost
+2 | t Ni . 1 eğ. : 4S
+z- : m, : > , . . fey
+PP Seed “a > phone —— i Pas
+¥. [EVEX]Salty Turkey oy + yi [ev oerbaktl guy |) * A , wwe
+a x . . re oat giri, © oN roy Ki i v |
+*) ss A 7) ey? " . A çiy
+MK | « te, ‘ oe Ni x a : Ni
+Fa a {evexstentsovx Cc NN a _ Tevek = İN. oe
+oes SN 42. BY di
+wt wR ce ee > OOS dd s ae
+Ve > ‘ “rk < « a} << ‘ us ¥
+£ .. < ‘ ¢ . . < ce < 5 oe . Nİ z ve .
+SN > cae vk“ İN ccc <a ç
+Di a rc & fe fe se, Ni vo , se ”
+İyi. a : wae e ae 4 /
+
+i [EVEN SEO, fe [EVEX]Oneerahmet © 4
+ae NS Mİ Oi, #2279 [EVEX]BadBossDZ <|%
+ye NN , q fs Savaş Gürü (CP): 40,821,295
+
+A y 1 Öldürmeler: 244,725
+
+oo re : ittifak [EVEXIVIX
+
+[EVEXPoseph Gordon Levi -
+€X Beğen ©
+2026-09-05 20:12:09,309 [INFO] Metin taramasi:
+oe Nee PR ors iTa Oplanma NOKTasi ç ”
+ae İs = Ty P ST) a
+a (EVEXISALDIRAY ©... ya mu ——— e a
+, eo [EVEX)salty Turkey oy “fe, , se [EV.  derbaktl guy » Se, og.
+Naş a eR a
+vo * “eof . ew ot
+@ we. - ak rr woe
+ex [EVEX)xSilentSoulx “a 5 [EVEXJwhoahbud —= .
+iC Tevexyes WH Ge pi fe [EVEX]Oneerahmet © 2 a
+uf Se i) #2279 [EVEX]BadBossDZ <|%
+li <A, b .. e.
+k, : ~~ AY KS Savaş Gücü (CP): 40,821,295
+aA 4. yy > iy 4 Öldürmeler: 244,725
+Gi A =, ae .
+O e LA ittifak (EVEXİVIK
+(EVEXMoseph Gordon Levi -
+e Beğen ©
+2026-09-05 20:12:13,672 [INFO] Metin taramasi:
+z Me pek ran Toplanma Noktası «Ey BF
+j Deği Pe a
+| »*» o (EVEXISALDIRAY © 1.4, RA — arma ,
+rü NR 205 ar 4 mt V a he
+p ' | SS ote Pr t it > ai fe
+FT O% ny “aym ae > > > .
+KL iğ ça .. yg Şa OM
+Ko ale ay F Aİ, EL gi yi
+a) TEVEK)Satty Tukey @ ope “fe [E.  Soerbakt! gop aN e .
+I SS Bo ee Z
+| [EVEX)xSilentSoulx c- Soe [EVEX]whoahbud —= ae
+Coos . ~ yg İT | © 2 << LİN < ge
+“! ~~ = we a Lr . a & re m & i <
+yi er eres . e het 2 NÜ im > :
+ae i N < © € Cpe ete « im Lf Mi
+GÜ TEVEKTİEĞİNİ ME Ge © [EVEX|Oneerahmet e <
+pi MA | Wy) #2279 [EVEX]BadBossDZ < y
+Ha VJ © ~ 3 Savaş Gücü (CP): 40,821,295
+NE Öldürmeler: 244,725
+A > İttifak (EVEXJVIX
+(EVEX}Joseph Gordon Levi w
+ey Beğen @&
+2026-09-05 20:12:21,977 [INFO] Metin taramasi:
+ye . vg —-. N z :
+alaka (lan | oplanma NOKTASI gı
+ğ f Ke LDIRAY ©
+oro Va N iv * Be is ' og
+> .. i b 4, > . Ş, | a, UN
+b : a on Ni Se yoga , e a ~
+° > ne oe “. Şi ie ae x Ni pi mii Ee, a. ‘ * 3. ‘7
+Mi [EVEX)Saity Tukey os wi [EV erbaktl ees |) .
+.. , NK. A a Ke, #
+Ve eas we eh at oe a a
+. Ni J ‘, x a , ot | oe vo cas I~ wy .
+WANG ee WR =
+Yo . [EVEXIxSllantSoulx G Sa pa JEVEXJwhcahbud — ği Ni
+wes ‘ee. . ji, : OW
+SO e O <<< oil r SN Fh f
+. < , a ‘n «eg . 2 Kc ce oe Z
+MN yv. Ss DA ‘ td, ae
+ae . “NS s «<< WX 0 ‘ EN * < «ce vi Ge
+y ‘ > : za Yy NN ; . a p< ¢
+. eS . ue is e ee Sad 7? 4
+ae TEVEKİTE SE HES Se > fe {EVEX]Qneerahmet 1 5 a
+| a . . < d
+; İM 2279 [EVEX]BadBossDz
+. ™M
+wef . N j a — — a (CP): 40,821,295
+"iw cS ‘ iy EN Öldürmeler: 244,725
+yo LEMİ ittifak (EVEXİVIK
+(EVEXVoseph Gordon Levi w
+er Beğen ©
+2026-09-05 20:12:26,735 [INFO] Metin taramasi:
+| # —_ [EVEXJSALDIRAY c- oA wpa tts ane ev?
+SO a! Ng ERA, ey
+ie < JEVEX)Salty Turkey © _ Pid [evi verbaktley y+ JA
+vi a ye et A,
+i A fai a 2 in oe,
+4“ , (EVEX]xSilentSoulx ¢. — ee Tevex|whoahbud _=
+Pas , iy va — oe
+a Me .. et v a, ” pA “a ,
+we [EVEX] 6S EH Ça 2. (a {EVEX]Oneerahmet (- > ça pa
+i MN 1, #2279 (EVEXJBadBossDZ < | 7
+oy WS ; j aS Savaş Gücü (CP): 40,821,295
+m LEAD ittifak [EVEXIVIX
+[EVEX|oseph Gordon Levi w
+e Beğen ©

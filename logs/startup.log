@@ -1,0 +1,1235 @@
+2026-09-05 09:40:02,957 [INFO] Uygulama baslatildi.
+2026-09-05 09:42:01,479 [INFO] Uygulama baslatildi.
+2026-09-05 09:47:46,560 [INFO] Uygulama baslatildi.
+2026-09-05 09:49:10,077 [INFO] Uygulama baslatildi.
+2026-09-05 10:12:20,153 [INFO] Uygulama baslatildi.
+2026-09-05 10:13:36,621 [INFO] Uygulama baslatildi.
+2026-09-05 10:14:00,437 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pytesseract\pytesseract.py", line 275, in run_tesseract
+    proc = subprocess.Popen(cmd_args, **subprocess_args())
+  File "C:\Users\erdem\AppData\Local\Programs\Python\Python314\Lib\subprocess.py", line 1039, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\AppData\Local\Programs\Python\Python314\Lib\subprocess.py", line 1553, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+                             # no special security
+                             ^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+                             cwd,
+                             ^^^^
+                             startupinfo)
+                             ^^^^^^^^^^^^
+  File "c:\Users\erdem\.vscode\extensions\ms-python.debugpy-2026.6.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\_pydev_bundle\pydev_monkey.py", line 911, in new_CreateProcess
+    return getattr(_subprocess, original_name)(app_name, cmd_line, *args)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [WinError 2] Sistem belirtilen dosyayı bulamıyor
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 406, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 389, in run_bot
+    scan_text_region(config["text_scan_region"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 232, in scan_text_region
+    text = pytesseract.image_to_string(screenshot, lang="eng").strip()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pytesseract\pytesseract.py", line 486, in image_to_string
+    return {
+           ~
+    ...<2 lines>...
+        Output.STRING: lambda: run_and_get_output(*args),
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }[output_type]()
+    ~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pytesseract\pytesseract.py", line 489, in <lambda>
+    Output.STRING: lambda: run_and_get_output(*args),
+                           ~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pytesseract\pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+    ~~~~~~~~~~~~~^^^^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pytesseract\pytesseract.py", line 280, in run_tesseract
+    raise TesseractNotFoundError()
+pytesseract.pytesseract.TesseractNotFoundError: tesseract is not installed or it's not in your PATH. See README file for more information.
+2026-09-05 10:15:41,262 [INFO] Uygulama baslatildi.
+2026-09-05 10:17:49,545 [INFO] Uygulama baslatildi.
+2026-09-05 10:17:55,821 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 425, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 398, in run_bot
+    resize_and_position_game(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 128, in resize_and_position_game
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 10:18:16,756 [INFO] Uygulama baslatildi.
+2026-09-05 10:18:59,580 [INFO] Uygulama baslatildi.
+2026-09-05 10:21:37,134 [INFO] Uygulama baslatildi.
+2026-09-05 10:22:25,791 [INFO] Uygulama baslatildi.
+2026-09-05 10:22:40,826 [INFO] Uygulama baslatildi.
+2026-09-05 10:24:15,189 [INFO] Uygulama baslatildi.
+2026-09-05 10:24:24,015 [INFO] Uygulama baslatildi.
+2026-09-05 10:24:42,072 [INFO] Uygulama baslatildi.
+2026-09-05 10:29:18,055 [INFO] Uygulama baslatildi.
+2026-09-05 10:29:40,862 [INFO] Uygulama baslatildi.
+2026-09-05 10:35:01,869 [INFO] Uygulama baslatildi.
+2026-09-05 10:35:40,622 [INFO] Uygulama baslatildi.
+2026-09-05 10:36:56,750 [INFO] Uygulama baslatildi.
+2026-09-05 10:38:37,468 [INFO] Uygulama baslatildi.
+2026-09-05 10:40:51,585 [INFO] Uygulama baslatildi.
+2026-09-05 10:43:13,225 [INFO] Uygulama baslatildi.
+2026-09-05 10:45:17,547 [INFO] Uygulama baslatildi.
+2026-09-05 10:47:35,784 [INFO] Uygulama baslatildi.
+2026-09-05 10:51:16,381 [INFO] Uygulama baslatildi.
+2026-09-05 11:07:52,120 [INFO] Uygulama baslatildi.
+2026-09-05 11:09:15,513 [INFO] Uygulama baslatildi.
+2026-09-05 11:10:01,720 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 765, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 746, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 596, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 187, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 1400 - Geçersiz pencere işleci.
+2026-09-05 11:11:01,131 [INFO] Uygulama baslatildi.
+2026-09-05 11:11:21,071 [INFO] Uygulama baslatildi.
+2026-09-05 11:11:41,228 [INFO] Uygulama baslatildi.
+2026-09-05 11:12:30,407 [INFO] Uygulama baslatildi.
+2026-09-05 11:31:01,032 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 777, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 758, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 603, in click_matching_templates
+    scan_cases(window, config)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 584, in scan_cases
+    run_scan_case(
+    ~~~~~~~~~~~~~^
+        case_name,
+        ^^^^^^^^^^
+    ...<5 lines>...
+        config,
+        ^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 406, in run_scan_case
+    found = scan_text_region(
+        case["text_region"],
+        case.get("ocr", {}),
+        case.get("target_texts"),
+    )
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 494, in scan_text_region
+    data = pytesseract.image_to_data(
+        processed,
+    ...<2 lines>...
+        output_type=pytesseract.Output.DICT,
+    )
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pytesseract\pytesseract.py", line 596, in image_to_data
+    return {
+           ~
+    ...<6 lines>...
+        Output.STRING: lambda: run_and_get_output(*args),
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }[output_type]()
+    ~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pytesseract\pytesseract.py", line 602, in <lambda>
+    Output.DICT: lambda: file_to_dict(run_and_get_output(*args), '\t', -1),
+                                      ~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pytesseract\pytesseract.py", line 352, in run_and_get_output
+    run_tesseract(**kwargs)
+    ~~~~~~~~~~~~~^^^^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pytesseract\pytesseract.py", line 284, in run_tesseract
+    raise TesseractError(proc.returncode, get_errors(error_string))
+pytesseract.pytesseract.TesseractError: (3, 'libpng error: IDAT: incorrect data check Error in pixReadMemPng: internal png error Error in pixReadMem: png: no pix returned src_pix != nullptr:Error:Assert failed:in file ../../../src/ccstruct/imagedata.cpp, line 222 ObjectCache(00007ffd62300860)::~ObjectCache(): WARNING! LEAK! object 00000231a30cec20 still has count 1 (id C:\\Program Files\\Tesseract-OCR/tessdata/tur.traineddatalstm-punc-dawg) ObjectCache(00007ffd62300860)::~ObjectCache(): WARNING! LEAK! object 00000231a30dbb80 still has count 1 (id C:\\Program Files\\Tesseract-OCR/tessdata/tur.traineddatalstm-word-dawg) ObjectCache(00007ffd62300860)::~ObjectCache(): WARNING! LEAK! object 00000231a30ceba0 still has count 1 (id C:\\Program Files\\Tesseract-OCR/tessdata/tur.traineddatalstm-number-dawg) ObjectCache(00007ffd62300860)::~ObjectCache(): WARNING! LEAK! object 00000231a30d9d20 still has count 1 (id C:\\Program Files\\Tesseract-OCR/tessdata/eng.traineddatalstm-punc-dawg) ObjectCache(00007ffd62300860)::~ObjectCache(): WARNING! LEAK! object 00000231a313eee0 still has count 1 (id C:\\Program Files\\Tesseract-OCR/tessdata/eng.traineddatalstm-word-dawg) ObjectCache(00007ffd62300860)::~ObjectCache(): WARNING! LEAK! object 00000231a313ef50 still has count 1 (id C:\\Program Files\\Tesseract-OCR/tessdata/eng.traineddatalstm-number-dawg)')
+2026-09-05 12:13:26,019 [INFO] Uygulama baslatildi.
+2026-09-05 12:13:56,386 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 777, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 758, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 597, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 188, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 12:13:59,027 [INFO] Uygulama baslatildi.
+2026-09-05 12:14:06,040 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 777, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 758, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 597, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 188, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 12:14:44,352 [INFO] Uygulama baslatildi.
+2026-09-05 12:15:01,857 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 783, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 764, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 603, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 194, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 12:16:13,964 [INFO] Uygulama baslatildi.
+2026-09-05 12:16:31,429 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 783, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 764, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 603, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 194, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 12:17:14,279 [INFO] Uygulama baslatildi.
+2026-09-05 12:17:46,401 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 783, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 764, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 603, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 194, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 13:20:53,338 [INFO] Uygulama baslatildi.
+2026-09-05 13:24:54,667 [INFO] Uygulama baslatildi.
+2026-09-05 13:25:12,880 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 811, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 792, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 631, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 194, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 13:25:59,852 [INFO] Uygulama baslatildi.
+2026-09-05 13:26:18,511 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 811, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 792, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 631, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 194, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 13:26:27,289 [INFO] Uygulama baslatildi.
+2026-09-05 13:26:40,013 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 811, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 792, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 631, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 194, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 13:28:00,151 [INFO] Uygulama baslatildi.
+2026-09-05 13:29:26,596 [INFO] Uygulama baslatildi.
+2026-09-05 13:29:39,098 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 820, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 801, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+        config,
+        ^^^^^^^
+        debug_capture["enabled"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 640, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 194, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 1400 - Geçersiz pencere işleci.
+2026-09-05 13:32:08,130 [INFO] Uygulama baslatildi.
+2026-09-05 13:33:33,407 [INFO] Uygulama baslatildi.
+2026-09-05 13:33:46,466 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 920, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 896, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 724, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 252, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 1400 - Geçersiz pencere işleci.
+2026-09-05 13:34:28,569 [INFO] Uygulama baslatildi.
+2026-09-05 13:35:43,765 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 922, in <module>
+    finally:
+        ^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 882, in run_bot
+    next_escape_at = time.monotonic()
+                             ~~~~~~^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 246, in restart_game_after_disconnect
+    timeout = config["game"]["window_wait_seconds"]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 167, in enforce_game_window_size
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 254, in bring_game_to_front
+    if window is None:
+    ^^^^^^^^^^^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 13:36:20,173 [INFO] Uygulama baslatildi.
+2026-09-05 13:39:20,462 [INFO] Uygulama baslatildi.
+2026-09-05 13:41:57,297 [INFO] Uygulama baslatildi.
+2026-09-05 13:43:30,723 [INFO] Uygulama baslatildi.
+2026-09-05 13:45:07,825 [INFO] Uygulama baslatildi.
+2026-09-05 13:46:53,550 [INFO] Uygulama baslatildi.
+2026-09-05 13:48:03,988 [INFO] Uygulama baslatildi.
+2026-09-05 13:49:07,151 [INFO] Uygulama baslatildi.
+2026-09-05 13:50:14,387 [INFO] Uygulama baslatildi.
+2026-09-05 14:08:56,646 [INFO] Uygulama baslatildi.
+2026-09-05 14:08:56,698 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 953, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 901, in run_bot
+    enforce_game_window_size(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 167, in enforce_game_window_size
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 275, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 14:09:04,272 [INFO] Uygulama baslatildi.
+2026-09-05 14:11:15,072 [INFO] Uygulama baslatildi.
+2026-09-05 14:12:49,366 [INFO] Uygulama baslatildi.
+2026-09-05 14:16:27,816 [INFO] Uygulama baslatildi.
+2026-09-05 14:20:20,775 [INFO] Uygulama baslatildi.
+2026-09-05 14:24:32,626 [INFO] Uygulama baslatildi.
+2026-09-05 14:25:01,397 [INFO] Uygulama baslatildi.
+2026-09-05 14:25:21,026 [INFO] Uygulama baslatildi.
+2026-09-05 14:27:08,566 [INFO] Uygulama baslatildi.
+2026-09-05 14:32:30,920 [INFO] Uygulama baslatildi.
+2026-09-05 14:33:51,664 [INFO] Uygulama baslatildi.
+2026-09-05 14:35:48,852 [INFO] Uygulama baslatildi.
+2026-09-05 14:37:12,609 [INFO] Uygulama baslatildi.
+2026-09-05 14:40:38,643 [INFO] Uygulama baslatildi.
+2026-09-05 14:40:46,710 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 963, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 925, in run_bot
+    monitor_action, next_escape_at = monitor_game_state(
+                                     ~~~~~~~~~~~~~~~~~~^
+        config,
+        ^^^^^^^
+        next_escape_at,
+        ^^^^^^^^^^^^^^^
+        allow_escape=not monitor_state["paused"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 249, in monitor_game_state
+    exit_button = find_template_center(
+        search_image,
+    ...<2 lines>...
+        monitor.get("exit_template_scales"),
+    )
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 307, in find_template_center
+    raise RuntimeError(f"PNG okunamadi: {template_path}")
+RuntimeError: PNG okunamadi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\png\oyundanCikNew.png
+2026-09-05 14:40:54,786 [INFO] Uygulama baslatildi.
+2026-09-05 14:41:02,861 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 963, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 925, in run_bot
+    monitor_action, next_escape_at = monitor_game_state(
+                                     ~~~~~~~~~~~~~~~~~~^
+        config,
+        ^^^^^^^
+        next_escape_at,
+        ^^^^^^^^^^^^^^^
+        allow_escape=not monitor_state["paused"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 249, in monitor_game_state
+    exit_button = find_template_center(
+        search_image,
+    ...<2 lines>...
+        monitor.get("exit_template_scales"),
+    )
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 307, in find_template_center
+    raise RuntimeError(f"PNG okunamadi: {template_path}")
+RuntimeError: PNG okunamadi: C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\png\oyundanCikNew.png
+2026-09-05 14:41:22,106 [INFO] Uygulama baslatildi.
+2026-09-05 14:42:55,367 [INFO] Uygulama baslatildi.
+2026-09-05 14:43:45,520 [INFO] Uygulama baslatildi.
+2026-09-05 14:43:47,773 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 967, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 915, in run_bot
+    enforce_game_window_size(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 167, in enforce_game_window_size
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 289, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 1400 - Geçersiz pencere işleci.
+2026-09-05 14:43:51,395 [INFO] Uygulama baslatildi.
+2026-09-05 14:45:40,450 [INFO] Uygulama baslatildi.
+2026-09-05 14:48:28,888 [INFO] Uygulama baslatildi.
+2026-09-05 14:48:53,898 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 967, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 946, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 779, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 289, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 1400 - Geçersiz pencere işleci.
+2026-09-05 14:51:08,914 [INFO] Uygulama baslatildi.
+2026-09-05 14:55:39,866 [INFO] Uygulama baslatildi.
+2026-09-05 14:55:44,590 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 984, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 936, in run_bot
+    enforce_game_window_size(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 164, in enforce_game_window_size
+    resize_and_position_game(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 142, in resize_and_position_game
+    window.resizeTo(width, height)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 258, in resizeTo
+    result = ctypes.windll.user32.SetWindowPos(self._hWnd, HWND_TOP, self.left, self.top, newWidth, newHeight, 0)
+                                                                     ^^^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\__init__.py", line 149, in left
+    return self._rect.left
+           ^^^^^^^^^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pyrect\__init__.py", line 296, in left
+    self.onRead(LEFT)
+    ~~~~~~~~~~~^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\__init__.py", line 54, in _onRead
+    r = self._getWindowRect()
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 199, in _getWindowRect
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 1400 - Geçersiz pencere işleci.
+2026-09-05 14:55:48,536 [INFO] Uygulama baslatildi.
+2026-09-05 14:58:41,417 [INFO] Uygulama baslatildi.
+2026-09-05 15:02:42,014 [INFO] Uygulama baslatildi.
+2026-09-05 17:26:00,845 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 980, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 963, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 796, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 1400 - Geçersiz pencere işleci.
+2026-09-05 17:26:02,859 [INFO] Uygulama baslatildi.
+2026-09-05 17:26:10,569 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 980, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 932, in run_bot
+    enforce_game_window_size(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 167, in enforce_game_window_size
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 17:26:31,251 [INFO] Uygulama baslatildi.
+2026-09-05 17:39:40,745 [INFO] Uygulama baslatildi.
+2026-09-05 17:40:29,314 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1013, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 996, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 797, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 17:41:44,847 [INFO] Uygulama baslatildi.
+2026-09-05 17:46:09,078 [INFO] Uygulama baslatildi.
+2026-09-05 17:47:01,949 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1062, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1045, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 797, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 18:13:33,710 [INFO] Uygulama baslatildi.
+2026-09-05 18:13:44,808 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1046, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1029, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 788, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 18:14:16,840 [INFO] Uygulama baslatildi.
+2026-09-05 18:15:16,246 [INFO] Uygulama baslatildi.
+2026-09-05 18:36:39,053 [INFO] Uygulama baslatildi.
+2026-09-05 19:19:43,515 [INFO] Uygulama baslatildi.
+2026-09-05 19:19:55,083 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1046, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1029, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 788, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:20:07,764 [INFO] Uygulama baslatildi.
+2026-09-05 19:20:30,342 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1046, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1029, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 788, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:22:24,147 [INFO] Uygulama baslatildi.
+2026-09-05 19:22:36,356 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1078, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1061, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 788, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:24:07,146 [INFO] Uygulama baslatildi.
+2026-09-05 19:24:15,390 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1083, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1066, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 791, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:24:40,700 [INFO] Uygulama baslatildi.
+2026-09-05 19:26:55,715 [INFO] Uygulama baslatildi.
+2026-09-05 19:27:10,373 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1096, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1071, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 791, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:27:15,517 [INFO] Uygulama baslatildi.
+2026-09-05 19:27:28,240 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1096, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1071, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 791, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:27:42,246 [INFO] Uygulama baslatildi.
+2026-09-05 19:27:57,916 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1096, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1071, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 791, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:28:47,928 [INFO] Uygulama baslatildi.
+2026-09-05 19:29:02,564 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1096, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1071, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 791, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:29:15,659 [INFO] Uygulama baslatildi.
+2026-09-05 19:30:47,996 [INFO] Uygulama baslatildi.
+2026-09-05 19:30:49,109 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1108, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1032, in run_bot
+    enforce_game_window_size(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 167, in enforce_game_window_size
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:30:52,512 [INFO] Uygulama baslatildi.
+2026-09-05 19:31:24,757 [INFO] Uygulama baslatildi.
+2026-09-05 19:31:39,383 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1108, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1083, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 791, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:34:51,614 [INFO] Uygulama baslatildi.
+2026-09-05 19:35:55,407 [INFO] Uygulama baslatildi.
+2026-09-05 19:35:56,495 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1131, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1055, in run_bot
+    enforce_game_window_size(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 167, in enforce_game_window_size
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 19:36:02,796 [INFO] Uygulama baslatildi.
+2026-09-05 19:38:28,922 [INFO] Uygulama baslatildi.
+2026-09-05 19:39:10,301 [INFO] Uygulama baslatildi.
+2026-09-05 19:40:03,875 [INFO] Uygulama baslatildi.
+2026-09-05 19:41:28,286 [INFO] Uygulama baslatildi.
+2026-09-05 19:46:00,035 [INFO] Uygulama baslatildi.
+2026-09-05 19:46:52,253 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1144, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1090, in run_bot
+    handle_uyari_scan(window, config, debug_capture["enabled"])
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1013, in handle_uyari_scan
+    found_plus = is_green_plus_present(screenshot_arti)
+                 ^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'is_green_plus_present' is not defined. Did you mean: 'is_green_present'?
+2026-09-05 19:48:15,554 [INFO] Uygulama baslatildi.
+2026-09-05 19:49:31,396 [INFO] Uygulama baslatildi.
+2026-09-05 19:50:08,747 [INFO] Uygulama baslatildi.
+2026-09-05 19:51:29,529 [INFO] Uygulama baslatildi.
+2026-09-05 19:52:20,977 [INFO] Uygulama baslatildi.
+2026-09-05 19:54:44,813 [INFO] Uygulama baslatildi.
+2026-09-05 19:56:39,754 [INFO] Uygulama baslatildi.
+2026-09-05 19:57:30,105 [INFO] Uygulama baslatildi.
+2026-09-05 19:59:56,268 [INFO] Uygulama baslatildi.
+2026-09-05 20:01:48,539 [INFO] Uygulama baslatildi.
+2026-09-05 20:01:57,215 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1198, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1173, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 801, in click_matching_templates
+    scan_cases(window, config, monitor_state)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 762, in scan_cases
+    for template_name in case["templates"]:
+                         ~~~~^^^^^^^^^^^^^
+KeyError: 'templates'
+2026-09-05 20:02:04,556 [INFO] Uygulama baslatildi.
+2026-09-05 20:02:13,181 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1198, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1173, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 801, in click_matching_templates
+    scan_cases(window, config, monitor_state)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 762, in scan_cases
+    for template_name in case["templates"]:
+                         ~~~~^^^^^^^^^^^^^
+KeyError: 'templates'
+2026-09-05 20:03:30,497 [INFO] Uygulama baslatildi.
+2026-09-05 20:05:09,181 [INFO] Uygulama baslatildi.
+2026-09-05 20:06:55,990 [ERROR] EXE baslangic/calisma hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1198, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1173, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 795, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-05 20:07:46,891 [INFO] Uygulama baslatildi.
+2026-09-05 20:13:57,270 [INFO] Uygulama baslatildi.
+2026-09-05 20:23:17,139 [INFO] Uygulama baslatildi.
+2026-09-05 20:24:14,975 [INFO] Uygulama baslatildi.
