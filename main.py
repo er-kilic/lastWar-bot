@@ -585,7 +585,6 @@ def run_scan_case(
                 time.sleep(click_before_escape["delay_seconds"])
                 coordinate = click_before_escape["coordinate"]
                 pyautogui.click(1075, 243)
-                time.sleep(0.3)
                 pyautogui.click(coordinate[0], coordinate[1])
                 print(
                     "OCR hedefinden sonra ESC oncesi tiklama: "

@@ -253,3 +253,105 @@ Traceback (most recent call last):
     obj, end = self.scan_once(s, idx)
                ~~~~~~~~~~~~~~^^^^^^^^
 json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 66 column 5 (char 1727)
+2026-09-06 13:26:22,141 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1200, in <module>
+    run_bot(load_config())
+            ~~~~~~~~~~~^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 75, in load_config
+    config = json.load(file)
+  File "C:\Users\erdem\AppData\Local\Programs\Python\Python314\Lib\json\__init__.py", line 298, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "C:\Users\erdem\AppData\Local\Programs\Python\Python314\Lib\json\__init__.py", line 352, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "C:\Users\erdem\AppData\Local\Programs\Python\Python314\Lib\json\decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\AppData\Local\Programs\Python\Python314\Lib\json\decoder.py", line 361, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ~~~~~~~~~~~~~~^^^^^^^^
+json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 66 column 5 (char 1727)
+2026-09-06 13:27:11,896 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1200, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1175, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 797, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-06 13:41:56,108 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1200, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1175, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 797, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-06 15:35:17,615 [INFO] Metin taramasi:
+Sohbet İttifak Duyurusu
+15:16
+| | YALE Lv.28 @ Salty Badger A 7 yeni mesaj
+NE) | sowehadagreat week. I
+want to know, what was your
+favorite moments? Anything
+big or small ay
+ST
+Ry] Lv.29©@ Maclauds wolf
+al Cevap Ver princes777: (Görsel)
+?
+How do you get that? na
+iT]
+15:30
+ai G23 Lv.30 Leoncino88
+\* 1 Cevap Ver Salty Badger: The small ...
+where are you from?
+ARN
+ST]
+ro] Yt 222 Lv.29 © Damocles87
+Mei Ee Şanslı Hediye dö
+Az önce 5,000 Elmas'u aldım.
+Gelin bu şansı paylaşalım!
+1/20 ? paylaş vo
+2026-09-06 15:35:18,105 [INFO] OCR hedefi bulundu ve tiklandi: Şanslı Hediye (859, 755)

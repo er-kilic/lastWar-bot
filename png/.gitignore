@@ -11,9 +11,6 @@ __pycache__/
 venv/
 env/
 
-# Tesseract İkili Dosyaları (GitHub'a binary basılmamalı)
-tesseract_bin/
-
 # Botun Çalışma Anı Logları ve Ekran Görüntüleri
 logs/
 screenShots/
