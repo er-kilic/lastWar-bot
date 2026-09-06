@@ -63,7 +63,7 @@
     "bottom_right": [1026, 869]
   },
 "scan_cases": {
-    "announcement": {
+    /*"announcement": {
       "templates": ["duyuru.png"],
       "image_confidence": 0.55,
       "template_scales": [0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1],
@@ -83,7 +83,7 @@
       "template_scales": [0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1],
       "action": "click_then_escape",
       "escape_delay_seconds": 0.5
-    },
+    },*/
     "excavation": {
       "templates": ["kazi.png"],
       "image_confidence": 0.65,
@@ -107,7 +107,7 @@
     },
     "clover": {
       "templates": ["yonca.png"],
-      "image_confidence": 0.78,
+      "image_confidence": 0.75,
       "template_scales": [0.9, 0.95, 1.0, 1.05, 1.1],
       "action": "click_then_text_match_escape",
       "target_texts": ["Şanslı Hediye", "anslı Hediye"],
