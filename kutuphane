@@ -1,0 +1,2 @@
+python -m pip install pynput
+python -m pip install pytesseract
