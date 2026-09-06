@@ -210,6 +210,9 @@ def perform_startup_clicks(config):
     if not startup.get("enabled", True):
         return
 
+    initial_delay = startup.get("initial_delay_seconds", 1.0)
+    time.sleep(initial_delay)
+
     delay = startup.get("click_delay_seconds", 0.5)
     for coordinate in startup.get("click_coordinates", []):
         pyautogui.click(coordinate[0], coordinate[1])

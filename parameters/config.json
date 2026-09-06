@@ -10,6 +10,7 @@
   },
   "startup_actions": {
     "enabled": true,
+    "initial_delay_seconds": 1.0,
     "click_delay_seconds": 0.5,
     "click_coordinates": [
       [1383, 908],
