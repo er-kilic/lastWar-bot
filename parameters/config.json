@@ -63,27 +63,6 @@
     "bottom_right": [1026, 869]
   },
 "scan_cases": {
-    /*"announcement": {
-      "templates": ["duyuru.png"],
-      "image_confidence": 0.55,
-      "template_scales": [0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1],
-      "action": "click_then_escape",
-      "escape_delay_seconds": 0.5
-    },
-    "hand": {
-      "templates": ["el.png"],
-      "image_confidence": 0.60,
-      "template_scales": [0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1],
-      "action": "click_coordinate",
-      "click_coordinate": [860, 774]
-    },
-    "new": {
-      "templates": ["new.png"],
-      "image_confidence": 0.60,
-      "template_scales": [0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1],
-      "action": "click_then_escape",
-      "escape_delay_seconds": 0.5
-    },*/
     "excavation": {
       "templates": ["kazi.png"],
       "image_confidence": 0.65,
