@@ -1,0 +1,22 @@
+# PyInstaller ve Build Çıktıları
+dist/
+build/
+*.spec
+
+# Python Çevre ve Önbellek
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# Botun Çalışma Anı Logları ve Ekran Görüntüleri
+logs/
+screenShots/
+screenshots/
+*.log
+
+# VS Code ve Editör Ayarları
+.vscode/
+.idea/

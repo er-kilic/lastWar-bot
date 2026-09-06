@@ -355,3 +355,50 @@ Az önce 5,000 Elmas'u aldım.
 Gelin bu şansı paylaşalım!
 1/20 ? paylaş vo
 2026-09-06 15:35:18,105 [INFO] OCR hedefi bulundu ve tiklandi: Şanslı Hediye (859, 755)
+2026-09-06 20:37:44,805 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1199, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1123, in run_bot
+    enforce_game_window_size(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 167, in enforce_game_window_size
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-06 20:38:27,615 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1199, in <module>
+    run_bot(load_config())
+    ~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1174, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<2 lines>...
+        monitor_state,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 796, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 306, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.

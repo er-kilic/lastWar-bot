@@ -5,7 +5,7 @@ a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[('parameters', 'parameters'), ('png', 'png')],
+    datas=[('parameters', 'parameters'), ('png', 'png'), ('tesseract_bin', 'tesseract_bin')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -32,6 +32,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    contents_directory='.',
 )
 coll = COLLECT(
     exe,

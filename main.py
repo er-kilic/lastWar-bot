@@ -2,7 +2,6 @@ import ctypes
 import difflib
 import json
 import logging
-import math
 import os
 import re
 import sys
@@ -19,6 +18,11 @@ from pytesseract import TesseractNotFoundError
 from pynput import keyboard
 from pynput import mouse
 
+try:
+    ctypes.windll.shcore.SetProcessDpiAwareness(2)
+except Exception:
+    pass
+
 
 ROOT = Path(
     sys.executable if getattr(sys, "frozen", False) else __file__
@@ -26,6 +30,8 @@ ROOT = Path(
 PARAMETERS_DIR = ROOT / "parameters"
 PNG_DIR = ROOT / "png"
 CONFIG_PATH = PARAMETERS_DIR / "config.json"
+PORTABLE_TESSERACT_DIR = ROOT / "tesseract_bin"
+PORTABLE_TESSERACT_EXE = PORTABLE_TESSERACT_DIR / "tesseract.exe"
 SCREENSHOTS_DIR = ROOT / "screenShots"
 LOGS_DIR = ROOT / "logs"
 APP_LOG_PATH = LOGS_DIR / "application.log"
@@ -70,15 +76,25 @@ def log_uncaught_exception(exception_type, exception, traceback):
     )
 
 
-def load_config():
-    with CONFIG_PATH.open("r", encoding="utf-8") as file:
-        config = json.load(file)
+def configure_tesseract(config):
+    if PORTABLE_TESSERACT_EXE.exists():
+        pytesseract.pytesseract.tesseract_cmd = str(PORTABLE_TESSERACT_EXE)
+        os.environ["TESSDATA_PREFIX"] = str(PORTABLE_TESSERACT_DIR / "tessdata")
+        print(f"Tasinabilir Tesseract kullaniliyor: {PORTABLE_TESSERACT_EXE}")
+        return
 
     tesseract_cmd = config.get("ocr", {}).get("tesseract_cmd", "")
     if tesseract_cmd:
         pytesseract.pytesseract.tesseract_cmd = os.path.expanduser(
             tesseract_cmd
         )
+
+
+def load_config():
+    with CONFIG_PATH.open("r", encoding="utf-8") as file:
+        config = json.load(file)
+
+    configure_tesseract(config)
     return config
 
 
@@ -130,34 +146,51 @@ def find_game_window(config):
     return windows[0] if windows else None
 
 
-def resize_and_position_game(window, config):
+def get_target_window_size(config):
+    """Tum PC'lerde ayni piksel boyutuna sabitlenmis oyun penceresi boyutu.
+
+    Config.json'daki tum koordinatlar bu sabit boyuta gore kalibre edildi;
+    ekran cozunurlugune gore orantilamiyoruz ki koordinatlar PC'den PC'ye
+    degismesin.
+    """
+    game_config = config["game"]
+    width = game_config["window_width"]
+    height = game_config["window_height"]
+
     screen_width, screen_height = pyautogui.size()
-    screen_area_ratio = config["game"]["screen_area_ratio"]
-    side_ratio = math.sqrt(screen_area_ratio)
-    width = int(screen_width * side_ratio)
-    height = int(screen_height * side_ratio)
+    if screen_width < width or screen_height < height:
+        APP_LOGGER.warning(
+            "Ekran cozunurlugu (%sx%s) hedef pencere boyutundan (%sx%s) "
+            "kucuk; oyun penceresi ekrana sigmayabilir.",
+            screen_width,
+            screen_height,
+            width,
+            height,
+        )
+        print(
+            f"UYARI: Ekran cozunurlugu ({screen_width}x{screen_height}) "
+            f"hedef pencere boyutundan ({width}x{height}) kucuk."
+        )
+
+    return width, height
+
+
+def resize_and_position_game(window, config):
+    width, height = get_target_window_size(config)
 
     window.restore()
     window.moveTo(0, 0)
     window.resizeTo(width, height)
     window.activate()
     bring_game_to_front(window)
-    print(
-        f"Oyun penceresi {width}x{height} boyutuna sol uste tasindi "
-        f"(ekran alaninin %{screen_area_ratio * 100:g}'si)."
-    )
+    print(f"Oyun penceresi {width}x{height} boyutuna sol uste tasindi.")
 
 
 def enforce_game_window_size(window, config):
     resize_config = config["game"]
     retries = resize_config.get("resize_retries", 5)
     delay = resize_config.get("resize_retry_delay_seconds", 1.0)
-    target_width = int(
-        pyautogui.size()[0] * math.sqrt(resize_config["screen_area_ratio"])
-    )
-    target_height = int(
-        pyautogui.size()[1] * math.sqrt(resize_config["screen_area_ratio"])
-    )
+    target_width, target_height = get_target_window_size(config)
 
     for attempt in range(retries):
         if window.width != target_width or window.height != target_height:
@@ -521,6 +554,17 @@ def wait_for_share_after_attack(config):
     print("Paylas PNG 60 saniye icinde bulunamadi.")
 
 
+def perform_pre_ocr_click(case):
+    delay = case.get("pre_ocr_delay_seconds", 0.5)
+    time.sleep(delay)
+    coordinate = case.get("pre_ocr_click_coordinate", [1075, 243])
+    pyautogui.click(coordinate[0], coordinate[1])
+    print(
+        f"OCR oncesi tiklama ({delay} saniye beklendi): "
+        f"({coordinate[0]}, {coordinate[1]})"
+    )
+
+
 def run_scan_case(
     case_name,
     template_path,
@@ -532,9 +576,10 @@ def run_scan_case(
     monitor_state,
 ):
     center_x, center_y = match
+    timestamp = datetime.now().strftime("%d.%m.%Y %H:%M")
     print(
         f"CASE {case_name}: {template_path.name} bulundu "
-        f"(bolge ici=({center_x}, {center_y}))"
+        f"(bolge ici=({center_x}, {center_y})) {timestamp}"
     )
     action = case.get("action")
     if action == "click_then_escape":
@@ -562,6 +607,7 @@ def run_scan_case(
         screen_y = region[1] + center_y
         pyautogui.click(screen_x, screen_y)
         time.sleep(case.get("text_scan_delay_seconds", 0.5))
+        perform_pre_ocr_click(case)
         found = scan_text_region(
             case["text_region"],
             case.get("ocr", {}),
@@ -574,6 +620,7 @@ def run_scan_case(
         screen_y = region[1] + center_y
         pyautogui.click(screen_x, screen_y)
         time.sleep(case.get("text_scan_delay_seconds", 1.0))
+        perform_pre_ocr_click(case)
         found = scan_text_region(
             case["text_region"],
             case.get("ocr", {}),
@@ -583,8 +630,14 @@ def run_scan_case(
             click_before_escape = case.get("click_before_escape")
             if click_before_escape:
                 time.sleep(click_before_escape["delay_seconds"])
+                pre_coordinate = click_before_escape.get("pre_coordinate")
+                if pre_coordinate:
+                    pyautogui.click(pre_coordinate[0], pre_coordinate[1])
+                    print(
+                        "OCR hedefinden sonra on tiklama: "
+                        f"({pre_coordinate[0]}, {pre_coordinate[1]})"
+                    )
                 coordinate = click_before_escape["coordinate"]
-                pyautogui.click(1075, 243)
                 pyautogui.click(coordinate[0], coordinate[1])
                 print(
                     "OCR hedefinden sonra ESC oncesi tiklama: "
@@ -1166,6 +1219,7 @@ def run_bot(config):
                 text_scan_requested["enabled"] = False
                 if debug_capture["enabled"]:
                     capture_debug_screenshot(window, config)
+                perform_pre_ocr_click(config)
                 scan_text_region(
                     config["text_scan_region"],
                     config.get("ocr", {}),
