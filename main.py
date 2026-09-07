@@ -6,6 +6,7 @@ import os
 import re
 import sys
 import subprocess
+import threading
 import time
 from datetime import datetime
 from pathlib import Path
@@ -36,6 +37,8 @@ SCREENSHOTS_DIR = ROOT / "screenShots"
 LOGS_DIR = ROOT / "logs"
 APP_LOG_PATH = LOGS_DIR / "application.log"
 STARTUP_LOG_PATH = LOGS_DIR / "startup.log"
+KUTUPHANE_DIR = ROOT / "kutuphane"
+SHORTCUTS_LOG_PATH = KUTUPHANE_DIR / "kisayollar.log"
 
 APP_LOGGER = logging.getLogger("last_war_bot")
 STARTUP_LOGGER = logging.getLogger("last_war_bot_startup")
@@ -300,6 +303,18 @@ def monitor_game_state(config, next_escape_at, allow_escape=True):
             15,
         )
 
+    paylas_region = get_region_tuple(config["text_scan_region"])
+    paylas_image = crop_region(paylas_region)
+    paylas_template = config.get("post_attack", {}).get("template", "paylas.png")
+    paylas_match = find_template_center(
+        paylas_image,
+        PNG_DIR / paylas_template,
+        confidence,
+    )
+    if paylas_match:
+        pyautogui.press("esc")
+        print("paylas.png bulundu (surekli tarama); ESC basildi.")
+
     return None, next_escape_at
 
 
@@ -334,6 +349,36 @@ def restart_game_after_disconnect(config):
     enforce_game_window_size(window, config)
     perform_startup_clicks(config)
     return window
+
+
+def position_console_window(config):
+    """Botun kendi konsol penceresini, coklu monitor de dahil, sanal ekranin
+    en sag kenarina (ya da config'te belirtilen konuma) tasir."""
+    console_config = config.get("console_window", {})
+    if not console_config.get("enabled", True):
+        return
+
+    hwnd = ctypes.windll.kernel32.GetConsoleWindow()
+    if not hwnd:
+        return
+
+    user32 = ctypes.windll.user32
+    SM_XVIRTUALSCREEN = 76
+    SM_CXVIRTUALSCREEN = 78
+    virtual_left = user32.GetSystemMetrics(SM_XVIRTUALSCREEN)
+    virtual_width = user32.GetSystemMetrics(SM_CXVIRTUALSCREEN)
+    virtual_right = virtual_left + virtual_width
+
+    width = console_config.get("width", 350)
+    height = console_config.get("height", 900)
+    x = console_config.get("x", virtual_right - width)
+    y = console_config.get("y", 0)
+
+    user32.MoveWindow(hwnd, x, y, width, height, True)
+    print(
+        f"Konsol penceresi ({x}, {y}) konumuna, {width}x{height} "
+        "boyutuna tasindi."
+    )
 
 
 def bring_game_to_front(window):
@@ -524,9 +569,15 @@ def ucuncu_takim_saldir():
 
 def wait_for_share_after_attack(config):
     post_attack = config["post_attack"]
-    deadline = time.time() + post_attack["duration_seconds"]
+
+    initial_wait = post_attack.get("initial_wait_seconds", 60)
+    print(f"Saldiri sonrasi {initial_wait} saniye sessizce bekleniyor.")
+    time.sleep(initial_wait)
+
+    duration = post_attack["duration_seconds"]
+    deadline = time.time() + duration
     share_template = PNG_DIR / post_attack["template"]
-    scan_region = get_scan_region(config)
+    scan_region = get_region_tuple(config["text_scan_region"])
     confidence = config["bot"]["image_confidence"]
 
     if not share_template.exists():
@@ -554,7 +605,7 @@ def wait_for_share_after_attack(config):
 
         time.sleep(post_attack["click_interval_seconds"])
 
-    print("Paylas PNG 60 saniye icinde bulunamadi.")
+    print(f"Paylas PNG {duration} saniye icinde bulunamadi.")
 
 
 def perform_pre_ocr_click(case):
@@ -577,7 +628,11 @@ def run_scan_case(
     window,
     config,
     monitor_state,
+    uyari_scan_enabled=None,
+    escape_monitor_enabled=None,
 ):
+    pause_escape_monitor_temporarily(escape_monitor_enabled, config, case_name)
+
     center_x, center_y = match
     timestamp = datetime.now().strftime("%d.%m.%Y %H:%M")
     print(
@@ -617,7 +672,9 @@ def run_scan_case(
             case.get("target_texts"),
         )
         if found and case.get("follow_up_action") == "excavation_attack":
-            perform_excavation_attack(window, case, config, monitor_state)
+            perform_excavation_attack(
+                window, case, config, monitor_state, uyari_scan_enabled
+            )
     elif action == "click_then_text_match_escape":
         screen_x = region[0] + center_x
         screen_y = region[1] + center_y
@@ -654,8 +711,43 @@ def run_scan_case(
             print(
                 f"OCR hedefinden sonra ESC {escape_press_count} kere basildi."
             )
+        else:
+            pyautogui.press("esc")
+            print("OCR hedefi bulunamadi; ESC basildi.")
 
-def perform_excavation_attack(window, case, config, monitor_state):
+def pause_toggle_temporarily(toggle_state, duration_seconds, label):
+    if not toggle_state or not toggle_state.get("enabled"):
+        return
+
+    toggle_state["enabled"] = False
+    print(f"{label} {duration_seconds} saniyeligine pasife alindi.")
+
+    def reactivate():
+        toggle_state["enabled"] = True
+        print(f"{label} tekrar aktif edildi.")
+
+    timer = threading.Timer(duration_seconds, reactivate)
+    timer.daemon = True
+    timer.start()
+
+
+def pause_rally_mode_temporarily(uyari_scan_enabled, config):
+    duration = config.get("rally_pause_seconds", 130)
+    pause_toggle_temporarily(uyari_scan_enabled, duration, "Ralli modu (R)")
+
+
+def pause_escape_monitor_temporarily(escape_monitor_enabled, config, case_name):
+    if case_name == "excavation":
+        duration = config.get("escape_pause_seconds_kazi", 130)
+    elif case_name == "clover":
+        duration = config.get("escape_pause_seconds_yonca", 30)
+    else:
+        return
+    pause_toggle_temporarily(escape_monitor_enabled, duration, "ESC dongusu (E)")
+
+
+def perform_excavation_attack(window, case, config, monitor_state, uyari_scan_enabled=None):
+    pause_rally_mode_temporarily(uyari_scan_enabled, config)
     monitor_state["paused"] = True
     interval = config.get("game_monitor", {}).get("escape_interval_seconds", 15)
     print(f"Kazi saldirisi basladi; {interval} saniyelik ESC izleme duraklatildi.")
@@ -806,7 +898,13 @@ def scan_text_region(text_region, ocr_config, target_texts=None):
 
     return False
 
-def scan_cases(window, config, monitor_state):
+def scan_cases(
+    window,
+    config,
+    monitor_state,
+    uyari_scan_enabled=None,
+    escape_monitor_enabled=None,
+):
     region = get_scan_region(config)
     screenshot = pyautogui.screenshot(region=region)
     cases = config["scan_cases"]
@@ -838,6 +936,8 @@ def scan_cases(window, config, monitor_state):
                     window,
                     config,
                     monitor_state,
+                    uyari_scan_enabled,
+                    escape_monitor_enabled,
                 )
 
 def click_matching_templates(
@@ -845,6 +945,8 @@ def click_matching_templates(
     config,
     debug_capture=False,
     monitor_state=None,
+    uyari_scan_enabled=None,
+    escape_monitor_enabled=None,
 ):
     if monitor_state is None:
         monitor_state = {"paused": False}
@@ -855,7 +957,7 @@ def click_matching_templates(
     )
     if debug_capture:
         capture_debug_screenshot(window, config)
-    scan_cases(window, config, monitor_state)
+    scan_cases(window, config, monitor_state, uyari_scan_enabled, escape_monitor_enabled)
 
     for activity_name, activity in config["activities"].items():
         if not activity["enabled"]:
@@ -872,27 +974,40 @@ def click_matching_templates(
                 )
 
 def log_shortcuts(config):
-    print("Kisayollar:")
-    for activity in config["activities"].values():
-        print(f"  {activity['shortcut'].upper()} -> {activity['description']}")
-    
     escape_interval = config.get("game_monitor", {}).get("escape_interval_seconds", 15)
-    
-    print(f"  {config['controls']['stop_shortcut'].upper()} -> botu durdur")
-    print(f"  {config['controls']['coordinate_shortcut'].upper()} -> "
+
+    lines = ["Kisayollar:"]
+    for activity in config["activities"].values():
+        lines.append(f"  {activity['shortcut'].upper()} -> {activity['description']}")
+
+    lines.append(f"  {config['controls']['stop_shortcut'].upper()} -> botu durdur")
+    lines.append(
+        f"  {config['controls']['coordinate_shortcut'].upper()} -> "
         "sonraki mouse tiklamasinin pikselini logla"
     )
-    print(f"  {config['controls']['text_scan_shortcut'].upper()} -> "
+    lines.append(
+        f"  {config['controls']['text_scan_shortcut'].upper()} -> "
         "metin bolgesini tara ve logla"
     )
-    print(f"  {config['controls']['debug_screenshot_shortcut'].upper()} -> "
+    lines.append(
+        f"  {config['controls']['debug_screenshot_shortcut'].upper()} -> "
         "kirmizi alanli tarama ekran goruntusunu ac/kapat"
     )
-    print(
+    lines.append(
         f"  {config['controls']['escape_monitor_shortcut'].upper()} -> "
         f"{escape_interval} saniyelik ESC dongusunu ac/kapat"
     )
-    print("  R -> Uyari ve Arti taramasini ac/kapat")
+    lines.append("  R -> Uyari ve Arti taramasini ac/kapat")
+
+    for line in lines:
+        print(line)
+
+    KUTUPHANE_DIR.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
+    with SHORTCUTS_LOG_PATH.open("a", encoding="utf-8") as file:
+        file.write(f"--- {timestamp} ---\n")
+        file.write("\n".join(lines))
+        file.write("\n\n")
 
 def create_input_listeners(window, config, running_state):
     shortcut_map = {
@@ -1079,7 +1194,8 @@ def handle_uyari_scan(window, config, debug_capture=False):
             pyautogui.click(center_x, center_y)
             print(f"[ARTI BULUNDU] Merkeze tiklandi -> ({center_x}, {center_y})")
 
-            time.sleep(0.5)
+            arti_click_delay = config.get("arti_click_delay_seconds", 1.5)
+            time.sleep(arti_click_delay)
             saldir_click()
             print("⚔️ [SALDIRI] Saldiri tetiklendi.")
             time.sleep(1.0)
@@ -1233,6 +1349,8 @@ def run_bot(config):
                 config,
                 debug_capture["enabled"],
                 monitor_state,
+                uyari_scan_enabled,
+                escape_monitor_enabled,
             )
 
             # Döngü aralığını daha duyarlı uyutma ile kontrol et
@@ -1253,7 +1371,9 @@ if __name__ == "__main__":
     sys.excepthook = log_uncaught_exception
     STARTUP_LOGGER.info("Uygulama baslatildi.")
     try:
-        run_bot(load_config())
+        startup_config = load_config()
+        position_console_window(startup_config)
+        run_bot(startup_config)
     except KeyboardInterrupt:
         APP_LOGGER.info("Bot kullanici tarafindan durduruldu.")
         print("\nBot durduruldu.")

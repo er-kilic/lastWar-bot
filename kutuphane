@@ -1,4 +1,0 @@
-python -m pip install pynput
-python -m pip install pytesseract
-
-.\build_exe.ps1

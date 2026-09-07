@@ -1,4 +1,9 @@
 {
+  "console_window": {
+    "enabled": true,
+    "width": 190,
+    "height": 1000
+  },
   "game": {
     "executable_path": "~/AppData/Local/FunFly/Last War-Survival Game/LastWarLauncher.exe",
     "window_title_contains": "Last War",
@@ -10,7 +15,7 @@
   },
   "startup_actions": {
     "enabled": true,
-    "initial_delay_seconds": 1.0,
+    "initial_delay_seconds": 5.0,
     "click_delay_seconds": 0.5,
     "click_coordinates": [
       [1383, 908],
@@ -84,7 +89,6 @@
       "follow_up_action": "excavation_attack",
       "follow_up_click_delay_seconds": 0.5,
       "follow_up_coordinates": [
-        [852, 442],
         [856, 592]
       ]
     },
@@ -101,7 +105,7 @@
       "escape_press_count": 2,
       "escape_between_presses_seconds": 0.1,
       "click_before_escape": {
-        "delay_seconds": 0.3,
+        "delay_seconds": 0.6,
         "pre_coordinate": [1077, 239],
         "coordinate": [874, 644]
       },
@@ -117,10 +121,15 @@
   },
   "pre_ocr_delay_seconds": 0.5,
   "pre_ocr_click_coordinate": [1075, 243],
+  "rally_pause_seconds": 130,
+  "escape_pause_seconds_kazi": 130,
+  "escape_pause_seconds_yonca": 30,
+  "arti_click_delay_seconds": 1.5,
   "post_attack": {
-    "duration_seconds": 45,
+    "initial_wait_seconds": 60,
+    "duration_seconds": 60,
     "click_coordinate": [856, 460],
-    "click_interval_seconds": 1.0,
+    "click_interval_seconds": 0.25,
     "template": "paylas.png"
   },
   "activities": {
