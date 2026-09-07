@@ -17,7 +17,6 @@ import pygetwindow
 import pytesseract
 from pytesseract import TesseractNotFoundError
 from pynput import keyboard
-from pynput import mouse
 
 try:
     ctypes.windll.shcore.SetProcessDpiAwareness(2)
@@ -567,45 +566,72 @@ def ikinci_takim_saldir():
 def ucuncu_takim_saldir():
     _takim_saldir(3, (905, 867))
 
-def wait_for_share_after_attack(config):
-    post_attack = config["post_attack"]
+def parse_countdown_seconds(raw_text):
+    """OCR'dan gelen 'sa:dk:sn' / 'dk:sn' / 'sn' formatlarini saniyeye cevirir."""
+    cleaned = re.sub(r"[^0-9:]", "", raw_text)
+    parts = [p for p in cleaned.split(":") if p != ""]
+    if not parts or not all(p.isdigit() for p in parts):
+        return None
 
-    initial_wait = post_attack.get("initial_wait_seconds", 60)
-    print(f"Saldiri sonrasi {initial_wait} saniye sessizce bekleniyor.")
-    time.sleep(initial_wait)
+    numbers = [int(p) for p in parts]
+    if len(numbers) == 3:
+        h, m, s = numbers
+    elif len(numbers) == 2:
+        h, m, s = 0, numbers[0], numbers[1]
+    elif len(numbers) == 1:
+        h, m, s = 0, 0, numbers[0]
+    else:
+        return None
 
-    duration = post_attack["duration_seconds"]
-    deadline = time.time() + duration
-    share_template = PNG_DIR / post_attack["template"]
-    scan_region = get_region_tuple(config["text_scan_region"])
-    confidence = config["bot"]["image_confidence"]
+    return h * 3600 + m * 60 + s
 
-    if not share_template.exists():
-        APP_LOGGER.warning("Paylas PNG bulunamadi: %s", share_template)
-        return
 
+def wait_for_countdown_then_burst_click(config):
+    """Kazi sayacini OCR ile okur; sayac esik degerin altina dusunce
+    kisa sureli hizli tiklama baslatir."""
+    countdown_config = config.get("countdown_watch", {})
+    countdown_region = countdown_config.get(
+        "region",
+        {"top_left": [671, 276], "bottom_right": [994, 514]},
+    )
+    click_coordinate = config["post_attack"]["click_coordinate"]
+    ocr_config = config.get("ocr", {})
+
+    threshold_seconds = countdown_config.get("threshold_seconds", 10)
+    burst_duration_seconds = countdown_config.get("burst_duration_seconds", 20)
+    burst_clicks_per_second = countdown_config.get("burst_clicks_per_second", 10)
+    poll_interval_seconds = countdown_config.get("poll_interval_seconds", 1.0)
+    safety_timeout_seconds = countdown_config.get("safety_timeout_seconds", 120)
+
+    deadline = time.time() + safety_timeout_seconds
     while time.time() < deadline:
-        coordinate = post_attack["click_coordinate"]
-        pyautogui.click(coordinate[0], coordinate[1])
-        print(
-            f"Saldiri sonrasi tiklama: "
-            f"({coordinate[0]}, {coordinate[1]})"
-        )
+        raw_text = get_text_from_region(countdown_region, ocr_config)
+        remaining = parse_countdown_seconds(raw_text)
 
-        screenshot = pyautogui.screenshot(region=scan_region)
-        match = find_template_center(
-            screenshot,
-            share_template,
-            confidence,
-        )
-        if match:
-            pyautogui.press("esc")
-            print("paylas.png bulundu; tiklama durduruldu ve ESC basildi.")
+        if remaining is None:
+            print(f"Sayac okunamadi, ham metin: '{raw_text}'")
+            time.sleep(poll_interval_seconds)
+            continue
+
+        print(f"Kazi sayaci: {remaining} saniye kaldi.")
+
+        if remaining <= threshold_seconds:
+            print(
+                f"Sayac {threshold_seconds} saniyenin altina dustu; "
+                f"{burst_duration_seconds} saniye boyunca "
+                f"saniyede {burst_clicks_per_second} tiklama basliyor."
+            )
+            click_interval = 1.0 / burst_clicks_per_second
+            burst_deadline = time.time() + burst_duration_seconds
+            while time.time() < burst_deadline:
+                pyautogui.click(click_coordinate[0], click_coordinate[1])
+                time.sleep(click_interval)
+            print("Hizli tiklama tamamlandi.")
             return
 
-        time.sleep(post_attack["click_interval_seconds"])
+        time.sleep(poll_interval_seconds)
 
-    print(f"Paylas PNG {duration} saniye icinde bulunamadi.")
+    print("Sayac suresi icinde esik degere dusmedi.")
 
 
 def perform_pre_ocr_click(case):
@@ -752,6 +778,10 @@ def perform_excavation_attack(window, case, config, monitor_state, uyari_scan_en
     interval = config.get("game_monitor", {}).get("escape_interval_seconds", 15)
     print(f"Kazi saldirisi basladi; {interval} saniyelik ESC izleme duraklatildi.")
     try:
+        jump_wait = case.get("map_jump_wait_seconds", 1.0)
+        print(f"Harita sicramasi icin {jump_wait} saniye bekleniyor.")
+        time.sleep(jump_wait)
+
         center_x = window.left + window.width // 2
         center_y = window.top + window.height // 2
         pyautogui.click(center_x, center_y)
@@ -1009,13 +1039,41 @@ def log_shortcuts(config):
         file.write("\n".join(lines))
         file.write("\n\n")
 
+def start_click_coordinate_capture(window, timeout_seconds=15):
+    """J kisayolu icin: global mouse hook'una guvenmeden (oyun raw-input
+    yakaladiginda hook tiklamayi hic gormeyebiliyor), sol tik durumunu
+    dogrudan GetAsyncKeyState ile yoklayarak bir sonraki tiklamayi loglar."""
+    VK_LBUTTON = 0x01
+
+    def poll():
+        user32 = ctypes.windll.user32
+        was_pressed = bool(user32.GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+        deadline = time.time() + timeout_seconds
+        while time.time() < deadline:
+            is_pressed = bool(user32.GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+            if is_pressed and not was_pressed:
+                x, y = pyautogui.position()
+                relative_x = x - window.left
+                relative_y = y - window.top
+                print(
+                    f"Mouse tiklamasi: ekran=({x}, {y}), "
+                    f"oyun penceresi ici=({relative_x}, {relative_y})"
+                )
+                return
+            was_pressed = is_pressed
+            time.sleep(0.02)
+        print(f"J: {timeout_seconds} saniye icinde tiklama algilanmadi.")
+
+    thread = threading.Thread(target=poll, daemon=True)
+    thread.start()
+
+
 def create_input_listeners(window, config, running_state):
     shortcut_map = {
         activity["shortcut"].lower(): activity_name
         for activity_name, activity in config["activities"].items()
     }
     controls = config["controls"]
-    capture_click = {"enabled": False}
     text_scan_requested = {"enabled": False}
     debug_capture = {"enabled": False}
     escape_monitor_enabled = {
@@ -1042,8 +1100,8 @@ def create_input_listeners(window, config, running_state):
             return
 
         if pressed_key == controls["coordinate_shortcut"].lower():
-            capture_click["enabled"] = True
             print("J -> sonraki mouse tiklamasi bekleniyor.")
+            start_click_coordinate_capture(window)
             return
 
         if pressed_key == controls["text_scan_shortcut"].lower():
@@ -1077,28 +1135,13 @@ def create_input_listeners(window, config, running_state):
     def on_release(key):
         return True
 
-    def on_click(x, y, button, pressed):
-        if not pressed or not capture_click["enabled"]:
-            return
-
-        capture_click["enabled"] = False
-        relative_x = x - window.left
-        relative_y = y - window.top
-        print(
-            f"Mouse {button.name} tiklamasi: ekran=({x}, {y}), "
-            f"oyun penceresi ici=({relative_x}, {relative_y})"
-        )
-
     keyboard_listener = keyboard.Listener(
         on_press=on_press,
         on_release=on_release,
     )
-    mouse_listener = mouse.Listener(on_click=on_click)
     keyboard_listener.start()
-    mouse_listener.start()
     return (
         keyboard_listener,
-        mouse_listener,
         text_scan_requested,
         debug_capture,
         escape_monitor_enabled,
@@ -1301,7 +1344,6 @@ def run_bot(config):
     running_state = {"running": True}
     (
         keyboard_listener,
-        mouse_listener,
         text_scan_requested,
         debug_capture,
         escape_monitor_enabled,
@@ -1363,7 +1405,6 @@ def run_bot(config):
 
     finally:
         keyboard_listener.stop()
-        mouse_listener.stop()
         print("Bot basariyla sonlandirildi.")
 
 if __name__ == "__main__":

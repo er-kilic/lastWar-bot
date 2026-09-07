@@ -86,6 +86,7 @@
         "top_left": [604, 165],
         "bottom_right": [1105, 846]
       },
+      "map_jump_wait_seconds": 1.0,
       "follow_up_action": "excavation_attack",
       "follow_up_click_delay_seconds": 0.5,
       "follow_up_coordinates": [

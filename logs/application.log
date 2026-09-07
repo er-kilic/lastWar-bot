@@ -402,3 +402,30 @@ Traceback (most recent call last):
   File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
     raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
 pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-07 20:52:36,297 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1390, in <module>
+    run_bot(startup_config)
+    ~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1362, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<4 lines>...
+        escape_monitor_enabled,
+        ^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 957, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 386, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
