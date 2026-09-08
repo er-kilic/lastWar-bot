@@ -56,3 +56,14 @@ Kisayollar:
   E -> 15 saniyelik ESC dongusunu ac/kapat
   R -> Uyari ve Arti taramasini ac/kapat
 
+--- 07.09.2026 21:24:25 ---
+Kisayollar:
+  Z -> Altin zombi avlar
+  K -> Kazi yapar
+  S -> botu durdur
+  J -> sonraki mouse tiklamasinin pikselini logla
+  O -> metin bolgesini tara ve logla
+  T -> kirmizi alanli tarama ekran goruntusunu ac/kapat
+  E -> 15 saniyelik ESC dongusunu ac/kapat
+  R -> Uyari ve Arti taramasini ac/kapat
+

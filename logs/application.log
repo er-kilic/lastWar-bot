@@ -429,3 +429,4 @@ Traceback (most recent call last):
   File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
     raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
 pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-07 21:25:14,574 [INFO] Bot kullanici tarafindan durduruldu.

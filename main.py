@@ -261,7 +261,8 @@ def monitor_game_state(config, next_escape_at, allow_escape=True):
         )
 
     exit_image = crop_region(exit_region)
-    disconnect_image = screenshot
+    disconnect_region = get_region_tuple(monitor["disconnect_scan_region"])
+    disconnect_image = crop_region(disconnect_region)
     confidence = monitor.get(
         "popup_image_confidence",
         config["bot"]["image_confidence"],
@@ -566,72 +567,45 @@ def ikinci_takim_saldir():
 def ucuncu_takim_saldir():
     _takim_saldir(3, (905, 867))
 
-def parse_countdown_seconds(raw_text):
-    """OCR'dan gelen 'sa:dk:sn' / 'dk:sn' / 'sn' formatlarini saniyeye cevirir."""
-    cleaned = re.sub(r"[^0-9:]", "", raw_text)
-    parts = [p for p in cleaned.split(":") if p != ""]
-    if not parts or not all(p.isdigit() for p in parts):
-        return None
+def wait_for_share_after_attack(config):
+    post_attack = config["post_attack"]
 
-    numbers = [int(p) for p in parts]
-    if len(numbers) == 3:
-        h, m, s = numbers
-    elif len(numbers) == 2:
-        h, m, s = 0, numbers[0], numbers[1]
-    elif len(numbers) == 1:
-        h, m, s = 0, 0, numbers[0]
-    else:
-        return None
+    initial_wait = post_attack.get("initial_wait_seconds", 60)
+    print(f"Saldiri sonrasi {initial_wait} saniye sessizce bekleniyor.")
+    time.sleep(initial_wait)
 
-    return h * 3600 + m * 60 + s
+    duration = post_attack["duration_seconds"]
+    deadline = time.time() + duration
+    share_template = PNG_DIR / post_attack["template"]
+    scan_region = get_region_tuple(config["text_scan_region"])
+    confidence = config["bot"]["image_confidence"]
 
+    if not share_template.exists():
+        APP_LOGGER.warning("Paylas PNG bulunamadi: %s", share_template)
+        return
 
-def wait_for_countdown_then_burst_click(config):
-    """Kazi sayacini OCR ile okur; sayac esik degerin altina dusunce
-    kisa sureli hizli tiklama baslatir."""
-    countdown_config = config.get("countdown_watch", {})
-    countdown_region = countdown_config.get(
-        "region",
-        {"top_left": [671, 276], "bottom_right": [994, 514]},
-    )
-    click_coordinate = config["post_attack"]["click_coordinate"]
-    ocr_config = config.get("ocr", {})
-
-    threshold_seconds = countdown_config.get("threshold_seconds", 10)
-    burst_duration_seconds = countdown_config.get("burst_duration_seconds", 20)
-    burst_clicks_per_second = countdown_config.get("burst_clicks_per_second", 10)
-    poll_interval_seconds = countdown_config.get("poll_interval_seconds", 1.0)
-    safety_timeout_seconds = countdown_config.get("safety_timeout_seconds", 120)
-
-    deadline = time.time() + safety_timeout_seconds
     while time.time() < deadline:
-        raw_text = get_text_from_region(countdown_region, ocr_config)
-        remaining = parse_countdown_seconds(raw_text)
+        coordinate = post_attack["click_coordinate"]
+        pyautogui.click(coordinate[0], coordinate[1])
+        print(
+            f"Saldiri sonrasi tiklama: "
+            f"({coordinate[0]}, {coordinate[1]})"
+        )
 
-        if remaining is None:
-            print(f"Sayac okunamadi, ham metin: '{raw_text}'")
-            time.sleep(poll_interval_seconds)
-            continue
-
-        print(f"Kazi sayaci: {remaining} saniye kaldi.")
-
-        if remaining <= threshold_seconds:
-            print(
-                f"Sayac {threshold_seconds} saniyenin altina dustu; "
-                f"{burst_duration_seconds} saniye boyunca "
-                f"saniyede {burst_clicks_per_second} tiklama basliyor."
-            )
-            click_interval = 1.0 / burst_clicks_per_second
-            burst_deadline = time.time() + burst_duration_seconds
-            while time.time() < burst_deadline:
-                pyautogui.click(click_coordinate[0], click_coordinate[1])
-                time.sleep(click_interval)
-            print("Hizli tiklama tamamlandi.")
+        screenshot = pyautogui.screenshot(region=scan_region)
+        match = find_template_center(
+            screenshot,
+            share_template,
+            confidence,
+        )
+        if match:
+            pyautogui.press("esc")
+            print("paylas.png bulundu; tiklama durduruldu ve ESC basildi.")
             return
 
-        time.sleep(poll_interval_seconds)
+        time.sleep(post_attack["click_interval_seconds"])
 
-    print("Sayac suresi icinde esik degere dusmedi.")
+    print(f"Paylas PNG {duration} saniye icinde bulunamadi.")
 
 
 def perform_pre_ocr_click(case):
@@ -643,6 +617,9 @@ def perform_pre_ocr_click(case):
         f"OCR oncesi tiklama ({delay} saniye beklendi): "
         f"({coordinate[0]}, {coordinate[1]})"
     )
+
+
+CASE_LABELS = {"excavation": "kazi", "clover": "yonca"}
 
 
 def run_scan_case(
@@ -665,6 +642,12 @@ def run_scan_case(
         f"CASE {case_name}: {template_path.name} bulundu "
         f"(bolge ici=({center_x}, {center_y})) {timestamp}"
     )
+
+    case_label = CASE_LABELS.get(case_name, case_name)
+    found_timestamp = datetime.now().strftime("%d%m%Y_%H:%M")
+    found_message = f"{case_label} -> bulundu_{found_timestamp}"
+    print(found_message)
+    APP_LOGGER.info(found_message)
     action = case.get("action")
     if action == "click_then_escape":
         screen_x = region[0] + center_x
@@ -713,23 +696,15 @@ def run_scan_case(
             case.get("target_texts"),
         )
         if found:
-            click_before_escape = case.get("click_before_escape")
-            if click_before_escape:
-                time.sleep(click_before_escape["delay_seconds"])
-                pre_coordinate = click_before_escape.get("pre_coordinate")
-                if pre_coordinate:
-                    pyautogui.click(pre_coordinate[0], pre_coordinate[1])
-                    print(
-                        "OCR hedefinden sonra on tiklama: "
-                        f"({pre_coordinate[0]}, {pre_coordinate[1]})"
-                    )
-                coordinate = click_before_escape["coordinate"]
-                pyautogui.click(coordinate[0], coordinate[1])
+            post_match_coordinate = case.get("post_match_click_coordinate")
+            if post_match_coordinate:
+                time.sleep(case.get("post_match_click_delay_seconds", 1.0))
+                pyautogui.click(post_match_coordinate[0], post_match_coordinate[1])
                 print(
-                    "OCR hedefinden sonra ESC oncesi tiklama: "
-                    f"({coordinate[0]}, {coordinate[1]})"
+                    "OCR hedefinden sonra ek tiklama: "
+                    f"({post_match_coordinate[0]}, {post_match_coordinate[1]})"
                 )
-            time.sleep(case.get("escape_delay_seconds", 0.5))
+
             escape_press_count = case.get("escape_press_count", 1)
             for _ in range(escape_press_count):
                 pyautogui.press("esc")
@@ -798,7 +773,7 @@ def perform_excavation_attack(window, case, config, monitor_state, uyari_scan_en
         wait_for_share_after_attack(config)
     finally:
         monitor_state["paused"] = False
-        print("Kazi saldirisi tamamlandi; 15 saniyelik ESC izleme yeniden etkin.")
+        print(f"Kazi saldirisi tamamlandi; {interval} saniyelik ESC izleme yeniden etkin.")
 
 def normalize_ocr_text(value):
     # Buyuk I ve İ harflerini standart kucuk i ve ı'ya cevir
@@ -1352,6 +1327,8 @@ def run_bot(config):
 
     print("Bot calisiyor. Durdurmak icin S basin.")
     next_escape_at = time.monotonic()
+    window_check_interval = config["game"].get("window_check_interval_seconds", 300)
+    next_window_check_at = time.monotonic() + window_check_interval
     monitor_state = {"paused": False}
     try:
         while running_state["running"] and keyboard_listener.is_alive():
@@ -1359,6 +1336,17 @@ def run_bot(config):
                 handle_uyari_scan(window, config, debug_capture["enabled"])
                 if not running_state["running"]:
                     break
+
+            if time.monotonic() >= next_window_check_at:
+                next_window_check_at = time.monotonic() + window_check_interval
+                if find_game_window(config) is None:
+                    print("Oyun penceresi bulunamadi; oyun yeniden baslatiliyor.")
+                    APP_LOGGER.warning(
+                        "Oyun penceresi bulunamadi; yeniden baslatma tetiklendi."
+                    )
+                    window = restart_game_after_disconnect(config)
+                    next_escape_at = time.monotonic()
+                    continue
 
             monitor_action, next_escape_at = monitor_game_state(
                 config,

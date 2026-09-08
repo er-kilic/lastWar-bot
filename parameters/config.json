@@ -10,6 +10,7 @@
     "window_width": 1717,
     "window_height": 965,
     "window_wait_seconds": 40,
+    "window_check_interval_seconds": 300,
     "resize_retries": 8,
     "resize_retry_delay_seconds": 1.0
   },
@@ -31,18 +32,18 @@
   },
   "game_monitor": {
     "region": {
-      "top_left": [701, 421],
-      "bottom_right": [1033, 591]
+      "top_left": [647, 331],
+      "bottom_right": [1074, 653]
     },
     "popup_scan_region": {
-      "top_left": [701, 421],
-      "bottom_right": [1033, 591]
+      "top_left": [647, 331],
+      "bottom_right": [1074, 653]
     },
     "disconnect_scan_region": {
-      "top_left": [500, 240],
-      "bottom_right": [900, 550]
+      "top_left": [647, 331],
+      "bottom_right": [1074, 653]
     },
-    "escape_interval_seconds": 15,
+    "escape_interval_seconds": 300,
     "popup_image_confidence": 0.7,
     "exit_template": "oyundanCikNew.png",
     "exit_template_scales": [0.8, 0.9, 1.0, 1.1],
@@ -79,14 +80,14 @@
         "Test Uçuşu Arızası",
         "Hazineyi kaz"
       ],
-      "text_scan_delay_seconds": 1.0,
-      "pre_ocr_delay_seconds": 0.5,
+      "text_scan_delay_seconds": 0,
+      "pre_ocr_delay_seconds": 0.8,
       "pre_ocr_click_coordinate": [1075, 243],
       "text_region": {
         "top_left": [604, 165],
         "bottom_right": [1105, 846]
       },
-      "map_jump_wait_seconds": 1.0,
+      "map_jump_wait_seconds": 2.0,
       "follow_up_action": "excavation_attack",
       "follow_up_click_delay_seconds": 0.5,
       "follow_up_coordinates": [
@@ -99,17 +100,13 @@
       "template_scales": [0.9, 0.95, 1.0, 1.05, 1.1],
       "action": "click_then_text_match_escape",
       "target_texts": ["Şanslı Hediye", "anslı Hediye"],
-      "text_scan_delay_seconds": 1.0,
-      "pre_ocr_delay_seconds": 0.5,
-      "pre_ocr_click_coordinate": [1075, 243],
-      "escape_delay_seconds": 0.0,
+      "text_scan_delay_seconds": 0,
+      "pre_ocr_delay_seconds": 0.8,
+      "pre_ocr_click_coordinate": [1090, 235],
+      "post_match_click_delay_seconds": 1.0,
+      "post_match_click_coordinate": [859, 668],
       "escape_press_count": 2,
       "escape_between_presses_seconds": 0.1,
-      "click_before_escape": {
-        "delay_seconds": 0.6,
-        "pre_coordinate": [1077, 239],
-        "coordinate": [874, 644]
-      },
       "text_region": {
         "top_left": [604, 165],
         "bottom_right": [1105, 846]
@@ -128,7 +125,7 @@
   "arti_click_delay_seconds": 1.5,
   "post_attack": {
     "initial_wait_seconds": 60,
-    "duration_seconds": 60,
+    "duration_seconds": 120,
     "click_coordinate": [856, 460],
     "click_interval_seconds": 0.25,
     "template": "paylas.png"
