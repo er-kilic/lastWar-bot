@@ -23,7 +23,7 @@
       [791, 128],
       [1090, 235]
     ],
-    "press_escape_after_clicks": true
+    "press_escape_after_clicks": false
   },
   "bot": {
     "enabled": false,
@@ -43,6 +43,7 @@
       "top_left": [647, 331],
       "bottom_right": [1074, 653]
     },
+    "escape_enabled": true,
     "escape_interval_seconds": 300,
     "popup_image_confidence": 0.7,
     "exit_template": "oyundanCikNew.png",
@@ -105,12 +106,30 @@
       "pre_ocr_click_coordinate": [1090, 235],
       "post_match_click_delay_seconds": 1.0,
       "post_match_click_coordinate": [859, 668],
-      "escape_press_count": 2,
-      "escape_between_presses_seconds": 0.1,
+      "escape_press_count": 3,
+      "escape_between_presses_seconds": 0.5,
       "text_region": {
         "top_left": [604, 165],
         "bottom_right": [1105, 846]
       }
+    },
+    "tren": {
+      "enabled": false,
+      "templates": ["tren.png"],
+      "scan_region": {
+        "top_left": [19, 532],
+        "bottom_right": [73, 580]
+      },
+      "image_confidence": 0.75,
+      "action": "tren_sequence",
+      "first_confirm_coordinate": [853, 790],
+      "confirm_coordinate": [1049, 316],
+      "final_click_coordinate": [974, 701],
+      "step1_wait_seconds": 2,
+      "step2_wait_seconds": 5,
+      "step3_wait_seconds": 2,
+      "step4_wait_seconds": 1,
+      "escape_delay_seconds": 0.5
     }
   },
   "text_scan_region": {
@@ -119,33 +138,17 @@
   },
   "pre_ocr_delay_seconds": 0.5,
   "pre_ocr_click_coordinate": [1075, 243],
-  "rally_pause_seconds": 130,
+  "rally_pause_seconds": 120,
   "escape_pause_seconds_kazi": 130,
   "escape_pause_seconds_yonca": 30,
-  "arti_click_delay_seconds": 1.5,
+  "arti_click_delay_seconds": 1.0,
+  "max_zombi_patronu_level": 55,
   "post_attack": {
     "initial_wait_seconds": 60,
-    "duration_seconds": 120,
+    "duration_seconds": 240,
     "click_coordinate": [856, 460],
-    "click_interval_seconds": 0.25,
+    "click_interval_seconds": 0.1,
     "template": "paylas.png"
   },
-  "activities": {
-    "gold_zombie": {
-      "enabled": false,
-      "shortcut": "z",
-      "description": "Altin zombi avlar",
-      "template_patterns": [
-        "gold_zombie/*.png"
-      ]
-    },
-    "excavation": {
-      "enabled": true,
-      "shortcut": "k",
-      "description": "Kazi yapar",
-      "template_patterns": [
-        "excavation/*.png"
-      ]
-    }
-  }
+  "activities": {}
 }

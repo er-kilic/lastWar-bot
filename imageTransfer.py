@@ -30,7 +30,7 @@ def auto_crop_icon(image_path):
     print(f"Tam merkezden temiz kırpıldı: {image_path.name} -> {cropped.shape[1]}x{cropped.shape[0]} px")
 
 # Sadece sorun yaratanları kırp (yoncayı olduğu gibi bırakabilirsin)
-targets = ["yonca.png"]
+targets = ["tren.png"]
 
 for name in targets:
     p = PNG_DIR / name

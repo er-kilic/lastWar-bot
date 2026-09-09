@@ -1,69 +1,111 @@
---- 06.09.2026 23:31:05 ---
 Kisayollar:
-  Z -> Altin zombi avlar
-  K -> Kazi yapar
   S -> botu durdur
   J -> sonraki mouse tiklamasinin pikselini logla
   O -> metin bolgesini tara ve logla
   T -> kirmizi alanli tarama ekran goruntusunu ac/kapat
-  E -> 15 saniyelik ESC dongusunu ac/kapat
+  E -> 300 saniyelik ESC dongusunu ac/kapat
   R -> Uyari ve Arti taramasini ac/kapat
-
-python -m pip install pynput
-python -m pip install pytesseract
-
-.\build_exe.ps1--- 07.09.2026 20:45:01 ---
+  P -> Tren taramasini ac/kapat
+  
+ .\build_exe.ps1    --- 09.09 21:39:40 ---
 Kisayollar:
-  Z -> Altin zombi avlar
-  K -> Kazi yapar
   S -> botu durdur
   J -> sonraki mouse tiklamasinin pikselini logla
   O -> metin bolgesini tara ve logla
   T -> kirmizi alanli tarama ekran goruntusunu ac/kapat
-  E -> 15 saniyelik ESC dongusunu ac/kapat
+  E -> 300 saniyelik ESC dongusunu ac/kapat
   R -> Uyari ve Arti taramasini ac/kapat
+  P -> Tren taramasini ac/kapat
 
---- 07.09.2026 20:50:06 ---
+--- 09.09 21:41:12 ---
 Kisayollar:
-  Z -> Altin zombi avlar
-  K -> Kazi yapar
   S -> botu durdur
   J -> sonraki mouse tiklamasinin pikselini logla
   O -> metin bolgesini tara ve logla
   T -> kirmizi alanli tarama ekran goruntusunu ac/kapat
-  E -> 15 saniyelik ESC dongusunu ac/kapat
+  E -> 300 saniyelik ESC dongusunu ac/kapat
   R -> Uyari ve Arti taramasini ac/kapat
+  P -> Tren taramasini ac/kapat
 
---- 07.09.2026 20:51:06 ---
+--- 09.09 21:41:35 ---
 Kisayollar:
-  Z -> Altin zombi avlar
-  K -> Kazi yapar
   S -> botu durdur
   J -> sonraki mouse tiklamasinin pikselini logla
   O -> metin bolgesini tara ve logla
   T -> kirmizi alanli tarama ekran goruntusunu ac/kapat
-  E -> 15 saniyelik ESC dongusunu ac/kapat
+  E -> 300 saniyelik ESC dongusunu ac/kapat
   R -> Uyari ve Arti taramasini ac/kapat
+  P -> Tren taramasini ac/kapat
 
---- 07.09.2026 20:52:12 ---
+--- 09.09 21:51:26 ---
 Kisayollar:
-  Z -> Altin zombi avlar
-  K -> Kazi yapar
   S -> botu durdur
   J -> sonraki mouse tiklamasinin pikselini logla
   O -> metin bolgesini tara ve logla
   T -> kirmizi alanli tarama ekran goruntusunu ac/kapat
-  E -> 15 saniyelik ESC dongusunu ac/kapat
+  E -> 300 saniyelik ESC dongusunu ac/kapat
   R -> Uyari ve Arti taramasini ac/kapat
+  P -> Tren taramasini ac/kapat
 
---- 07.09.2026 21:24:25 ---
+--- 09.09 21:53:56 ---
 Kisayollar:
-  Z -> Altin zombi avlar
-  K -> Kazi yapar
   S -> botu durdur
   J -> sonraki mouse tiklamasinin pikselini logla
   O -> metin bolgesini tara ve logla
   T -> kirmizi alanli tarama ekran goruntusunu ac/kapat
-  E -> 15 saniyelik ESC dongusunu ac/kapat
+  E -> 300 saniyelik ESC dongusunu ac/kapat
   R -> Uyari ve Arti taramasini ac/kapat
+  P -> Tren taramasini ac/kapat
+
+--- 09.09 21:57:12 ---
+Kisayollar:
+  S -> botu durdur
+  J -> sonraki mouse tiklamasinin pikselini logla
+  O -> metin bolgesini tara ve logla
+  T -> kirmizi alanli tarama ekran goruntusunu ac/kapat
+  E -> 300 saniyelik ESC dongusunu ac/kapat
+  R -> Uyari ve Arti taramasini ac/kapat
+  P -> Tren taramasini ac/kapat
+
+--- 09.09 22:10:43 ---
+Kisayollar:
+  S -> botu durdur
+  J -> sonraki mouse tiklamasinin pikselini logla
+  O -> metin bolgesini tara ve logla
+  T -> kirmizi alanli tarama ekran goruntusunu ac/kapat
+  E -> 300 saniyelik ESC dongusunu ac/kapat
+  R -> Uyari ve Arti taramasini ac/kapat
+  P -> Tren taramasini ac/kapat
+
+--- 09.09 22:23:34 ---
+Kisayollar:
+  S -> botu durdur
+  J -> sonraki mouse tiklamasinin pikselini logla
+  O -> metin bolgesini tara ve logla
+  T -> kirmizi alanli tarama ekran goruntusunu ac/kapat
+  E -> 300 saniyelik ESC dongusunu ac/kapat
+  R -> Uyari ve Arti taramasini ac/kapat
+  P -> Tren taramasini ac/kapat
+
+--- 09.09 22:30:19 ---
+Kisayollar:
+  S -> botu durdur
+  J -> sonraki mouse tiklamasinin pikselini logla
+  O -> metin bolgesini tara ve logla
+  T -> kirmizi alanli tarama ekran goruntusunu ac/kapat
+  E -> 300 saniyelik ESC dongusunu ac/kapat
+  R -> Uyari ve Arti taramasini ac/kapat
+  P -> Tren taramasini ac/kapat
+  U -> Sv.NN/Zombi Patronu OCR gri alan taramasini kaydet
+
+--- 09.09 22:37:28 ---
+Kisayollar:
+  S -> botu durdur
+  J -> sonraki mouse tiklamasinin pikselini logla
+  O -> metin bolgesini tara ve logla
+  T -> kirmizi alanli tarama ekran goruntusunu ac/kapat
+  E -> 300 saniyelik ESC dongusunu ac/kapat
+  R -> Uyari ve Arti taramasini ac/kapat
+  P -> Tren taramasini ac/kapat
+  U -> Sv.NN/Zombi Patronu OCR gri alan taramasini kaydet
 

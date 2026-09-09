@@ -430,3 +430,414 @@ Traceback (most recent call last):
     raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
 pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
 2026-09-07 21:25:14,574 [INFO] Bot kullanici tarafindan durduruldu.
+2026-09-08 17:59:05,230 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1484, in <module>
+    run_bot(startup_config)
+    ~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1394, in run_bot
+    perform_startup_clicks(config)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 220, in perform_startup_clicks
+    pyautogui.click(coordinate[0], coordinate[1])
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pyautogui\__init__.py", line 593, in wrapper
+    failSafeCheck()
+    ~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pyautogui\__init__.py", line 1734, in failSafeCheck
+    raise FailSafeException(
+        "PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED."
+    )
+pyautogui.FailSafeException: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2026-09-08 18:06:19,501 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1484, in <module>
+    run_bot(startup_config)
+    ~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1456, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<4 lines>...
+        escape_monitor_enabled,
+        ^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1038, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 387, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-08 18:06:44,606 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1484, in <module>
+    run_bot(startup_config)
+    ~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1456, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<4 lines>...
+        escape_monitor_enabled,
+        ^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1038, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 387, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-08 18:20:48,399 [INFO] yonca -> bulundu_08092026_18:20
+2026-09-08 18:20:50,088 [INFO] Metin taramasi:
+— —— r
+Sohbet İttifak Duyuru .u
+| KK a pi
+| We mi: | 1 ae ergen ve ee evi rel ae
+| Yorum
+pileli yo layle elian N
+| , Eğ
+16:16
+FAD VE ÜZEN EZİZ Lv.30 Gg Shauman
+— Şanslı Hediye
+* Az önce 5,000 Elmas'u aldım.
+20/20 Gelin bu şansı paylaşayın!
+2d Wiles Lw.28@) Virsculent
+S @
+ma
+> v
+çöz) YER Lv.29 (gi karajo5
+2026-09-08 18:20:50,649 [INFO] OCR hedefi bulundu ve tiklandi: Şanslı Hediye (859, 621)
+2026-09-08 18:21:02,400 [INFO] yonca -> bulundu_08092026_18:21
+2026-09-08 18:21:03,995 [INFO] Metin taramasi:
+Sohbet Ittifak Duyurus':
+. = AB
+| ii Lv.29 G karajo5
+
+™ Esos vagones se pueden
+
+sew gone P
+
+buscar con iwatlas? ay
+
+OT
+
+fe Vk. Lw.28G) odjgomurphy
+“es Cevap Ver karajo5: Esos vagones Ss...
+
+pled! yo Late ean V
+
+16:16
+yd CEERI Lv.30G/shauman
+yâ sa e
+» 7 N
+
+Ol Es Şanslı Hediye
+
+gj Az önce 5,000 Elmas'u aldım.
+
+Gelin bu şansı paylaşalım!
+
+20/20 şansı paylaştı.
+
+2d wy 4 Lv.286/Virsculent
+s @
+ma
+
+Gisa) 512 Lv.29 G/karajos
+2026-09-08 18:21:04,590 [INFO] OCR hedefi bulundu ve tiklandi: Şanslı Hediye (859, 621)
+2026-09-08 18:21:13,004 [INFO] yonca -> bulundu_08092026_18:21
+2026-09-08 18:21:14,625 [INFO] Metin taramasi:
+, , a
+Sohbet İttifak Duyu
+. = AS
+| yi 513 Lw.29 Gy karajo5
+eee Esos vagones se pueden
+buscar con iwatlas? ay
+OT
+WA lee Lv.2867 o4jgomurphy
+“es Cevap Ver karajo5: Esos vagones Ss...
+pled! yo Late ean V
+16:16
+ey ys CHEIEIFERSIED Lv.30 GShauman
+yâ sa ©
+ws 7 .
+Ol == Şanslı Hediye
+gj Az önce 5,000 Elmas'u aldım.
+Gelin bu şansı paylaşalım!
+20/20 şansı paylaştı.
+2d wy Lw.28 7 Virsculent
+s @
+ma
+Gisa) 512 Lv.29 G/karajos
+2026-09-08 18:21:15,200 [INFO] OCR hedefi bulundu ve tiklandi: Şanslı Hediye (859, 621)
+2026-09-08 18:21:26,302 [INFO] yonca -> bulundu_08092026_18:21
+2026-09-08 18:21:27,920 [INFO] Metin taramasi:
+. , . @
+
+Sohbet Ittifak Duyuru
+. = AS
+a” Lv.29 Gkarajo5
+
+™ Esos vagones se pueden
+
+aia (ee g p
+
+buscar con iwatlas? ay
+
+OT
+
+fe WP Lv.286) scjgomurphy
+“es Cevap Ver karajo5: Esos vagones Ss...
+
+pled! yo Late ean V
+
+16:16
+ey ys CHEIEIFERSIED Lv.30 GShauman
+wy M ©
+» 7 N
+
+Ol Es Şanslı Hediye
+
+gj Az önce 5,000 Elmas'u aldım.
+
+Gelin bu şansı paylaşalım!
+
+20/20 şansı paylaştı.
+
+Ei wy 22 Lv.28(g Virsculent
+dp
+ma
+
+Gisa) 512 Lv.29 G/karajos
+2026-09-08 18:21:28,518 [INFO] OCR hedefi bulundu ve tiklandi: Şanslı Hediye (859, 621)
+2026-09-08 18:21:37,236 [INFO] yonca -> bulundu_08092026_18:21
+2026-09-08 18:21:38,825 [INFO] Metin taramasi:
+Sohbet Ittifak Duyurı::
+. = , A
+| yi 513 Lw.29 Gy karajo5
+eee Esos vagones se pueden
+buscar con iwatlas? ay
+OT
+fe Pe Lw.28@) 64)gomurphy
+“es Cevap Ver karajo5: Esos vagones Ss...
+pled! yo Late ean V
+16:16
+my ys ÜZEL Lv.30 Gr Shauman
+yâ sa ©
+“7 N
+Ol Es Şanslı Hediye
+gj Az önce 5,000 Elmas'u aldım.
+Gelin bu şansı paylaşalım!
+20/20 şansı paylaştı.
+2d wy Lw.28 7 Virsculent
+dp
+ma
+Gisa) 512 Lv.29 G/karajos
+2026-09-08 18:21:39,402 [INFO] OCR hedefi bulundu ve tiklandi: Şanslı Hediye (859, 621)
+2026-09-08 18:22:42,357 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1523, in <module>
+    run_bot(startup_config)
+    ~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1431, in run_bot
+    enforce_game_window_size(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 202, in enforce_game_window_size
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 387, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 183 - Halen varolan bir dosya oluşturulamaz.
+2026-09-08 19:03:32,620 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1523, in <module>
+    run_bot(startup_config)
+    ~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1495, in run_bot
+    click_matching_templates(
+    ~~~~~~~~~~~~~~~~~~~~~~~~^
+        window,
+        ^^^^^^^
+    ...<4 lines>...
+        escape_monitor_enabled,
+        ^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1038, in click_matching_templates
+    bring_game_to_front(window)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 387, in bring_game_to_front
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-08 19:15:29,457 [INFO] Metin taramasi:
+iğ” ©
+4-5, va "7 . ty: .
+oT
+> S a xg %
+2026-09-08 19:51:30,913 [INFO] kazi -> bulundu_08092026_19:51
+2026-09-08 19:51:32,269 [INFO] Metin taramasi:
+; ’ a” gi . ‘ :
+İ > EN
+i a
+. ©.
+2026-09-09 07:34:21,282 [INFO] kazi -> bulundu_09092026_07:34
+2026-09-09 07:34:22,774 [INFO] Metin taramasi:
+“
+Sohbet İttifak Duyurusu
+: mek “1
+Ea İY 27 ar LEGENDARIS TCP 1
+musim depan 1SO akan
+. gm
+memulai LIGA EMAS nyagg >
+Tan YE 33 GQ v.30 salty Sean Jr
+ae |
+aT)
+@ 1
+07:33
+m | v7 222 Lw.28G Long time ago x
+' © Paylaş
+KP) Sv. 20 Zombi Patronu (Savaş Alanı
+#2279 X:933 Y:185)
+(a wie İşe alım görevlisi Lv.30 = 6 Shauman
+—E Hazineyi kaz (Savaş Alanı #2279 X:547
+Y:426) |
+2026-09-09 07:34:23,332 [INFO] OCR hedefi bulundu ve tiklandi: Hazineyi kaz (749, 812)
+2026-09-09 07:34:26,879 [INFO] Kazi sayaci: 71 saniye kaldi.
+2026-09-09 07:34:28,115 [INFO] Kazi sayaci: 7 saniye kaldi.
+2026-09-09 07:34:28,115 [INFO] Kazi sayaci 15 saniyenin altina dustu; 20 saniye boyunca saniyede 10 tiklama basliyor.
+2026-09-09 07:34:48,266 [INFO] Kazi sayaci hizli tiklama tamamlandi.
+2026-09-09 07:48:00,582 [INFO] yonca -> bulundu_09092026_07:48
+2026-09-09 07:48:01,974 [INFO] Metin taramasi:
+, 2» we
+Pte f [SVEXISALDIRAY
+a ay es
+z ~ Ev
+4 oe .
+Me: ae at
+e
+Gy
+“3”
+b e
+“©
+we
+[NODS] Clay Bermord ;
+2026-09-09 08:28:18,673 [INFO] Metin taramasi:
+ME, EEE
+(ge. KASaldırı
+A =) (EVEXJZentusuken e
+SN Müttefiklenbekleniyarii
+| ZomhilPatronu
+LD] Sayı/Sınır (5/5) is 517 kilometre uzaklıkta
+[EVEXTESS HS e
+Müttetiklenbekleniyor”
+Mie) wee
+Zombi/Patronu)
+LD] Sayı/Sınır (5/5) 1366 kilometre uzaklıkta
+2026-09-09 18:51:58,520 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1636, in <module>
+    run_bot(startup_config)
+    ~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1540, in run_bot
+    enforce_game_window_size(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 199, in enforce_game_window_size
+    resize_and_position_game(window, config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 186, in resize_and_position_game
+    window.activate()
+    ~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 246, in activate
+    _raiseWithLastError()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pygetwindow\_pygetwindow_win.py", line 99, in _raiseWithLastError
+    raise PyGetWindowException('Error code from Windows: %s - %s' % (errorCode, _formatMessage(errorCode)))
+pygetwindow.PyGetWindowException: Error code from Windows: 0 - İşlem başarıyla tamamlandı.
+2026-09-09 22:30:33,601 [INFO] kazi -> bulundu_09092026_22:30
+2026-09-09 22:30:35,104 [INFO] Metin taramasi:
+€
+Sohbet İttifak Duyurusu
+| AA, a
+| lll luk AG
+ea WUE Lv.28@ Salty Badger
+b= it's been awhile since I have
+been this angry at work
+(AR
+ir
+Ee 7 E32 GD Lv.30 Salty Sean Jr
+= ?
+ees Whathappened?
+aT)
+7 33 Lv.28 5 Mad Casper
+PA) O Paylaş
+C= Hazineyi kaz (Savaş Alanı #2279 X:520
+Y:423)
+YEP Lv. 2BG/SALDIRAY( ME
+© Paylaş va
+Hazineyi kaz (Savas Alani #2279 X:520 c
+Y:423)
+2026-09-09 22:30:35,669 [INFO] OCR hedefi bulundu ve tiklandi: Hazineyi kaz (749, 690)
+2026-09-09 22:30:39,002 [INFO] Saldiri sonrasi 60 saniye sessizce bekleniyor.
+2026-09-09 22:31:39,003 [INFO] 240 saniye boyunca (856, 460) konumuna 0.1 saniyede bir tiklanacak.
+2026-09-09 22:34:19,604 [ERROR] Uygulama hatasi
+Traceback (most recent call last):
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1932, in <module>
+    print("Bot basariyla sonlandirildi.")
+    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1904, in run_bot
+    text_scan_requested["enabled"] = False
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1147, in click_matching_templates
+    if monitor_state is None:
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 1117, in scan_cases
+        continue
+        ^^^^^^^^
+    ...<10 lines>...
+            template_path,
+    
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 815, in run_scan_case
+    pyautogui.click(screen_x, screen_y)
+        ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 947, in perform_excavation_attack
+  File "C:\Users\erdem\OneDrive\Desktop\lastWarBotNew\main.py", line 724, in wait_then_burst_click
+    "%s saniye boyunca (%s, %s) konumuna %s saniyede bir tiklanacak.",
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pyautogui\__init__.py", line 593, in wrapper
+    failSafeCheck()
+    ~~~~~~~~~~~~~^^
+  File "c:\Users\erdem\OneDrive\Desktop\lastWarBotNew\.venv\Lib\site-packages\pyautogui\__init__.py", line 1734, in failSafeCheck
+    raise FailSafeException(
+        "PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED."
+    )
+pyautogui.FailSafeException: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
