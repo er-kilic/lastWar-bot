@@ -143,6 +143,8 @@
   "escape_pause_seconds_yonca": 30,
   "arti_click_delay_seconds": 1.0,
   "max_zombi_patronu_level": 56,
+  "ralli_confidence": 0.55,
+  "arti_confidence": 0.55,
   "post_attack": {
     "initial_wait_seconds": 60,
     "duration_seconds": 240,

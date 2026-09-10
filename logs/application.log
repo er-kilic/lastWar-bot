@@ -841,3 +841,7 @@ Traceback (most recent call last):
         "PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED."
     )
 pyautogui.FailSafeException: PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.
+2026-09-09 22:59:09,397 [INFO] Test mesaji - hem konsola hem loga.
+2026-09-09 22:59:09,398 [INFO] [DEBUG OCR TEMIZ METIN]: 'zombi patronu'
+2026-09-09 22:59:09,398 [INFO] [DEBUG OCR SEVIYE] Okunan seviye: 45
+2026-09-09 22:59:09,398 [INFO] [OCR ONAY] 'zombi patronu' bulundu ve seviye 45 < 56, hedef uygun.
