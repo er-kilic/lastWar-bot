@@ -1536,7 +1536,7 @@ def handle_uyari_scan(window, config, debug_capture=False, uyari_state=None):
         print(f"--- [OCR METNI OKUNDU]:\n{raw_ocr_text}\n-----------------------")
         print(f"--- [OCR SEVIYE SATIRI OKUNDU]: '{level_text}'")
 
-        max_zombi_patronu_level = config.get("max_zombi_patronu_level", 55)
+        max_zombi_patronu_level = config.get("max_zombi_patronu_level", 56)
         if not check_elite_level(raw_ocr_text, level_text, max_zombi_patronu_level):
             pyautogui.press("esc")
             print("[KOSUL SAGLANMADI] Hedef uygun degil, ESC basildi.")
@@ -1614,6 +1614,10 @@ def check_elite_level(ocr_text, level_text="", max_level=55):
             return False
         parsed_level = int(digit_runs[-1][-2:])
     print(f"[DEBUG OCR SEVIYE] Okunan seviye: {parsed_level}")
+
+    if parsed_level <= 0:
+        print("[OCR RED] Seviye 0 okundu (guvenilmez/tanimlanamadi), hedef reddedildi.")
+        return False
 
     if parsed_level >= max_level:
         print(f"[OCR RED] Seviye {parsed_level} >= {max_level}, hedef uygun degil.")
