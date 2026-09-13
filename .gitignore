@@ -1,0 +1,40 @@
+﻿# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyInstaller / Build outputs
+build/
+dist/
+*.manifest
+*.spec.bak
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Logs
+*.log
+logs/
+
+# Debug Screenshots
+screenShots/*.png
+screenShots/*.jpg
+screenShots/*.jpeg
+!screenShots/.gitkeep
+
+# OS generated files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# IDE / Editor folders
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
