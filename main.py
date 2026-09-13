@@ -38,6 +38,7 @@ APP_LOG_PATH = LOGS_DIR / "application.log"
 STARTUP_LOG_PATH = LOGS_DIR / "startup.log"
 KUTUPHANE_DIR = ROOT / "kutuphane"
 SHORTCUTS_LOG_PATH = KUTUPHANE_DIR / "kisayollar.log"
+FOUND_LOG_PATH = LOGS_DIR / "bulunanlar.log"
 
 APP_LOGGER = logging.getLogger("last_war_bot")
 STARTUP_LOGGER = logging.getLogger("last_war_bot_startup")
@@ -208,7 +209,7 @@ def enforce_game_window_size(window, config):
     bring_game_to_front(window)
 
 
-def perform_startup_clicks(config):
+def perform_startup_clicks(config, window=None):
     startup = config.get("startup_actions", {})
     if not startup.get("enabled", True):
         return
@@ -223,28 +224,24 @@ def perform_startup_clicks(config):
         time.sleep(delay)
 
     if startup.get("press_escape_after_clicks", True):
+        escape_delay = startup.get("escape_delay_after_clicks_seconds", 1.0)
+        time.sleep(escape_delay)
+        # ESC bir tus vurusu oldugu icin (tiklamalar gibi imlec konumuna
+        # bagli degil) sadece oyun penceresi o an klavye odaginda ise
+        # etkili oluyor; odak baska bir yere kaymissa (yukleme ekrani,
+        # konsol penceresi vb.) ESC oyuna hic ulasmiyordu. Basmadan once
+        # pencereyi tekrar one getirip odagi garantiliyoruz.
+        if window is not None:
+            bring_game_to_front(window)
         pyautogui.press("esc")
-        log("Baslangic tiklamalarindan sonra ESC basildi.")
+        log(f"Baslangic tiklamalarindan {escape_delay} saniye sonra ESC basildi.")
 
-
-def has_red_disconnect_button(screenshot):
-    image = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2HSV)
-    height, width = image.shape[:2]
-    lower_area = image[int(height * 0.5):, int(width * 0.15):int(width * 0.85)]
-    lower_red = np.array([0, 100, 100])
-    upper_red = np.array([10, 255, 255])
-    red_mask = cv2.inRange(lower_area, lower_red, upper_red)
-    return cv2.countNonZero(red_mask) >= 500
-
-
-def has_blue_exit_button(screenshot):
-    image = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2HSV)
-    height, width = image.shape[:2]
-    lower_area = image[int(height * 0.5):, int(width * 0.15):int(width * 0.85)]
-    lower_blue = np.array([85, 80, 100])
-    upper_blue = np.array([115, 255, 255])
-    blue_mask = cv2.inRange(lower_area, lower_blue, upper_blue)
-    return cv2.countNonZero(blue_mask) >= 500
+        post_esc_coordinate = startup.get("post_escape_click_coordinate", [1651, 900])
+        pyautogui.click(post_esc_coordinate[0], post_esc_coordinate[1])
+        log(
+            f"ESC sonrasi ({post_esc_coordinate[0]}, {post_esc_coordinate[1]}) "
+            "tiklandi."
+        )
 
 
 def monitor_game_state(config, next_escape_at, allow_escape=True, escape_state=None):
@@ -301,10 +298,20 @@ def monitor_game_state(config, next_escape_at, allow_escape=True, escape_state=N
         interval = monitor.get("escape_interval_seconds", 15)
         is_first_check = escape_state is not None and not escape_state.get("first_done")
         if not is_first_check:
-            pyautogui.press("esc")
+            coordinate = monitor.get("periodic_click_coordinate", [1651, 900])
+            click_count = monitor.get("periodic_click_count", 2)
+            click_between = monitor.get("periodic_click_between_seconds", 1.0)
+            for click_index in range(click_count):
+                pyautogui.click(coordinate[0], coordinate[1])
+                if click_index < click_count - 1:
+                    time.sleep(click_between)
+            log(
+                f"Oyun kontrolu icin ({coordinate[0]}, {coordinate[1]}) "
+                f"{click_count} kez {click_between}sn arayla tiklandi "
+                f"({interval} saniye aralikla)."
+            )
         else:
             escape_state["first_done"] = True
-        log(f"Oyun kontrolu icin ESC basildi ({interval} saniye aralikla).")
         next_escape_at = time.monotonic() + interval
 
     exit_button = find_template_center(
@@ -336,6 +343,63 @@ def monitor_game_state(config, next_escape_at, allow_escape=True, escape_state=N
     return None, next_escape_at
 
 
+def check_disconnect_and_bakim(config):
+    """disconnect.png ve bakim.png icin tek atimlik hizli kontrol.
+    monitor_game_state ana dongude her turda bu ikisini zaten kontrol
+    ediyor, ama kazi saldirisinin bekleme/tiklama dongusu (45sn+75sn
+    gibi) ana donguyu tamamen bloke ettigi icin o sirada disconnect
+    veya bakim ekrani cikarsa hic fark edilmiyordu. Bu fonksiyon o
+    bloke eden dongulerin icinden periyodik olarak cagirilip ayni
+    kontrolu yapar. Disconnect bulunup tiklandiysa True doner (cagiran
+    taraf saldiriyi kesip oyunu yeniden baslatma sinyali vermeli);
+    bakim bulunup Onayla tiklanmis olsa da False doner (bakim,
+    disconnect gibi oyunu kapatmiyor, saldiriya devam edilebilir)."""
+    monitor = config.get("game_monitor", {})
+    screenshot = pyautogui.screenshot()
+
+    def crop(region):
+        return screenshot.crop(
+            (region[0], region[1], region[0] + region[2], region[1] + region[3])
+        )
+
+    confidence = monitor.get(
+        "popup_image_confidence",
+        config["bot"]["image_confidence"],
+    )
+
+    disconnect_region = get_region_tuple(monitor["disconnect_scan_region"])
+    disconnect = find_template_center(
+        crop(disconnect_region),
+        PNG_DIR / monitor["disconnect_template"],
+        confidence,
+        monitor.get("disconnect_template_scales"),
+    )
+    if disconnect:
+        coordinate = monitor["disconnect_click_coordinate"]
+        pyautogui.click(coordinate[0], coordinate[1])
+        log(
+            "disconnect.png bulundu (kazi beklerken); cikis tiklamasi "
+            f"yapildi: ({coordinate[0]}, {coordinate[1]})"
+        )
+        return True
+
+    exit_region = get_region_tuple(monitor["popup_scan_region"])
+    bakim_click = find_template_offset_click(
+        crop(exit_region),
+        PNG_DIR / monitor.get("bakim_template", "bakim.png"),
+        confidence,
+        monitor.get("bakim_confirm_offset_fraction", [0.714, 0.737]),
+        monitor.get("bakim_template_scales", [0.9, 0.95, 1.0, 1.05, 1.1]),
+    )
+    if bakim_click:
+        abs_x = exit_region[0] + bakim_click[0]
+        abs_y = exit_region[1] + bakim_click[1]
+        pyautogui.click(abs_x, abs_y)
+        log(f"bakim.png bulundu (kazi beklerken); Onayla tiklandi -> ({abs_x}, {abs_y})")
+
+    return False
+
+
 def restart_game_after_disconnect(config):
     executable = Path(config["game"]["executable_path"]).expanduser()
     time.sleep(1)
@@ -365,7 +429,7 @@ def restart_game_after_disconnect(config):
     if window is None:
         raise RuntimeError("Oyun yeniden baslatildi ancak pencere bulunamadi.")
     enforce_game_window_size(window, config)
-    perform_startup_clicks(config)
+    perform_startup_clicks(config, window)
     return window
 
 
@@ -555,16 +619,6 @@ def get_region_tuple(region):
     return left, top, width, height
 
 
-def save_scan_screenshot(screenshot, prefix):
-    SCREENSHOTS_DIR.mkdir(parents=True, exist_ok=True)
-    timestamp = datetime.now().strftime("%d%m%Y_%H%M")
-    path = SCREENSHOTS_DIR / f"{prefix}_{timestamp}.png"
-    image = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR)
-    cv2.imwrite(str(path), image)
-    APP_LOGGER.info("Tarama ekran goruntusu kaydedildi: %s", path)
-    return path
-
-
 def capture_debug_screenshot(window, config, custom_regions=None):
     """Pencere ekran goruntusunu alip belirtilen bolgeleri kirmizi cerceveyle kaydeder."""
     if custom_regions is not None:
@@ -581,6 +635,10 @@ def capture_debug_screenshot(window, config, custom_regions=None):
             (
                 "tren_arama",
                 config.get("scan_cases", {}).get("tren", {}).get("scan_region"),
+            ),
+            (
+                "hastane_yardim_asker_arama",
+                {"top_left": [75, 723], "bottom_right": [145, 785]},
             ),
         ]
     SCREENSHOTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -646,79 +704,12 @@ def saldirma_click():
     saldir_click()
 
 
-def _takim_saldir(takim_no, coordinate):
-    pyautogui.click(coordinate[0], coordinate[1])
-    log(f"{takim_no}. takim secildi: ({coordinate[0]}, {coordinate[1]})")
-    time.sleep(0.3)
-    saldir_click()
-
-def birinci_takim_saldir():
-    _takim_saldir(1, (705, 854))
-
-def ikinci_takim_saldir():
-    _takim_saldir(2, (804, 860))
-
-def ucuncu_takim_saldir():
-    _takim_saldir(3, (905, 867))
-
-def wait_for_share_after_attack(config):
+def burst_click_until_paylas(config, coordinate, duration, click_interval):
+    """Verilen konuma, verilen sure boyunca hizli tiklar; paylas.png ekrana
+    gelirse hemen durur ve ESC basar. wait_then_burst_click (sabit sureli)
+    ve wait_for_sayac_then_burst_click (sayac bazli) tarafindan paylasilan
+    ortak tiklama dongusu."""
     post_attack = config["post_attack"]
-
-    initial_wait = post_attack.get("initial_wait_seconds", 60)
-    log(f"Saldiri sonrasi {initial_wait} saniye sessizce bekleniyor.")
-    time.sleep(initial_wait)
-
-    duration = post_attack["duration_seconds"]
-    deadline = time.time() + duration
-    share_template = PNG_DIR / post_attack["template"]
-    scan_region = get_region_tuple(config["text_scan_region"])
-    confidence = config["bot"]["image_confidence"]
-
-    if not share_template.exists():
-        APP_LOGGER.warning("Paylas PNG bulunamadi: %s", share_template)
-        return
-
-    while time.time() < deadline:
-        coordinate = post_attack["click_coordinate"]
-        pyautogui.click(coordinate[0], coordinate[1])
-        log(
-            f"Saldiri sonrasi tiklama: "
-            f"({coordinate[0]}, {coordinate[1]})"
-        )
-
-        screenshot = pyautogui.screenshot(region=scan_region)
-        match = find_template_center(
-            screenshot,
-            share_template,
-            confidence,
-        )
-        if match:
-            pyautogui.press("esc")
-            log("paylas.png bulundu; tiklama durduruldu ve ESC basildi.")
-            return
-
-        time.sleep(post_attack["click_interval_seconds"])
-
-    log(f"Paylas PNG {duration} saniye icinde bulunamadi.")
-
-
-def wait_then_burst_click(config):
-    """Saldiridan sonra sabit bir sure sessizce bekler, sonra sabit bir
-    sure boyunca hizli tiklar. Sayac OCR'una bagli degil (guvenilmez
-    ciktigi icin kaldirildi), ama paylas.png ekrana gelirse tiklamayi
-    hemen durdurup ESC basar; aksi halde bu sirada ana dongu (ve onun
-    surekli paylas.png taramasi) bloke oldugu icin ekran gelse de kimse
-    fark etmiyordu."""
-    post_attack = config["post_attack"]
-
-    initial_wait = post_attack.get("initial_wait_seconds", 60)
-    log(f"Saldiri sonrasi {initial_wait} saniye sessizce bekleniyor.")
-    time.sleep(initial_wait)
-
-    duration = post_attack.get("duration_seconds", 240)
-    click_interval = post_attack.get("click_interval_seconds", 0.1)
-    coordinate = post_attack["click_coordinate"]
-
     paylas_template = PNG_DIR / post_attack.get("template", "paylas.png")
     paylas_region = get_region_tuple(config["text_scan_region"])
     paylas_confidence = config["bot"]["image_confidence"]
@@ -748,6 +739,257 @@ def wait_then_burst_click(config):
     log(f"{duration} saniyelik hizli tiklama tamamlandi.")
 
 
+def get_kazi_initial_wait_seconds(config):
+    """Saat 23:00-08:00 arasi gece, 08:00-23:00 arasi gunduz sayilip
+    farkli bekleme sureleri kullanilir (gece daha uzun, 45sn; gunduz
+    daha kisa, 30sn - varsayilanlar)."""
+    post_attack = config["post_attack"]
+    hour = datetime.now().hour
+    is_night = hour >= 23 or hour < 8
+    if is_night:
+        return post_attack.get("initial_wait_seconds_night", 45)
+    return post_attack.get("initial_wait_seconds_day", 30)
+
+
+def wait_then_burst_click(config):
+    """Saldiridan sonra sabit bir sure sessizce bekler, sonra sabit bir
+    sure boyunca hizli tiklar. Sayac OCR'una bagli degil (guvenilmez
+    ciktigi icin kaldirildi), ama paylas.png ekrana gelirse tiklamayi
+    hemen durdurup ESC basar; aksi halde bu sirada ana dongu (ve onun
+    surekli paylas.png taramasi) bloke oldugu icin ekran gelse de kimse
+    fark etmiyordu."""
+    post_attack = config["post_attack"]
+
+    initial_wait = get_kazi_initial_wait_seconds(config)
+    log(f"Saldiri sonrasi {initial_wait} saniye sessizce bekleniyor.")
+    time.sleep(initial_wait)
+
+    duration = post_attack.get("duration_seconds", 240)
+    click_interval = post_attack.get("click_interval_seconds", 0.1)
+    coordinate = post_attack["click_coordinate"]
+    burst_click_until_paylas(config, coordinate, duration, click_interval)
+
+
+def parse_sayac_seconds(sayac_text):
+    """'00:00:39' / '00:39' / '39' gibi OCR ciktilarini toplam saniyeye
+    cevirir. Son 3 rakam grubunu (SS, MM, HH) alir; eksik olanlari 0 sayar.
+    Ayristirilamazsa (bos/gurultu) None doner.
+
+    OCR bazen saat basamagindaki "0"i "9" gibi okuyup ("00:00:48" ->
+    "90:00:48") anlamsiz derecede buyuk bir toplam uretiyor; bu da esik
+    kontrolunun (<=15sn) hicbir zaman gerceklesmeyip tarama dongusunun
+    guvenlik suresi (max_poll_seconds) dolana kadar surmesine yol
+    aciyordu. Bu sayacin gercek gosterebilecegi en yuksek saat degeri
+    (6) asilirsa, saat basamaginin gurultu oldugunu kabul edip 0 sayiyoruz.
+
+    Saniye alani gercek sayacta hep 2 haneli gosterildigi icin ("04",
+    "40" gibi); OCR bir haneyi kacirip tek hane okursa ("4"), bunu
+    onlar hanesi sayip sonuna 0 ekliyoruz (4 -> 40), "04" gibi
+    yorumlamiyoruz - gozlemlenen gercek OCR hatasi bu yondeydi.
+
+    OCR bazen saniye kismini hic okuyamayip ':' dan sonrasini bos
+    birakiyor (orn. "03: :"). Bu durumda son (saniye) grubu gercekte
+    hangi degeri temsil ettigi belirsiz oldugu icin onu tahmin etmek
+    yerine guvenli/esik-disi sabit bir deger (60 sn) donuyoruz - boylece
+    boyle bir okuma yanlislikla "esige indi" sanilip erken tetiklemeye
+    yol acmiyor. Bu kural sadece EN AZ 2 iki nokta ust uste varsa
+    (gercek bir HH:MM:SS/MM:SS formati denendigine isaret eder)
+    calisiyor - tek basina, gecerli bir ciplak sayinin (orn. "27")
+    sonuna OCR gurultusuyle eklenmis TEK bir ":" bu kurali tetiklemez,
+    aksi halde gecerli bir okuma (27 -> 27 sn) yanlislikla 60'a
+    cevriliyordu (gercek gozlemlenen hata)."""
+    text = sayac_text or ""
+    if text.count(":") >= 2:
+        last_segment = text.rsplit(":", 1)[-1]
+        if not re.search(r"\d", last_segment):
+            return 60
+    digit_groups = re.findall(r"\d+", text)
+    if not digit_groups:
+        return None
+    groups = digit_groups[-3:]
+    while len(groups) < 3:
+        groups.insert(0, "0")
+    hours_str, minutes_str, seconds_str = groups[-3], groups[-2], groups[-1]
+    hours, minutes, seconds = int(hours_str), int(minutes_str), int(seconds_str)
+    if hours > 6:
+        hours = 0
+    if len(seconds_str) == 1:
+        seconds *= 10
+    return hours * 3600 + minutes * 60 + seconds
+
+
+def scroll_zoom(window, ticks):
+    """Harita zoom'unu pencere merkezinde fare tekerlegi ile ticks kadar
+    cevirir (pozitif=yakinlas, negatif=uzaklas). Oyunda maksimum zoom'a
+    6 tekerlek tikiyla ulasiliyor; sayac metnini daha buyuk/net okumak
+    icin bu fonksiyonla once yakinlasip, okuma bitince ayni miktarda
+    geri uzaklasiyoruz (aksi halde diger tum tiklama koordinatlari
+    normal zoom seviyesine gore kalibre oldugu icin bozulur)."""
+    center_x = window.left + window.width // 2
+    center_y = window.top + window.height // 2
+    pyautogui.moveTo(center_x, center_y)
+    direction = 1 if ticks >= 0 else -1
+    for _ in range(abs(ticks)):
+        pyautogui.scroll(direction)
+        time.sleep(0.1)
+
+
+def run_sayac_zoom_ocr_test(window, config):
+    """Q kisayolu: kazi sayacinin zoom yapip OCR ile okunup saniyeye
+    cevrilmesi ve esige inince tiklama baslatilmasi kismini, gercek bir
+    kazi saldirisi tetiklemeden tek basina test etmek icin. wait_for_
+    sayac_then_burst_click ile ayni OCR/esik/dogrulama mantigini kullanir,
+    ama L modundan bagimsiz kendi test bolgesini (q_test_sayac_coords)
+    okur ve esige inince post_attack.click_coordinate yerine ekranin
+    ortasina tiklar. Klavye dinleyicisini bloke etmemek icin ayri bir
+    thread'de calistirilir."""
+    sayac_coords = config.get(
+        "q_test_sayac_coords", {"top_left": [860, 266], "bottom_right": [948, 302]}
+    )
+    poll_interval = config.get("kazi_sayac_poll_interval_seconds", 1.0)
+    max_poll_seconds = config.get("kazi_sayac_max_poll_seconds", 120)
+    threshold_seconds = 20
+    required_confirmations = 5
+
+    log(
+        f"Q -> sayac zoom/OCR testi basladi (esik: {threshold_seconds} sn, "
+        f"{required_confirmations} kez ust uste dogrulanacak, "
+        f"en fazla {max_poll_seconds} sn beklenecek)."
+    )
+
+    zoom_ticks = config.get("kazi_sayac_zoom_ticks", 6)
+    log(f"Q testi: harita {zoom_ticks} tik yakinlastiriliyor.")
+    scroll_zoom(window, zoom_ticks)
+    time.sleep(config.get("kazi_sayac_zoom_settle_seconds", 0.3))
+
+    poll_deadline = time.time() + max_poll_seconds
+    consecutive_low_readings = 0
+    reached_threshold = False
+    while time.time() < poll_deadline:
+        sayac_text = read_sayac_text(sayac_coords, config.get("ocr", {}), True)
+        total_seconds = parse_sayac_seconds(sayac_text)
+        if total_seconds is None:
+            log(f"Kazi sayaci okunamadi: '{sayac_text}'")
+        else:
+            log(f"Kazi sayaci okundu: '{sayac_text}' -> {total_seconds} sn")
+            if total_seconds <= threshold_seconds:
+                consecutive_low_readings += 1
+                log(
+                    f"Esik altinda dogrulama {consecutive_low_readings}/"
+                    f"{required_confirmations}."
+                )
+                if consecutive_low_readings >= required_confirmations:
+                    reached_threshold = True
+                    break
+            else:
+                if consecutive_low_readings:
+                    log("Esik ustunde okuma geldi; dogrulama sayaci sifirlandi.")
+                consecutive_low_readings = 0
+        time.sleep(poll_interval)
+
+    if not reached_threshold:
+        log(
+            f"Q testi: sayac {max_poll_seconds} sn icinde esige inmedi; "
+            "guvenlik icin tiklamaya baslaniyor."
+        )
+
+    center_x = window.left + window.width // 2
+    center_y = window.top + window.height // 2
+    duration = config.get("kazi_sayac_click_duration_seconds", 40)
+    click_interval = config.get("post_attack", {}).get("click_interval_seconds", 0.1)
+    log(
+        f"Q testi: ekran ortasina ({center_x}, {center_y}) {duration} "
+        "saniye boyunca tiklaniyor."
+    )
+    deadline = time.time() + duration
+    while time.time() < deadline:
+        pyautogui.click(center_x, center_y)
+        time.sleep(click_interval)
+    log("Q testi: tiklama tamamlandi.")
+
+    log(f"Q testi: harita {zoom_ticks} tik eski haline uzaklastiriliyor.")
+    scroll_zoom(window, -zoom_ticks)
+    time.sleep(config.get("kazi_sayac_zoom_settle_seconds", 0.3))
+    log("Q testi bitti.")
+
+
+def wait_for_sayac_then_burst_click(config, window, debug_capture=False):
+    """L acikken kazi sonrasi bekleme: sayac_coords bolgesindeki geri
+    sayimi OCR ile izler, deger esik (varsayilan 30) saniyeye ust uste
+    N kez (varsayilan 5) indiginde burst-click'e gecer. Tek bir dusuk
+    okumayla hemen tetiklemek yerine ust uste dogrulama istenmesinin
+    nedeni, OCR'in ara sira "03: :" gibi saniye kismi eksik/bozuk
+    ciktilar uretip yanlislikla cok erken tetiklemesini onlemek (bu
+    tur bozuk ciktilar parse_sayac_seconds tarafindan zaten esik-disi
+    60 sn'ye cevriliyor, ama yine de ek bir guvenlik katmani olarak
+    dogrulama sayisi tutuluyor). Esik ustunde gelen bir okuma dogrulama
+    sayacini sifirlar; okunamayan (bos) okumalar sayaci etkilemez.
+    Sayac beklenen surede esige inmezse (guvenlik onlemi) yine de
+    tiklamaya baslar, sonsuza dek beklemez."""
+    post_attack = config["post_attack"]
+    sayac_coords = config.get(
+        "kazi_sayac_coords", {"top_left": [811, 334], "bottom_right": [894, 378]}
+    )
+    poll_interval = config.get("kazi_sayac_poll_interval_seconds", 1.0)
+    max_poll_seconds = config.get("kazi_sayac_max_poll_seconds", 120)
+    threshold_seconds = config.get("kazi_sayac_threshold_seconds", 30)
+    required_confirmations = config.get("kazi_sayac_confirmations_required", 5)
+
+    log(
+        f"Kazi sayaci izleniyor (esik: {threshold_seconds} sn, "
+        f"{required_confirmations} kez ust uste dogrulanacak, "
+        f"en fazla {max_poll_seconds} sn beklenecek)."
+    )
+
+    zoom_ticks = config.get("kazi_sayac_zoom_ticks", 6)
+    log(f"Sayac okumasi icin harita {zoom_ticks} tik yakinlastiriliyor.")
+    scroll_zoom(window, zoom_ticks)
+    time.sleep(config.get("kazi_sayac_zoom_settle_seconds", 0.3))
+
+    poll_deadline = time.time() + max_poll_seconds
+    consecutive_low_readings = 0
+    reached_threshold = False
+    while time.time() < poll_deadline:
+        # L modunu test ederken T'ye bagli olmadan her okumada ham renkli
+        # goruntuyu kaydediyoruz; sorun cozulunce debug_capture parametresine
+        # geri baglanacak.
+        sayac_text = read_sayac_text(sayac_coords, config.get("ocr", {}), True)
+        total_seconds = parse_sayac_seconds(sayac_text)
+        if total_seconds is None:
+            log(f"Kazi sayaci okunamadi: '{sayac_text}'")
+        else:
+            log(f"Kazi sayaci okundu: '{sayac_text}' -> {total_seconds} sn")
+            if total_seconds <= threshold_seconds:
+                consecutive_low_readings += 1
+                log(
+                    f"Esik altinda dogrulama {consecutive_low_readings}/"
+                    f"{required_confirmations}."
+                )
+                if consecutive_low_readings >= required_confirmations:
+                    reached_threshold = True
+                    break
+            else:
+                if consecutive_low_readings:
+                    log("Esik ustunde okuma geldi; dogrulama sayaci sifirlandi.")
+                consecutive_low_readings = 0
+        time.sleep(poll_interval)
+
+    if not reached_threshold:
+        log(
+            f"Kazi sayaci {max_poll_seconds} sn icinde esige inmedi; "
+            "guvenlik icin tiklamaya baslaniyor."
+        )
+
+    log(f"Sayac okumasi bitti; harita {zoom_ticks} tik eski haline uzaklastiriliyor.")
+    scroll_zoom(window, -zoom_ticks)
+    time.sleep(config.get("kazi_sayac_zoom_settle_seconds", 0.3))
+
+    duration = config.get("kazi_sayac_click_duration_seconds", 40)
+    click_interval = post_attack.get("click_interval_seconds", 0.1)
+    coordinate = post_attack["click_coordinate"]
+    return burst_click_until_paylas(config, coordinate, duration, click_interval)
+
+
 def perform_pre_ocr_click(case):
     delay = case.get("pre_ocr_delay_seconds", 0.5)
     time.sleep(delay)
@@ -760,6 +1002,27 @@ def perform_pre_ocr_click(case):
 
 
 CASE_LABELS = {"excavation": "kazi", "clover": "yonca"}
+FOUND_PHRASES = {
+    "excavation": "Kazı buldum!",
+    "clover": "Yonca buldum!",
+    "tren": "Tren buldum!",
+}
+
+
+def log_found_target(case_name):
+    """kazi.png/yonca.png/tren.png bulundugunda, ayri bir dosyaya
+    (logs/bulunanlar.log) kisa ve okunakli bir satir ekler. Tarih gun-
+    saat:dakika (dd-hh24:mi) formatinda tutuluyor. hastane/yardim_asker
+    gibi cok sik tetiklenen case'ler bu dosyaya yazilmiyor - o dosya
+    sadece nadir/degerli bulgular icin, sik tekrar eden bulgularla
+    kirlenmemesi icin."""
+    if case_name not in FOUND_PHRASES:
+        return
+    phrase = FOUND_PHRASES.get(case_name, f"{CASE_LABELS.get(case_name, case_name).capitalize()} buldum!")
+    timestamp = datetime.now().strftime("%d-%H:%M")
+    LOGS_DIR.mkdir(parents=True, exist_ok=True)
+    with FOUND_LOG_PATH.open("a", encoding="utf-8") as file:
+        file.write(f"{timestamp} {phrase}\n")
 
 
 def run_scan_case(
@@ -773,22 +1036,33 @@ def run_scan_case(
     monitor_state,
     uyari_scan_enabled=None,
     escape_monitor_enabled=None,
+    kazi_sayac_mode_enabled=None,
+    debug_capture=False,
 ):
     pause_escape_monitor_temporarily(escape_monitor_enabled, config, case_name)
     rally_was_paused = pause_rally_mode_temporarily(uyari_scan_enabled, config, case_name)
+    pause_hastane_mode_temporarily(config, case_name)
+
+    # hastane/yardim_asker cok sik tetiklendigi ve calistigi dogrulandigi
+    # icin bu ikisinin tespit/tiklama loglari kapatildi (application.log'u
+    # kirletmesin diye); diger case'ler (kazi/yonca/tren) hala loglaniyor.
+    quiet = case_name in ("hastane", "yardim_asker")
 
     try:
         center_x, center_y = match
         timestamp = datetime.now().strftime("%d.%m %H:%M")
-        log(
-            f"CASE {case_name}: {template_path.name} bulundu "
-            f"(bolge ici=({center_x}, {center_y})) {timestamp}"
-        )
+        if not quiet:
+            log(
+                f"CASE {case_name}: {template_path.name} bulundu "
+                f"(bolge ici=({center_x}, {center_y})) {timestamp}"
+            )
 
         case_label = CASE_LABELS.get(case_name, case_name)
         found_timestamp = datetime.now().strftime("%d%m%Y_%H:%M")
         found_message = f"{case_label} -> bulundu_{found_timestamp}"
-        log(found_message)
+        if not quiet:
+            log(found_message)
+        log_found_target(case_name)
         action = case.get("action")
         if action == "tren_sequence":
             screen_x = region[0] + center_x
@@ -819,6 +1093,33 @@ def run_scan_case(
                 f"{template_path.name} bulundu; "
                 f"({coordinate[0]}, {coordinate[1]}) koordinatina tiklandi."
             )
+        elif action == "click_only":
+            screen_x = region[0] + center_x
+            screen_y = region[1] + center_y
+            pyautogui.click(screen_x, screen_y)
+            if not quiet:
+                log(
+                    f"{template_path.name} bulundu; tiklandi: "
+                    f"({screen_x}, {screen_y})"
+                )
+        elif action == "click_then_click_coordinate":
+            screen_x = region[0] + center_x
+            screen_y = region[1] + center_y
+            pyautogui.click(screen_x, screen_y)
+            if not quiet:
+                log(
+                    f"{template_path.name} bulundu; tiklandi: "
+                    f"({screen_x}, {screen_y})"
+                )
+            delay = case.get("follow_up_delay_seconds", 1.0)
+            time.sleep(delay)
+            coordinate = case["follow_up_click_coordinate"]
+            pyautogui.click(coordinate[0], coordinate[1])
+            if not quiet:
+                log(
+                    f"{delay} saniye sonra ek tiklama: "
+                    f"({coordinate[0]}, {coordinate[1]})"
+                )
         elif action in {"click_then_text_scan", "click_then_text_match"}:
             screen_x = region[0] + center_x
             screen_y = region[1] + center_y
@@ -831,7 +1132,10 @@ def run_scan_case(
                 case.get("target_texts"),
             )
             if found and case.get("follow_up_action") == "excavation_attack":
-                perform_excavation_attack(window, case, config, monitor_state)
+                perform_excavation_attack(
+                    window, case, config, monitor_state,
+                    kazi_sayac_mode_enabled, debug_capture,
+                )
         elif action == "click_then_text_match_escape":
             screen_x = region[0] + center_x
             screen_y = region[1] + center_y
@@ -889,10 +1193,47 @@ def pause_toggle_temporarily(toggle_state, duration_seconds, label):
 
 
 def pause_rally_mode_temporarily(uyari_scan_enabled, config, case_name):
-    if case_name not in ("excavation", "clover"):
+    if case_name in ("excavation", "clover"):
+        duration = config.get("rally_pause_seconds", 120)
+    elif case_name == "tren":
+        duration = config.get("rally_pause_seconds_tren", 30)
+    else:
         return False
-    duration = config.get("rally_pause_seconds", 120)
     return pause_toggle_temporarily(uyari_scan_enabled, duration, "Ralli modu (R)")
+
+
+def pause_hastane_mode_temporarily(config, case_name):
+    """Kazi veya yonca bulundugunda, A modu (hastane + yardim_asker
+    taramasi) o an acik ise 5 dakikaligina pasife alir, sure dolunca
+    otomatik tekrar aktif eder. A modu zaten kapaliysa hicbir sey
+    yapmaz. hastane/yardim_asker'in enabled bayraklarini dogrudan
+    config uzerinde degistiriyor (A tusunun kendisi de ayni sekilde
+    calisiyor), ayri bir toggle_state nesnesi gerektirmiyor."""
+    if case_name not in ("excavation", "clover"):
+        return
+
+    hastane_case = config.get("scan_cases", {}).get("hastane")
+    yardim_asker_case = config.get("scan_cases", {}).get("yardim_asker")
+    if not (hastane_case and hastane_case.get("enabled")):
+        return
+
+    duration = config.get("hastane_pause_seconds", 300)
+    if hastane_case is not None:
+        hastane_case["enabled"] = False
+    if yardim_asker_case is not None:
+        yardim_asker_case["enabled"] = False
+    log(f"A modu (Hastane/Yardim/Asker) {duration} saniyeligine pasife alindi.")
+
+    def reactivate():
+        if hastane_case is not None:
+            hastane_case["enabled"] = True
+        if yardim_asker_case is not None:
+            yardim_asker_case["enabled"] = True
+        log("A modu (Hastane/Yardim/Asker) tekrar aktif edildi.")
+
+    timer = threading.Timer(duration, reactivate)
+    timer.daemon = True
+    timer.start()
 
 
 def pause_escape_monitor_temporarily(escape_monitor_enabled, config, case_name):
@@ -902,46 +1243,41 @@ def pause_escape_monitor_temporarily(escape_monitor_enabled, config, case_name):
         duration = config.get("escape_pause_seconds_yonca", 30)
     else:
         return
-    pause_toggle_temporarily(escape_monitor_enabled, duration, "ESC dongusu (E)")
+    pause_toggle_temporarily(escape_monitor_enabled, duration, "Periyodik tiklama dongusu (E)")
 
 
 def perform_tren_sequence(case, escape_monitor_enabled):
     was_enabled = bool(escape_monitor_enabled and escape_monitor_enabled.get("enabled"))
     if escape_monitor_enabled is not None:
         escape_monitor_enabled["enabled"] = False
-        log("Tren bulundu; 300 saniyelik ESC dongusu durduruldu.")
+        log("Tren bulundu; 300 saniyelik periyodik tiklama dongusu durduruldu.")
 
     try:
-        coordinate = case["confirm_coordinate"]
-        first_coordinate = case.get("first_confirm_coordinate", coordinate)
+        pre_confirm_delay = case.get("pre_confirm_delay_seconds", 0)
+        if pre_confirm_delay:
+            time.sleep(pre_confirm_delay)
 
-        time.sleep(case.get("step1_wait_seconds", 2))
-        pyautogui.click(first_coordinate[0], first_coordinate[1])
-        log(f"Tren onay tiklamasi 1: ({first_coordinate[0]}, {first_coordinate[1]})")
+        for index, step in enumerate(case.get("confirm_clicks", []), start=1):
+            coordinate = step["coordinate"]
+            pyautogui.click(coordinate[0], coordinate[1])
+            log(f"Tren onay tiklamasi {index}: ({coordinate[0]}, {coordinate[1]})")
+            time.sleep(step.get("wait_after_seconds", 1))
 
-        time.sleep(case.get("step2_wait_seconds", 5))
-        pyautogui.click(coordinate[0], coordinate[1])
-        log(f"Tren onay tiklamasi 2: ({coordinate[0]}, {coordinate[1]})")
-
-        time.sleep(case.get("step3_wait_seconds", 2))
-        pyautogui.click(coordinate[0], coordinate[1])
-        log(f"Tren onay tiklamasi 3: ({coordinate[0]}, {coordinate[1]})")
-
-        time.sleep(case.get("step4_wait_seconds", 1))
-        final_coordinate = case["final_click_coordinate"]
-        pyautogui.click(final_coordinate[0], final_coordinate[1])
-        log(f"Tren son tiklama: ({final_coordinate[0]}, {final_coordinate[1]})")
-
-        time.sleep(case.get("escape_delay_seconds", 0.5))
-        pyautogui.press("esc")
-        log("Tren akisi sonunda ESC basildi.")
+        escape_press_count = case.get("escape_press_count", 1)
+        escape_between = case.get("escape_between_presses_seconds", 0.5)
+        for _ in range(escape_press_count):
+            pyautogui.press("esc")
+            time.sleep(escape_between)
+        log(f"Tren akisi sonunda ESC {escape_press_count} kere basildi.")
     finally:
         if escape_monitor_enabled is not None:
             escape_monitor_enabled["enabled"] = was_enabled
-            log("300 saniyelik ESC dongusu tekrar baslatildi.")
+            log("300 saniyelik periyodik tiklama dongusu tekrar baslatildi.")
 
 
-def perform_excavation_attack(window, case, config, monitor_state):
+def perform_excavation_attack(
+    window, case, config, monitor_state, kazi_sayac_mode_enabled=None, debug_capture=False
+):
     monitor_state["paused"] = True
     interval = config.get("game_monitor", {}).get("escape_interval_seconds", 15)
     log(f"Kazi saldirisi basladi; {interval} saniyelik ESC izleme duraklatildi.")
@@ -961,9 +1297,15 @@ def perform_excavation_attack(window, case, config, monitor_state):
             pyautogui.click(coordinate[0], coordinate[1])
             log(f"Takip tiklamasi: ({coordinate[0]}, {coordinate[1]})")
 
-        time.sleep(delay)
+        pre_saldir_delay = case.get("pre_saldir_delay_seconds", delay)
+        time.sleep(pre_saldir_delay)
         saldir_click()
-        wait_then_burst_click(config)
+        # L acikken sayac-bazli bekleme, kapaliyken (varsayilan) eskisi gibi
+        # sabit sureli bekleme kullanilir - normal kazi akisi degismiyor.
+        if kazi_sayac_mode_enabled is not None and kazi_sayac_mode_enabled.get("enabled"):
+            wait_for_sayac_then_burst_click(config, window, debug_capture)
+        else:
+            wait_then_burst_click(config)
     finally:
         monitor_state["paused"] = False
         log(f"Kazi saldirisi tamamlandi; {interval} saniyelik ESC izleme yeniden etkin.")
@@ -1001,28 +1343,12 @@ def scan_text_region(text_region, ocr_config, target_texts=None):
         255,
         cv2.THRESH_BINARY + cv2.THRESH_OTSU,
     )[1]
-    try:
-        text = pytesseract.image_to_string(
-            processed,
-            lang=ocr_config.get("language", "tur+eng"),
-            config=f"--psm {ocr_config.get('page_segmentation_mode', 6)}",
-        ).strip()
-    except TesseractNotFoundError:
-        message = (
-            "Tesseract OCR bulunamadi. "
-            "config.json icindeki tesseract_cmd yolunu kontrol edin."
-        )
-        log(message)
-        return False
-    if text:
-        log("Metin taramasi:")
-        log(text)
-    else:
-        log("Metin taramasi: metin bulunamadi.")
-
-    if not target_texts:
-        return False
-
+    # Eskiden text_to_string ve image_to_data ayri ayri (iki kez) OCR
+    # calistiriyordu. Bu, ekran goruntusu alinip gercek tiklama arasindaki
+    # sureyi ikiye katliyordu; oyun ekraninda bu arada (orn. ittifak
+    # sohbetine biri mesaj yazinca) satirlar kayarsa, tiklama artik eski
+    # (kaymadan onceki) konuma gidiyordu. Tek OCR gecisiyle bu pencereyi
+    # kisaltiyoruz; log metnini de ayni sonuctan turetiyoruz.
     try:
         data = pytesseract.image_to_data(
             processed,
@@ -1031,6 +1357,21 @@ def scan_text_region(text_region, ocr_config, target_texts=None):
             output_type=pytesseract.Output.DICT,
         )
     except TesseractNotFoundError:
+        message = (
+            "Tesseract OCR bulunamadi. "
+            "config.json icindeki tesseract_cmd yolunu kontrol edin."
+        )
+        log(message)
+        return False
+
+    text = " ".join(word for word in data["text"] if word.strip())
+    if text:
+        log("Metin taramasi:")
+        log(text)
+    else:
+        log("Metin taramasi: metin bulunamadi.")
+
+    if not target_texts:
         return False
 
     lines = {}
@@ -1088,12 +1429,111 @@ def scan_text_region(text_region, ocr_config, target_texts=None):
 
     return False
 
+def get_best_template_match(screenshot, template_path, template_scales=None):
+    """get_best_template_score gibi ama en iyi eslesmenin konum ve
+    boyutunu da dondurur: (skor, sol, ust, genislik, yukseklik); hicbir
+    olcek sigmazsa None."""
+    screenshot_gray = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2GRAY)
+    original_template = cv2.imread(str(template_path), cv2.IMREAD_GRAYSCALE)
+    if original_template is None:
+        raise RuntimeError(f"PNG okunamadi: {template_path}")
+
+    screenshot_height, screenshot_width = screenshot_gray.shape[:2]
+    scales = template_scales or [1.0]
+    best = None
+    for scale in scales:
+        template = cv2.resize(
+            original_template, None, fx=scale, fy=scale, interpolation=cv2.INTER_LINEAR
+        )
+        template_height, template_width = template.shape[:2]
+        if template_width > screenshot_width or template_height > screenshot_height:
+            continue
+        result = cv2.matchTemplate(screenshot_gray, template, cv2.TM_CCOEFF_NORMED)
+        _, maximum_value, _, maximum_location = cv2.minMaxLoc(result)
+        if best is None or maximum_value > best[0]:
+            best = (maximum_value, maximum_location[0], maximum_location[1], template_width, template_height)
+    return best
+
+
+def average_center_color(image, fraction=0.5):
+    """PIL Image, gri veya renkli bir ndarray'in TAM ORTASINDAKI (fraction
+    kadar) bolgesinin ortalama renk vektorunu dondurur. Tum goruntunun
+    ortalamasini almak, rozetin kenarlarindaki arka plan/gecis piksellerini
+    de karistirip asil ayirt edici rengi (hastane.png'nin mavisi ile
+    hastaneFake.png'nin yesili arasindaki fark) zayiflatiyordu - olcum:
+    tam goruntu ortalamasinda fark ~29 birimken, merkezin yarisinda ~144
+    birime cikiyor. fraction, oransal oldugu icin ekran kirpintisi ile
+    sablonun kendi boyutu farkli olsa da (olcekleme sonucu) ayni sekilde
+    calisir."""
+    array = np.array(image, dtype=np.float64)
+    if array.ndim == 3 and array.shape[2] == 4:
+        array = array[:, :, :3]
+    height, width = array.shape[:2]
+    margin_h = int(height * (1 - fraction) / 2)
+    margin_w = int(width * (1 - fraction) / 2)
+    cropped = array[margin_h:height - margin_h, margin_w:width - margin_w]
+    if cropped.ndim == 2:
+        return np.array([cropped.mean()] * 3)
+    return cropped.reshape(-1, cropped.shape[-1]).mean(axis=0)
+
+
+
+
+def is_excluded_by_fake_template(screenshot, case, template_name, confidence):
+    """case["exclude_templates_for"] icinde template_name'e karsilik gelen
+    'sahte' sablonlar tanimlanmissa (orn. hastane.png ile gorsel olarak
+    cok benzeyen hastaneFake.png). hastane.png (mavi daire) ve
+    hastaneFake.png (yesil kare) griye cevrildiginde OCR/sablon
+    eslestirme icin kullanilan gri-tonlama skorlari birbirine cok
+    yakin cikiyor (ikisi de "acik renk hac isareti + koyu arka plan"
+    seklinde), bu yuzden skor karsilastirmasi bile hastane.png'yi
+    yanlislikla kazandirabiliyordu. Renk bilgisi (mavi vs yesil) ise
+    ikisini kesin ayirt ediyor: gercek eslesmenin bulundugu bolgenin
+    RENKLI ortalamasini (rozetin merkezine odaklanarak, kenar/arka plan
+    piksellerini disarida tutarak), hem asil hem sahte sablonun kendi
+    renkli ortalamasiyla karsilastirip HANGISINE renk olarak daha
+    yakinsa onu gercek kabul ediyoruz."""
+    exclude_map = case.get("exclude_templates_for", {})
+    exclude_templates = exclude_map.get(template_name)
+    if not exclude_templates:
+        return False
+
+    template_scales = case.get("template_scales")
+    real_match = get_best_template_match(screenshot, PNG_DIR / template_name, template_scales)
+    if real_match is None:
+        return False
+
+    _, left, top, width, height = real_match
+    screen_crop = np.array(screenshot)[top:top + height, left:left + width]
+    screen_color = average_center_color(screen_crop)
+
+    real_template_color = average_center_color(
+        cv2.cvtColor(cv2.imread(str(PNG_DIR / template_name), cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
+    )
+    real_distance = np.linalg.norm(screen_color - real_template_color)
+
+    for fake_template_name in exclude_templates:
+        fake_template_path = PNG_DIR / fake_template_name
+        if not fake_template_path.exists():
+            APP_LOGGER.warning("Tarama PNG bulunamadi: %s", fake_template_path)
+            continue
+        fake_template_color = average_center_color(
+            cv2.cvtColor(cv2.imread(str(fake_template_path), cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
+        )
+        fake_distance = np.linalg.norm(screen_color - fake_template_color)
+        if fake_distance < real_distance:
+            return True
+    return False
+
+
 def scan_cases(
     window,
     config,
     monitor_state,
     uyari_scan_enabled=None,
     escape_monitor_enabled=None,
+    kazi_sayac_mode_enabled=None,
+    debug_capture=False,
 ):
     default_region = get_scan_region(config)
     cases = config["scan_cases"]
@@ -1124,6 +1564,10 @@ def scan_cases(
                 confidence,
                 case.get("template_scales"),
             )
+            if center and is_excluded_by_fake_template(
+                screenshot, case, template_name, confidence
+            ):
+                continue
             if center:
                 run_scan_case(
                     case_name,
@@ -1136,7 +1580,18 @@ def scan_cases(
                     monitor_state,
                     uyari_scan_enabled,
                     escape_monitor_enabled,
+                    kazi_sayac_mode_enabled,
+                    debug_capture,
                 )
+
+def is_screenshot_blank(image, std_threshold=5.0):
+    """Ekran goruntusunun neredeyse tek renk (orn. monitor kapaliyken
+    Windows'un dondurdugu siyah kare) olup olmadigini kontrol eder.
+    Piksel degerlerinin standart sapmasi cok dusukse (gercek oyun
+    ekranindaki cesitlilik yoksa) True doner."""
+    array = np.array(image, dtype=np.float64)
+    return array.std() < std_threshold
+
 
 def click_matching_templates(
     window,
@@ -1145,6 +1600,7 @@ def click_matching_templates(
     monitor_state=None,
     uyari_scan_enabled=None,
     escape_monitor_enabled=None,
+    kazi_sayac_mode_enabled=None,
 ):
     if monitor_state is None:
         monitor_state = {"paused": False}
@@ -1153,9 +1609,24 @@ def click_matching_templates(
     screenshot = pyautogui.screenshot(
         region=(window.left, window.top, window.width, window.height)
     )
+
+    if is_screenshot_blank(screenshot):
+        if not monitor_state.get("blank_screen_warned"):
+            log(
+                "[UYARI] Ekran goruntusu neredeyse tek renk (siyah/donmus) - "
+                "monitor kapali olabilir; taramalar sonuc vermeyebilir."
+            )
+            monitor_state["blank_screen_warned"] = True
+    elif monitor_state.get("blank_screen_warned"):
+        log("Ekran goruntusu tekrar normal gorunuyor.")
+        monitor_state["blank_screen_warned"] = False
+
     if debug_capture:
         capture_debug_screenshot(window, config)
-    scan_cases(window, config, monitor_state, uyari_scan_enabled, escape_monitor_enabled)
+    scan_cases(
+        window, config, monitor_state, uyari_scan_enabled, escape_monitor_enabled,
+        kazi_sayac_mode_enabled, debug_capture,
+    )
 
     for activity_name, activity in config["activities"].items():
         if not activity["enabled"]:
@@ -1193,21 +1664,29 @@ def log_shortcuts(config):
     )
     lines.append(
         f"  {config['controls']['escape_monitor_shortcut'].upper()} -> "
-        f"{escape_interval} saniyelik ESC dongusunu ac/kapat"
+        f"{escape_interval} saniyelik periyodik tiklama dongusunu ac/kapat"
     )
     lines.append("  R -> Uyari ve Arti taramasini ac/kapat")
     lines.append("  P -> Tren taramasini ac/kapat")
-    lines.append("  U -> Sv.NN/Zombi Patronu OCR gri alan taramasini kaydet")
+    lines.append("  A -> Hastane/Yardim/Asker taramasini ac/kapat (varsayilan kapali)")
+    lines.append(
+        "  Q -> Sayac zoom/OCR testini baslat (gercek kazi saldirisi olmadan; "
+        "esik 20sn, 5 dogrulama, sonra ekran ortasina tiklar)"
+    )
+    lines.append("  U -> Sv.NN/Zombi Patronu OCR gri alan taramasini kaydet (paylas.png arama bolgesinin de ekran goruntusunu alir)")
+    lines.append(
+        "  L -> Kazi sayac modunu ac/kapat (acikken kazi sonundaki 60sn "
+        "bekle+240sn tikla yerine, sayac 30sn altina ust uste 5 kez "
+        "dogrulandiginda 40sn boyunca saniyede 10 tiklama yapilir; "
+        "L kapaliyken kazi normal sureciyle calisir)"
+    )
 
     for line in lines:
         log(line)
-
-    KUTUPHANE_DIR.mkdir(parents=True, exist_ok=True)
-    timestamp = datetime.now().strftime("%d.%m %H:%M:%S")
-    with SHORTCUTS_LOG_PATH.open("a", encoding="utf-8") as file:
-        file.write(f"--- {timestamp} ---\n")
-        file.write("\n".join(lines))
-        file.write("\n\n")
+    # Not: kutuphane/kisayollar.log artik her bot baslangicinda otomatik
+    # guncellenmiyor (surekli tekrarlanan bloklar birikiyordu). O dosya
+    # sadece koda yeni bir kisayol eklendiginde elle guncellenen statik
+    # bir referans.
 
 def start_click_coordinate_capture(window, timeout_seconds=15):
     """J kisayolu icin: global mouse hook'una guvenmeden (oyun raw-input
@@ -1245,35 +1724,6 @@ def start_click_coordinate_capture(window, timeout_seconds=15):
     thread.start()
 
 
-def simulate_clover_found(
-    window,
-    config,
-    monitor_state,
-    uyari_scan_enabled,
-    escape_monitor_enabled,
-):
-    """P test kisayolu: yonca.png'yi gercekten aramadan, sanki bulunmus ve
-    ikon tiklanmis gibi davranip gercek yonca akisinin geri kalanini
-    (OCR, ek tiklamalar, ESC) oldugu gibi calistirir."""
-    case = config["scan_cases"]["clover"]
-    template_path = PNG_DIR / case["templates"][0]
-    region = get_scan_region(config)
-    fake_match = (region[2] // 2, region[3] // 2)
-    log("P -> yonca.png bulunmus/tiklanmis gibi test akisi baslatiliyor.")
-    run_scan_case(
-        "clover",
-        template_path,
-        fake_match,
-        region,
-        case,
-        window,
-        config,
-        monitor_state,
-        uyari_scan_enabled,
-        escape_monitor_enabled,
-    )
-
-
 def create_input_listeners(window, config, running_state, monitor_state):
     shortcut_map = {
         activity["shortcut"].lower(): activity_name
@@ -1282,6 +1732,7 @@ def create_input_listeners(window, config, running_state, monitor_state):
     controls = config["controls"]
     text_scan_requested = {"enabled": False}
     ocr_debug_requested = {"enabled": False}
+    kazi_sayac_mode_enabled = {"enabled": False}
     debug_capture = {"enabled": False}
     escape_monitor_enabled = {
         "enabled": config.get("game_monitor", {}).get("escape_enabled", False)
@@ -1314,6 +1765,28 @@ def create_input_listeners(window, config, running_state, monitor_state):
                 log(f"P -> Tren taramasi: {state}")
             return
 
+        if pressed_key == "a":
+            hastane_case = config.get("scan_cases", {}).get("hastane")
+            yardim_asker_case = config.get("scan_cases", {}).get("yardim_asker")
+            current = hastane_case.get("enabled", False) if hastane_case else False
+            new_state = not current
+            if hastane_case is not None:
+                hastane_case["enabled"] = new_state
+            if yardim_asker_case is not None:
+                yardim_asker_case["enabled"] = new_state
+            state = "acik" if new_state else "kapali"
+            log(f"A -> Hastane/Yardim/Asker taramasi: {state}")
+            return
+
+        if pressed_key == "q":
+            log("Q -> Sayac zoom/OCR testi baslatildi.")
+            threading.Thread(
+                target=run_sayac_zoom_ocr_test,
+                args=(window, config),
+                daemon=True,
+            ).start()
+            return
+
         if pressed_key == controls["coordinate_shortcut"].lower():
             log("J -> sonraki mouse tiklamasi bekleniyor.")
             start_click_coordinate_capture(window)
@@ -1329,6 +1802,17 @@ def create_input_listeners(window, config, running_state, monitor_state):
             log("U -> OCR gri alan taramasi istendi.")
             return
 
+        if pressed_key == "l":
+            kazi_sayac_mode_enabled["enabled"] = not kazi_sayac_mode_enabled["enabled"]
+            state = "acik" if kazi_sayac_mode_enabled["enabled"] else "kapali"
+            log(
+                f"L -> Kazi sayac modu: {state} (acikken kazi normal surecinin "
+                "sonundaki 60sn bekle+240sn tikla yerine, sayac 30sn altina "
+                "ust uste 5 kez dogrulandiginda 40sn boyunca saniyede 10 "
+                "tiklama yapilir; L kapaliyken kazi normal sureciyle calisir)."
+            )
+            return
+
         if pressed_key == controls["debug_screenshot_shortcut"].lower():
             debug_capture["enabled"] = not debug_capture["enabled"]
             state = "acik" if debug_capture["enabled"] else "kapali"
@@ -1339,7 +1823,7 @@ def create_input_listeners(window, config, running_state, monitor_state):
             escape_monitor_enabled["enabled"] = not escape_monitor_enabled["enabled"]
             state = "acik" if escape_monitor_enabled["enabled"] else "kapali"
             log(
-                f"{pressed_key.upper()} -> {escape_interval} saniyelik ESC dongusu: {state}"
+                f"{pressed_key.upper()} -> {escape_interval} saniyelik periyodik tiklama dongusu: {state}"
             )
             return
 
@@ -1364,35 +1848,12 @@ def create_input_listeners(window, config, running_state, monitor_state):
         keyboard_listener,
         text_scan_requested,
         ocr_debug_requested,
+        kazi_sayac_mode_enabled,
         debug_capture,
         escape_monitor_enabled,
         uyari_scan_enabled,
     )
 
-def capture_single_debug_region(region_name, region_tuple):
-    """(left, top, width, height) formatindaki bolgeyi kirmizi cerceveyle kaydeder."""
-    SCREENSHOTS_DIR.mkdir(parents=True, exist_ok=True)
-    screenshot = pyautogui.screenshot(region=region_tuple)
-    image = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR)
-    h, w = image.shape[:2]
-
-    # Bolge etrafina kirmizi cerceve ve etiket ciz
-    cv2.rectangle(image, (0, 0), (w - 1, h - 1), (0, 0, 255), 2)
-    cv2.putText(
-        image,
-        region_name,
-        (4, 18),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.55,
-        (0, 0, 255),
-        2,
-        cv2.LINE_AA,
-    )
-
-    timestamp = datetime.now().strftime("%d%m%Y_%H%M%S")
-    path = SCREENSHOTS_DIR / f"{region_name}_{timestamp}.png"
-    cv2.imwrite(str(path), image)
-    log(f"{region_name} icin kirmizi cerceveli ekran goruntusu: {path}")
 
 def check_ralli_screen_timeout(config, uyari_state):
     """Ralli ekraninin ne zamandir surekli acik oldugunu, cagrilar arasi
@@ -1400,7 +1861,7 @@ def check_ralli_screen_timeout(config, uyari_state):
     akisindan bagimsiz olarak HER turda calisir; boylece ekran farkli bir
     sebeple (tikanma, saldiri/ESC'nin isini gormemesi) takilirsa bile
     5 saniye sonra zorla kapatilir."""
-    ralli_region = (595, 90, 1110 - 595, 165 - 90)
+    ralli_region = (602, 38, 818 - 602, 96 - 38)
     ralli_confidence = config.get("ralli_confidence", 0.7)
     ralli_scales = [0.9, 0.95, 1.0, 1.05]
     ralli_timeout = config.get("ralli_timeout_seconds", 5)
@@ -1408,7 +1869,7 @@ def check_ralli_screen_timeout(config, uyari_state):
     screenshot_ralli = pyautogui.screenshot(region=ralli_region)
     ralli_present = find_template_center(
         screenshot_ralli,
-        PNG_DIR / "ralli.png",
+        PNG_DIR / "ralli2.png",
         ralli_confidence,
         ralli_scales,
     ) is not None
@@ -1437,9 +1898,24 @@ def handle_uyari_scan(window, config, debug_capture=False, uyari_state=None):
     check_ralli_screen_timeout(config, uyari_state)
 
     uyari_coords = {"top_left": [1616, 578], "bottom_right": [1698, 649]}
-    arti_coords = {"top_left": [831, 272], "bottom_right": [899, 341]}
-    ocr_coords = {"top_left": [935, 300], "bottom_right": [1076, 360]}
-    ralli_coords = {"top_left": [595, 90], "bottom_right": [1110, 165]}
+    ralli_coords = {"top_left": [602, 38], "bottom_right": [818, 96]}
+
+    # Ralli ekraninda birden fazla hedef satiri gorunebiliyor (bkz. ekran
+    # goruntusu: "Kiyamet Eliti" + "Zombi Patronu" aynı ekranda). 1. satir
+    # kosullari (isim/seviye/arti) saglamazsa 2. satira geciyoruz; her
+    # satirin kendi olcumlenmis koordinatlari var (satir yukseklikleri
+    # birbirinden farkli oldugu icin sabit bir offset yerine gercek
+    # degerler kullaniliyor).
+    uyari_rows = config.get("uyari_rows", [
+        {
+            "ocr_coords": {"top_left": [935, 300], "bottom_right": [1101, 360]},
+            "arti_coords": {"top_left": [831, 272], "bottom_right": [899, 341]},
+        },
+        {
+            "ocr_coords": {"top_left": [929, 555], "bottom_right": [1101, 594]},
+            "arti_coords": {"top_left": [836, 514], "bottom_right": [892, 566]},
+        },
+    ])
 
     if debug_capture:
         capture_debug_screenshot(window, config, [("uyari_alani", uyari_coords)])
@@ -1478,7 +1954,7 @@ def handle_uyari_scan(window, config, debug_capture=False, uyari_state=None):
         if debug_capture:
             capture_debug_screenshot(window, config, [("ralli_alani", ralli_coords)])
 
-        ralli_region = (595, 90, 1110 - 595, 165 - 90)
+        ralli_region = (602, 38, 818 - 602, 96 - 38)
         ralli_confidence = config.get("ralli_confidence", 0.7)
         ralli_scales = [0.9, 0.95, 1.0, 1.05]
         ralli_found = False
@@ -1486,7 +1962,7 @@ def handle_uyari_scan(window, config, debug_capture=False, uyari_state=None):
             screenshot_ralli = pyautogui.screenshot(region=ralli_region)
             ralli_match = find_template_center(
                 screenshot_ralli,
-                PNG_DIR / "ralli.png",
+                PNG_DIR / "ralli2.png",
                 ralli_confidence,
                 ralli_scales,
             )
@@ -1502,61 +1978,72 @@ def handle_uyari_scan(window, config, debug_capture=False, uyari_state=None):
 
         log("[RALLI BULUNDU] Ekran acildi.")
 
-        # 4. OCR Taramasi ve Kosul Kontrolu
-        if debug_capture:
-            capture_debug_screenshot(window, config, [("ocr_metin_alani", ocr_coords)])
-
-        raw_ocr_text, level_text = get_text_from_region(ocr_coords, config.get("ocr", {}), debug_capture)
-        log(f"--- [OCR METNI OKUNDU]:\n{raw_ocr_text}\n-----------------------")
-        log(f"--- [OCR SEVIYE SATIRI OKUNDU]: '{level_text}'")
-
+        # 4. OCR + Arti kontrolunu satir satir dene; bir satir kosullari
+        # saglamazsa (isim/seviye tutmuyor veya arti.png bulunamiyor)
+        # sonraki satira gec.
         max_zombi_patronu_level = config.get("max_zombi_patronu_level", 56)
-        if not check_elite_level(raw_ocr_text, level_text, max_zombi_patronu_level):
-            pyautogui.press("esc")
-            log("[KOSUL SAGLANMADI] Hedef uygun degil, ESC basildi.")
-            return
-
-        # 5. Sart saglandiysa arti.png sablon eslesmesiyle ara
-        if debug_capture:
-            capture_debug_screenshot(window, config, [("arti_alani", arti_coords)])
-
-        arti_region = (831, 272, 899 - 831, 341 - 272)
         arti_confidence = config.get("arti_confidence", 0.7)
-        screenshot_arti = pyautogui.screenshot(region=arti_region)
+        target_found = False
 
-        # Farkli PC'lerdeki oyun render'i (font/GPU farki) arti.png'nin
-        # eslesme skorunu dusurebiliyor (bkz. ralli.png ile ayni sorun).
-        # Iki farkli PC'den alinmis sablonu sirayla deniyoruz; biri
-        # tutmazsa digeri genelde tutuyor.
-        arti_templates = config.get("arti_templates", ["arti.png", "arti_pc2.png"])
-        arti_match = None
-        for arti_template_name in arti_templates:
+        for row_index, row in enumerate(uyari_rows, start=1):
+            row_ocr_coords = row["ocr_coords"]
+            row_arti_coords = row["arti_coords"]
+
+            if debug_capture:
+                capture_debug_screenshot(
+                    window, config, [(f"ocr_metin_alani_satir{row_index}", row_ocr_coords)]
+                )
+
+            raw_ocr_text, level_text = get_text_from_region(
+                row_ocr_coords, config.get("ocr", {}), debug_capture, f"satir{row_index}"
+            )
+            log(f"--- [SATIR {row_index}] OCR METNI OKUNDU:\n{raw_ocr_text}\n-----------------------")
+            log(f"--- [SATIR {row_index}] OCR SEVIYE SATIRI OKUNDU: '{level_text}'")
+
+            if not check_elite_level(raw_ocr_text, level_text, max_zombi_patronu_level):
+                log(f"[SATIR {row_index}] Kosul saglanmadi, sonraki satira geciliyor.")
+                continue
+
+            if debug_capture:
+                capture_debug_screenshot(
+                    window, config, [(f"arti_alani_satir{row_index}", row_arti_coords)]
+                )
+
+            arti_region = get_region_tuple(row_arti_coords)
+            screenshot_arti = pyautogui.screenshot(region=arti_region)
+
             arti_match = find_template_center(
                 screenshot_arti,
-                PNG_DIR / arti_template_name,
+                PNG_DIR / "arti.png",
                 arti_confidence,
                 template_scales=[0.9, 0.95, 1.0, 1.05, 1.1],
-                debug_label=arti_template_name,
+                debug_label=f"arti.png (satir {row_index})",
             )
-            if arti_match:
-                break
 
-        if arti_match:
+            if not arti_match:
+                log(f"[SATIR {row_index}] Arti bulunamadi, sonraki satira geciliyor.")
+                continue
+
             center_x = arti_region[0] + arti_match[0]
             center_y = arti_region[1] + arti_match[1]
             pyautogui.click(center_x, center_y)
-            log(f"[ARTI BULUNDU] Merkeze tiklandi -> ({center_x}, {center_y})")
+            log(f"[SATIR {row_index}] ARTI BULUNDU] Merkeze tiklandi -> ({center_x}, {center_y})")
 
             arti_click_delay = config.get("arti_click_delay_seconds", 1.0)
             time.sleep(arti_click_delay)
             saldir_click()
-            log("⚔️ [SALDIRI] Saldiri tetiklendi.")
-            time.sleep(1.0)
-        else:
+            log(f"⚔️ [SATIR {row_index}] SALDIRI tetiklendi.")
+            time.sleep(0.5)
             pyautogui.press("esc")
-            log("[ARTI BULUNAMADI] Slot kapali veya dolu, ESC basildi.")
+            log(f"[SATIR {row_index}] Saldiridan 0.5sn sonra ESC basildi.")
+            target_found = True
+            break
 
-def check_elite_level(ocr_text, level_text="", max_level=55):
+        if not target_found:
+            pyautogui.press("esc")
+            log("[KOSUL SAGLANMADI] Hicbir satir uygun degil, ESC basildi.")
+
+def check_elite_level(ocr_text, level_text="", max_level=61):
     """
     Metin icinde Zombi Patronu ve seviyenin max_level altinda oldugunu kontrol eder.
     Gelen ornek: 'Sv.45\nZombi Patronu' (OCR bazen 'ZombilPatronu' olarak okuyor).
@@ -1568,10 +2055,19 @@ def check_elite_level(ocr_text, level_text="", max_level=55):
     clean_text = normalize_ocr_text(ocr_text)
     log(f"[DEBUG OCR TEMIZ METIN]: '{clean_text}'")
 
-    # 1. Zombi Patronu kontrolu (OCR kelimeleri birlestirip 'zombilpatronu'
-    # gibi de okuyabiliyor, o yuzden iki kelimeyi ayri ayri ariyoruz)
-    if "zombi" not in clean_text or "patronu" not in clean_text:
-        log(f"[OCR RED] 'zombi patronu' metinde yok: '{clean_text}'")
+    # 1. Zombi Patronu kontrolu: katı alt-dize eslesmesi ("zombi" VE "patronu"
+    # ayri ayri metinde olmali) tek harflik OCR hatalarinda bile (orn.
+    # "zombiRatrant", "zomiPatronu") tamamen basarisiz oluyordu - oysa bu
+    # okumalar gercekte hep "Zombi Patronu" idi, gercek DIGER hedef isimlerine
+    # (orn. "Kiyamet Eliti") olan benzerligi ise cok dusuk (~0.15-0.25) kaliyor.
+    # Bu yuzden katı substring yerine butun ada (bosluksuz) bulanik benzerlik
+    # kullaniyoruz; gercek yanlis okumalar hep >=0.75 benzerlik verirken,
+    # gercekten farkli bir hedef adi ~0.25'i gecmiyor - 0.65 esigi guvenli bir ara deger.
+    target_name = "zombipatronu"
+    compact_text = clean_text.replace(" ", "")
+    similarity = difflib.SequenceMatcher(None, compact_text, target_name).ratio()
+    if similarity < 0.65:
+        log(f"[OCR RED] 'zombi patronu' metinde yok (bsenzerlik={similarity:.2f}): '{clean_text}'")
         return False
 
     # 2. Seviye kontrolu: OCR iyilestirmesiyle (satir bazli kirpma + gurultu
@@ -1590,6 +2086,18 @@ def check_elite_level(ocr_text, level_text="", max_level=55):
             log("[OCR RED] Seviye rakami okunamadi, hedef reddedildi.")
             return False
         parsed_level = int(digit_runs[-1][-2:])
+
+    # OCR bu fontta bazen "0"i "9" gibi okuyor (sayac saat basamaginda da
+    # ayni hata gorulmustu); seviyenin son hanesi 9 ise gercekte 0 oldugunu
+    # varsayip duzeltiyoruz (orn. "69" -> 60, "59" -> 50).
+    if parsed_level % 10 == 9:
+        corrected_level = parsed_level - 9
+        log(
+            f"[OCR DUZELTME] Seviye {parsed_level} -> {corrected_level} "
+            "(son hane 9, muhtemelen 0 yanlis okunmus)."
+        )
+        parsed_level = corrected_level
+
     log(f"[DEBUG OCR SEVIYE] Okunan seviye: {parsed_level}")
 
     if parsed_level <= 0:
@@ -1683,6 +2191,59 @@ def crop_to_ink(image, margin=4):
     right = min(image.shape[1], cols.max() + 1 + margin)
     return image[top:bottom, left:right]
 
+def read_sayac_text(region, ocr_config=None, debug_capture=False):
+    """Kazi/uyari sayacini (orn. "00:00:39" veya artik zoom'lu goruntude
+    "51" gibi ciplak saniye rakami) OCR ile okur.
+
+    Bu bolge, sayacin kendi siyah rozetinin yaninda genis bir renkli/
+    desenli oyuncu/bina avatarini da iceriyor (zoom + genisletilmis
+    bolge sonrasi dogrulandi - ekran goruntusunde "02:43" gibi gayet
+    net bir rakam varken OCR tamamen bos donuyordu). Gri+Otsu esiklemesi
+    (ve daha once denenen doygunluk-temizleme+Otsu) bu genis renkli
+    alanin histogramindan etkilenip esigi yanlis noktaya kaydiriyor,
+    kucuk beyaz rakamlari kaybediyordu. Bunun yerine dogrudan HEDEF
+    RENK ozelligini (rakamlar parlak/beyaz VE dusuk doygunlukta,
+    avatar ise koyu/orta parlaklikta VE yuksek doygunlukta) maskeleyip
+    sadece bu pikselleri beyaz, geri kalan her seyi siyah yapiyoruz -
+    Otsu'nun global histogramina bagli olmadigi icin avatarin ne kadar
+    yer kapladigi onemli degil."""
+    ocr_config = ocr_config or {}
+    left, top = region["top_left"]
+    right, bottom = region["bottom_right"]
+    width = abs(right - left)
+    height = abs(bottom - top)
+
+    screenshot = pyautogui.screenshot(
+        region=(min(left, right), min(top, bottom), width, height)
+    )
+    image = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR)
+
+    if debug_capture:
+        SCREENSHOTS_DIR.mkdir(parents=True, exist_ok=True)
+        timestamp = datetime.now().strftime("%d%m%Y_%H%M%S")
+        raw_path = SCREENSHOTS_DIR / f"sayac_ham_{timestamp}.png"
+        cv2.imwrite(str(raw_path), image)
+        log(f"Sayac icin ham (islenmemis) renkli goruntu kaydedildi: {raw_path}")
+
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    value = hsv[:, :, 2].astype(np.int16)
+    saturation = hsv[:, :, 1].astype(np.int16)
+    text_mask = (value > 170) & (saturation < 70)
+    binary = np.where(text_mask, 255, 0).astype(np.uint8)
+
+    scale = ocr_config.get("sayac_scale", 6)
+    enlarged = cv2.resize(binary, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
+    processed = cv2.threshold(enlarged, 127, 255, cv2.THRESH_BINARY)[1]
+
+    try:
+        return pytesseract.image_to_string(
+            processed,
+            lang=ocr_config.get("language", "tur+eng"),
+            config="--psm 6 -c tessedit_char_whitelist=0123456789:",
+        ).strip()
+    except Exception:
+        return ""
+
 def read_level_text(processed_image, language="tur+eng"):
     """Get_text_from_region'in urettigi olceklenmis+esiklenmis goruntuden
     sadece "Sv.NN" satirini ayiklayip, rakam/karakter whitelist'i ile ayri
@@ -1724,7 +2285,7 @@ def read_name_text(processed_image, language="tur+eng"):
     except Exception:
         return ""
 
-def get_text_from_region(text_region, ocr_config, debug_capture=False):
+def get_text_from_region(text_region, ocr_config, debug_capture=False, debug_label=""):
     left, top = text_region["top_left"]
     right, bottom = text_region["bottom_right"]
     width = abs(right - left)
@@ -1754,8 +2315,12 @@ def get_text_from_region(text_region, ocr_config, debug_capture=False):
 
     if debug_capture:
         SCREENSHOTS_DIR.mkdir(parents=True, exist_ok=True)
-        timestamp = datetime.now().strftime("%d%m%Y_%H%M%S")
-        path = SCREENSHOTS_DIR / f"ocr_gri_taranan_{timestamp}.png"
+        # Mikrosaniye dahil ediliyor; ayni saniye icinde birden fazla satir
+        # (orn. satir1+satir2) taranirsa dosya adlari cakisip biri digerinin
+        # uzerine yazmasin diye.
+        timestamp = datetime.now().strftime("%d%m%Y_%H%M%S_%f")
+        suffix = f"_{debug_label}" if debug_label else ""
+        path = SCREENSHOTS_DIR / f"ocr_gri_taranan{suffix}_{timestamp}.png"
         cv2.imwrite(str(path), processed)
         log(f"OCR'a gonderilen gri/esiklenmis goruntu kaydedildi: {path}")
 
@@ -1830,7 +2395,7 @@ def run_bot(config):
 
     enforce_game_window_size(window, config)
     if game_started:
-        perform_startup_clicks(config)
+        perform_startup_clicks(config, window)
     else:
         log("Oyun zaten acikti; baslangic tiklamalari atlandi.")
 
@@ -1842,6 +2407,7 @@ def run_bot(config):
         keyboard_listener,
         text_scan_requested,
         ocr_debug_requested,
+        kazi_sayac_mode_enabled,
         debug_capture,
         escape_monitor_enabled,
         uyari_scan_enabled,
@@ -1853,69 +2419,92 @@ def run_bot(config):
     next_window_check_at = time.monotonic() + window_check_interval
     try:
         while running_state["running"] and keyboard_listener.is_alive():
-            if uyari_scan_enabled["enabled"]:
-                handle_uyari_scan(window, config, debug_capture["enabled"], uyari_state)
-                
+            try:
+                if uyari_scan_enabled["enabled"]:
+                    handle_uyari_scan(window, config, debug_capture["enabled"], uyari_state)
+
+                    if not running_state["running"]:
+                        break
+
+                if time.monotonic() >= next_window_check_at:
+                    next_window_check_at = time.monotonic() + window_check_interval
+                    if find_game_window(config) is None:
+                        log("Oyun penceresi bulunamadi; oyun yeniden baslatiliyor.")
+                        window = restart_game_after_disconnect(config)
+                        next_escape_at = time.monotonic()
+                        continue
+
+                monitor_action, next_escape_at = monitor_game_state(
+                    config,
+                    next_escape_at,
+                    allow_escape=(
+                        not monitor_state["paused"]
+                        and escape_monitor_enabled["enabled"]
+                    ),
+                    escape_state=escape_state,
+                )
                 if not running_state["running"]:
                     break
 
-            if time.monotonic() >= next_window_check_at:
-                next_window_check_at = time.monotonic() + window_check_interval
-                if find_game_window(config) is None:
-                    log("Oyun penceresi bulunamadi; oyun yeniden baslatiliyor.")
+                if monitor_action == "restart":
                     window = restart_game_after_disconnect(config)
                     next_escape_at = time.monotonic()
                     continue
 
-            monitor_action, next_escape_at = monitor_game_state(
-                config,
-                next_escape_at,
-                allow_escape=(
-                    not monitor_state["paused"]
-                    and escape_monitor_enabled["enabled"]
-                ),
-                escape_state=escape_state,
-            )
-            if not running_state["running"]:
-                break
+                if ocr_debug_requested["enabled"]:
+                    ocr_debug_requested["enabled"] = False
+                    # Sv.NN/Zombi Patronu OCR'inin gordugu gri/esiklenmis
+                    # goruntuyu, handle_uyari_scan disinda manuel test icin
+                    # kaydeder. Koordinatlar handle_uyari_scan'in uyari_rows
+                    # varsayilaniyla ayni (uzun suredir hardcoded literal
+                    # kullanma konvansiyonuna uygun); artik her iki satiri
+                    # da tarar.
+                    ocr_debug_rows = [
+                        {"top_left": [935, 300], "bottom_right": [1101, 360]},
+                        {"top_left": [929, 555], "bottom_right": [1101, 594]},
+                    ]
+                    for row_index, row_coords in enumerate(ocr_debug_rows, start=1):
+                        raw_ocr_text, level_text = get_text_from_region(
+                            row_coords, config.get("ocr", {}), True, f"U_satir{row_index}"
+                        )
+                        log(f"--- [U: SATIR {row_index}] OCR METNI OKUNDU:\n{raw_ocr_text}\n-----------------------")
+                        log(f"--- [U: SATIR {row_index}] OCR SEVIYE SATIRI OKUNDU: '{level_text}'")
 
-            if monitor_action == "restart":
+                    capture_debug_screenshot(
+                        window, config, [("paylas_arama", config["text_scan_region"])]
+                    )
+
+                if text_scan_requested["enabled"]:
+                    text_scan_requested["enabled"] = False
+                    if debug_capture["enabled"]:
+                        capture_debug_screenshot(window, config)
+                    perform_pre_ocr_click(config)
+                    scan_text_region(
+                        config["text_scan_region"],
+                        config.get("ocr", {}),
+                    )
+
+                click_matching_templates(
+                    window,
+                    config,
+                    debug_capture["enabled"],
+                    monitor_state,
+                    uyari_scan_enabled,
+                    escape_monitor_enabled,
+                    kazi_sayac_mode_enabled,
+                )
+            except pygetwindow.PyGetWindowException:
+                # Oyun penceresi (X'e basma, crash, gorev yoneticisinden
+                # sonlandirma vb. herhangi bir sekilde) kapandiginda pencere
+                # isleci gecersiz kalip her window.left/top/width/height
+                # erisiminde bu hatayi firlatiyordu ve botu tamamen
+                # cokertiyordu; periyodik pencere kontrolu (300sn) bu
+                # cokmeden ONCE calismiyordu. Simdi hatayi hemen yakalayip
+                # yeniden baslatma prosedurunu tetikliyoruz.
+                log("Oyun penceresi kapandi/gecersiz oldu; oyun yeniden baslatiliyor.")
                 window = restart_game_after_disconnect(config)
                 next_escape_at = time.monotonic()
                 continue
-
-            if ocr_debug_requested["enabled"]:
-                ocr_debug_requested["enabled"] = False
-                # Sv.NN/Zombi Patronu OCR'inin gordugu gri/esiklenmis
-                # goruntuyu, handle_uyari_scan disinda manuel test icin
-                # kaydeder. Koordinatlar handle_uyari_scan'in ocr_coords'u
-                # ile ayni (uzun suredir hardcoded literal kullanma
-                # konvansiyonuna uygun).
-                ocr_debug_coords = {"top_left": [935, 300], "bottom_right": [1076, 360]}
-                raw_ocr_text, level_text = get_text_from_region(
-                    ocr_debug_coords, config.get("ocr", {}), debug_capture=True
-                )
-                log(f"--- [U: OCR METNI OKUNDU]:\n{raw_ocr_text}\n-----------------------")
-                log(f"--- [U: OCR SEVIYE SATIRI OKUNDU]: '{level_text}'")
-
-            if text_scan_requested["enabled"]:
-                text_scan_requested["enabled"] = False
-                if debug_capture["enabled"]:
-                    capture_debug_screenshot(window, config)
-                perform_pre_ocr_click(config)
-                scan_text_region(
-                    config["text_scan_region"],
-                    config.get("ocr", {}),
-                )
-
-            click_matching_templates(
-                window,
-                config,
-                debug_capture["enabled"],
-                monitor_state,
-                uyari_scan_enabled,
-                escape_monitor_enabled,
-            )
 
             # Döngü aralığını daha duyarlı uyutma ile kontrol et
             sleep_duration = config["bot"]["scan_interval_seconds"]

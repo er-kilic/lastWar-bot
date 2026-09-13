@@ -23,7 +23,9 @@
       [791, 128],
       [1090, 235]
     ],
-    "press_escape_after_clicks": false
+    "press_escape_after_clicks": true,
+    "escape_delay_after_clicks_seconds": 1.0,
+    "post_escape_click_coordinate": [1651, 900]
   },
   "bot": {
     "enabled": false,
@@ -45,6 +47,9 @@
     },
     "escape_enabled": true,
     "escape_interval_seconds": 300,
+    "periodic_click_coordinate": [1651, 900],
+    "periodic_click_count": 2,
+    "periodic_click_between_seconds": 1.0,
     "popup_image_confidence": 0.7,
     "exit_template": "oyundanCikNew.png",
     "exit_template_scales": [0.8, 0.9, 1.0, 1.1],
@@ -57,6 +62,7 @@
     "tesseract_cmd": "C:/Program Files/Tesseract-OCR/tesseract.exe",
     "language": "tur+eng",
     "scale": 3,
+    "sayac_scale": 10,
     "page_segmentation_mode": 6,
     "target_match_threshold": 0.75
   },
@@ -73,6 +79,7 @@
   },
 "scan_cases": {
     "excavation": {
+      "enabled": true,
       "templates": ["kazi.png"],
       "image_confidence": 0.65,
       "template_scales": [0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0, 1.05],
@@ -90,12 +97,14 @@
       },
       "map_jump_wait_seconds": 2.0,
       "follow_up_action": "excavation_attack",
-      "follow_up_click_delay_seconds": 0.5,
+      "follow_up_click_delay_seconds": 1.0,
       "follow_up_coordinates": [
         [856, 592]
-      ]
+      ],
+      "pre_saldir_delay_seconds": 2.0
     },
     "clover": {
+      "enabled": true,
       "templates": ["yonca.png"],
       "image_confidence": 0.75,
       "template_scales": [0.9, 0.95, 1.0, 1.05, 1.1],
@@ -114,7 +123,7 @@
       }
     },
     "tren": {
-      "enabled": false,
+      "enabled": true,
       "templates": ["tren.png"],
       "scan_region": {
         "top_left": [19, 532],
@@ -122,14 +131,49 @@
       },
       "image_confidence": 0.75,
       "action": "tren_sequence",
-      "first_confirm_coordinate": [853, 790],
-      "confirm_coordinate": [1049, 316],
-      "final_click_coordinate": [974, 701],
-      "step1_wait_seconds": 2,
-      "step2_wait_seconds": 5,
-      "step3_wait_seconds": 2,
-      "step4_wait_seconds": 1,
-      "escape_delay_seconds": 0.5
+      "pre_confirm_delay_seconds": 0,
+      "confirm_clicks": [
+        {"coordinate": [1295, 155], "wait_after_seconds": 3},
+        {"coordinate": [1295, 155], "wait_after_seconds": 1},
+        {"coordinate": [1295, 155], "wait_after_seconds": 2},
+        {"coordinate": [854, 785], "wait_after_seconds": 1},
+        {"coordinate": [916, 592], "wait_after_seconds": 0.5},
+        {"coordinate": [916, 592], "wait_after_seconds": 0.5},
+        {"coordinate": [966, 702], "wait_after_seconds": 0.5}
+      ],
+      "escape_press_count": 3,
+      "escape_between_presses_seconds": 0.5
+    },
+    "hastane": {
+      "enabled": false,
+      "templates": ["hastane.png"],
+      "scan_region": {
+        "top_left": [75, 723],
+        "bottom_right": [145, 785]
+      },
+      "image_confidence": 0.6,
+      "template_scales": [0.9, 0.95, 1.0, 1.05, 1.1],
+      "exclude_templates_for": {
+        "hastane.png": ["hastaneFake.png", "yardimH.png", "asker.png"]
+      },
+      "action": "click_then_click_coordinate",
+      "follow_up_delay_seconds": 1.0,
+      "follow_up_click_coordinate": [962, 757]
+    },
+    "yardim_asker": {
+      "enabled": false,
+      "templates": ["yardimH.png", "asker.png"],
+      "scan_region": {
+        "top_left": [75, 723],
+        "bottom_right": [145, 785]
+      },
+      "image_confidence": 0.6,
+      "template_scales": [0.9, 0.95, 1.0, 1.05, 1.1],
+      "exclude_templates_for": {
+        "yardimH.png": ["hastane.png", "hastaneFake.png", "asker.png"],
+        "asker.png": ["hastane.png", "hastaneFake.png", "yardimH.png"]
+      },
+      "action": "click_only"
     }
   },
   "text_scan_region": {
@@ -141,13 +185,22 @@
   "rally_pause_seconds": 120,
   "escape_pause_seconds_kazi": 130,
   "escape_pause_seconds_yonca": 30,
+  "hastane_pause_seconds": 300,
   "arti_click_delay_seconds": 1.0,
   "max_zombi_patronu_level": 56,
   "ralli_confidence": 0.55,
   "arti_confidence": 0.55,
+  "kazi_sayac_coords": {"top_left": [811, 334], "bottom_right": [894, 378]},
+  "kazi_sayac_threshold_seconds": 30,
+  "kazi_sayac_confirmations_required": 5,
+  "kazi_sayac_click_duration_seconds": 40,
+  "kazi_sayac_zoom_ticks": 6,
+  "kazi_sayac_zoom_settle_seconds": 0.3,
+  "q_test_sayac_coords": {"top_left": [860, 266], "bottom_right": [948, 302]},
   "post_attack": {
-    "initial_wait_seconds": 60,
-    "duration_seconds": 240,
+    "initial_wait_seconds_night": 45,
+    "initial_wait_seconds_day": 30,
+    "duration_seconds": 150,
     "click_coordinate": [856, 460],
     "click_interval_seconds": 0.1,
     "template": "paylas.png"
