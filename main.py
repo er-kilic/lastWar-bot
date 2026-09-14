@@ -298,18 +298,8 @@ def monitor_game_state(config, next_escape_at, allow_escape=True, escape_state=N
         interval = monitor.get("escape_interval_seconds", 15)
         is_first_check = escape_state is not None and not escape_state.get("first_done")
         if not is_first_check:
-            coordinate = monitor.get("periodic_click_coordinate", [1651, 900])
-            click_count = monitor.get("periodic_click_count", 2)
-            click_between = monitor.get("periodic_click_between_seconds", 1.0)
-            for click_index in range(click_count):
-                pyautogui.click(coordinate[0], coordinate[1])
-                if click_index < click_count - 1:
-                    time.sleep(click_between)
-            log(
-                f"Oyun kontrolu icin ({coordinate[0]}, {coordinate[1]}) "
-                f"{click_count} kez {click_between}sn arayla tiklandi "
-                f"({interval} saniye aralikla)."
-            )
+            pyautogui.press("esc")
+            log(f"Oyun kontrolu icin ESC basildi ({interval} saniye aralikla).")
         else:
             escape_state["first_done"] = True
         next_escape_at = time.monotonic() + interval
@@ -846,85 +836,6 @@ def scroll_zoom(window, ticks):
         time.sleep(0.1)
 
 
-def run_sayac_zoom_ocr_test(window, config):
-    """Q kisayolu: kazi sayacinin zoom yapip OCR ile okunup saniyeye
-    cevrilmesi ve esige inince tiklama baslatilmasi kismini, gercek bir
-    kazi saldirisi tetiklemeden tek basina test etmek icin. wait_for_
-    sayac_then_burst_click ile ayni OCR/esik/dogrulama mantigini kullanir,
-    ama L modundan bagimsiz kendi test bolgesini (q_test_sayac_coords)
-    okur ve esige inince post_attack.click_coordinate yerine ekranin
-    ortasina tiklar. Klavye dinleyicisini bloke etmemek icin ayri bir
-    thread'de calistirilir."""
-    sayac_coords = config.get(
-        "q_test_sayac_coords", {"top_left": [860, 266], "bottom_right": [948, 302]}
-    )
-    poll_interval = config.get("kazi_sayac_poll_interval_seconds", 1.0)
-    max_poll_seconds = config.get("kazi_sayac_max_poll_seconds", 120)
-    threshold_seconds = 20
-    required_confirmations = 5
-
-    log(
-        f"Q -> sayac zoom/OCR testi basladi (esik: {threshold_seconds} sn, "
-        f"{required_confirmations} kez ust uste dogrulanacak, "
-        f"en fazla {max_poll_seconds} sn beklenecek)."
-    )
-
-    zoom_ticks = config.get("kazi_sayac_zoom_ticks", 6)
-    log(f"Q testi: harita {zoom_ticks} tik yakinlastiriliyor.")
-    scroll_zoom(window, zoom_ticks)
-    time.sleep(config.get("kazi_sayac_zoom_settle_seconds", 0.3))
-
-    poll_deadline = time.time() + max_poll_seconds
-    consecutive_low_readings = 0
-    reached_threshold = False
-    while time.time() < poll_deadline:
-        sayac_text = read_sayac_text(sayac_coords, config.get("ocr", {}), True)
-        total_seconds = parse_sayac_seconds(sayac_text)
-        if total_seconds is None:
-            log(f"Kazi sayaci okunamadi: '{sayac_text}'")
-        else:
-            log(f"Kazi sayaci okundu: '{sayac_text}' -> {total_seconds} sn")
-            if total_seconds <= threshold_seconds:
-                consecutive_low_readings += 1
-                log(
-                    f"Esik altinda dogrulama {consecutive_low_readings}/"
-                    f"{required_confirmations}."
-                )
-                if consecutive_low_readings >= required_confirmations:
-                    reached_threshold = True
-                    break
-            else:
-                if consecutive_low_readings:
-                    log("Esik ustunde okuma geldi; dogrulama sayaci sifirlandi.")
-                consecutive_low_readings = 0
-        time.sleep(poll_interval)
-
-    if not reached_threshold:
-        log(
-            f"Q testi: sayac {max_poll_seconds} sn icinde esige inmedi; "
-            "guvenlik icin tiklamaya baslaniyor."
-        )
-
-    center_x = window.left + window.width // 2
-    center_y = window.top + window.height // 2
-    duration = config.get("kazi_sayac_click_duration_seconds", 40)
-    click_interval = config.get("post_attack", {}).get("click_interval_seconds", 0.1)
-    log(
-        f"Q testi: ekran ortasina ({center_x}, {center_y}) {duration} "
-        "saniye boyunca tiklaniyor."
-    )
-    deadline = time.time() + duration
-    while time.time() < deadline:
-        pyautogui.click(center_x, center_y)
-        time.sleep(click_interval)
-    log("Q testi: tiklama tamamlandi.")
-
-    log(f"Q testi: harita {zoom_ticks} tik eski haline uzaklastiriliyor.")
-    scroll_zoom(window, -zoom_ticks)
-    time.sleep(config.get("kazi_sayac_zoom_settle_seconds", 0.3))
-    log("Q testi bitti.")
-
-
 def wait_for_sayac_then_burst_click(config, window, debug_capture=False):
     """L acikken kazi sonrasi bekleme: sayac_coords bolgesindeki geri
     sayimi OCR ile izler, deger esik (varsayilan 30) saniyeye ust uste
@@ -1064,15 +975,17 @@ def run_scan_case(
     escape_monitor_enabled=None,
     kazi_sayac_mode_enabled=None,
     debug_capture=False,
+    okey_scan_enabled=None,
 ):
     pause_escape_monitor_temporarily(escape_monitor_enabled, config, case_name)
     rally_was_paused = pause_rally_mode_temporarily(uyari_scan_enabled, config, case_name)
     pause_hastane_mode_temporarily(config, case_name)
+    pause_y_and_i_temporarily(config, case_name, okey_scan_enabled)
 
     # hastane/yardim_asker cok sik tetiklendigi ve calistigi dogrulandigi
     # icin bu ikisinin tespit/tiklama loglari kapatildi (application.log'u
     # kirletmesin diye); diger case'ler (kazi/yonca/tren) hala loglaniyor.
-    quiet = case_name in ("hastane", "yardim_asker")
+    quiet = case_name in ("hastane", "yardim_asker", "yardimh_scan")
 
     try:
         center_x, center_y = match
@@ -1261,6 +1174,45 @@ def pause_hastane_mode_temporarily(config, case_name):
     timer.start()
 
 
+def pause_y_and_i_temporarily(config, case_name, okey_scan_enabled):
+    """Kazi veya yonca bulundugunda, o an acik olan Y (yardimh_scan
+    surekli taramasi) ve I (okeyKirmizi periyodik islemi) modlarini
+    kazi/yonca isleminin surdugu tahmini sure kadar pasife alir, sure
+    dolunca otomatik tekrar aktif eder. Ikisi de kapaliysa hicbir sey
+    yapmaz. Y'nin enabled bayragi dogrudan config uzerinde (A modundaki
+    hastane/yardim_asker ile ayni mantik), I'nin bayragi ise ayri bir
+    toggle_state nesnesinde (okey_scan_enabled) tutuluyor."""
+    if case_name == "excavation":
+        duration = config.get("yardimh_scan_pause_seconds_kazi", 250)
+    elif case_name == "clover":
+        duration = config.get("yardimh_scan_pause_seconds_yonca", 30)
+    else:
+        return
+
+    yardimh_case = config.get("scan_cases", {}).get("yardimh_scan")
+    y_was_on = bool(yardimh_case and yardimh_case.get("enabled"))
+    i_was_on = bool(okey_scan_enabled and okey_scan_enabled.get("enabled"))
+    if not (y_was_on or i_was_on):
+        return
+
+    if y_was_on:
+        yardimh_case["enabled"] = False
+    if i_was_on:
+        okey_scan_enabled["enabled"] = False
+    log(f"Y/I modlari {duration} saniyeligine pasife alindi.")
+
+    def reactivate():
+        if y_was_on:
+            yardimh_case["enabled"] = True
+        if i_was_on:
+            okey_scan_enabled["enabled"] = True
+        log("Y/I modlari tekrar aktif edildi.")
+
+    timer = threading.Timer(duration, reactivate)
+    timer.daemon = True
+    timer.start()
+
+
 def pause_escape_monitor_temporarily(escape_monitor_enabled, config, case_name):
     if case_name == "excavation":
         duration = config.get("escape_pause_seconds_kazi", 130)
@@ -1268,14 +1220,14 @@ def pause_escape_monitor_temporarily(escape_monitor_enabled, config, case_name):
         duration = config.get("escape_pause_seconds_yonca", 30)
     else:
         return
-    pause_toggle_temporarily(escape_monitor_enabled, duration, "Periyodik tiklama dongusu (E)")
+    pause_toggle_temporarily(escape_monitor_enabled, duration, "ESC dongusu (E)")
 
 
 def perform_tren_sequence(case, escape_monitor_enabled):
     was_enabled = bool(escape_monitor_enabled and escape_monitor_enabled.get("enabled"))
     if escape_monitor_enabled is not None:
         escape_monitor_enabled["enabled"] = False
-        log("Tren bulundu; 300 saniyelik periyodik tiklama dongusu durduruldu.")
+        log("Tren bulundu; 180 saniyelik ESC dongusu durduruldu.")
 
     try:
         pre_confirm_delay = case.get("pre_confirm_delay_seconds", 0)
@@ -1297,7 +1249,7 @@ def perform_tren_sequence(case, escape_monitor_enabled):
     finally:
         if escape_monitor_enabled is not None:
             escape_monitor_enabled["enabled"] = was_enabled
-            log("300 saniyelik periyodik tiklama dongusu tekrar baslatildi.")
+            log("180 saniyelik ESC dongusu tekrar baslatildi.")
 
 
 def perform_excavation_attack(
@@ -1559,6 +1511,7 @@ def scan_cases(
     escape_monitor_enabled=None,
     kazi_sayac_mode_enabled=None,
     debug_capture=False,
+    okey_scan_enabled=None,
 ):
     default_region = get_scan_region(config)
     cases = config["scan_cases"]
@@ -1607,6 +1560,7 @@ def scan_cases(
                     escape_monitor_enabled,
                     kazi_sayac_mode_enabled,
                     debug_capture,
+                    okey_scan_enabled,
                 )
 
 def is_screenshot_blank(image, std_threshold=5.0):
@@ -1626,6 +1580,7 @@ def click_matching_templates(
     uyari_scan_enabled=None,
     escape_monitor_enabled=None,
     kazi_sayac_mode_enabled=None,
+    okey_scan_enabled=None,
 ):
     if monitor_state is None:
         monitor_state = {"paused": False}
@@ -1650,7 +1605,7 @@ def click_matching_templates(
         capture_debug_screenshot(window, config)
     scan_cases(
         window, config, monitor_state, uyari_scan_enabled, escape_monitor_enabled,
-        kazi_sayac_mode_enabled, debug_capture,
+        kazi_sayac_mode_enabled, debug_capture, okey_scan_enabled,
     )
 
     for activity_name, activity in config["activities"].items():
@@ -1689,22 +1644,15 @@ def log_shortcuts(config):
     )
     lines.append(
         f"  {config['controls']['escape_monitor_shortcut'].upper()} -> "
-        f"{escape_interval} saniyelik periyodik tiklama dongusunu ac/kapat"
+        f"{escape_interval} saniyelik ESC dongusunu ac/kapat"
     )
     lines.append("  R -> Uyari ve Arti taramasini ac/kapat")
     lines.append("  P -> Tren taramasini ac/kapat")
     lines.append("  A -> Hastane/Yardim/Asker taramasini ac/kapat (varsayilan kapali)")
-    lines.append(
-        "  Q -> Sayac zoom/OCR testini baslat (gercek kazi saldirisi olmadan; "
-        "esik 20sn, 5 dogrulama, sonra ekran ortasina tiklar)"
-    )
+    lines.append("  Y -> Yardimi modunu ac/kapat (varsayilan kapali; kazi/yonca bulununca gecici pasife alinir)")
+    lines.append("  I -> Ittifak teknoloji modunu ac/kapat (varsayilan kapali; acikken 8 saatte bir calisir, kazi/yonca bulununca gecici pasife alinir)")
     lines.append("  U -> Sv.NN/Zombi Patronu OCR gri alan taramasini kaydet (paylas.png arama bolgesinin de ekran goruntusunu alir)")
-    lines.append(
-        "  L -> Kazi sayac modunu ac/kapat (acikken kazi sonundaki 60sn "
-        "bekle+240sn tikla yerine, sayac 30sn altina ust uste 5 kez "
-        "dogrulandiginda 40sn boyunca saniyede 10 tiklama yapilir; "
-        "L kapaliyken kazi normal sureciyle calisir)"
-    )
+    lines.append("  L -> Kazi sayac modunu ac/kapat")
 
     for line in lines:
         log(line)
@@ -1763,6 +1711,7 @@ def create_input_listeners(window, config, running_state, monitor_state):
         "enabled": config.get("game_monitor", {}).get("escape_enabled", False)
     }
     uyari_scan_enabled = {"enabled": False}
+    okey_scan_enabled = {"enabled": False}
     escape_interval = config.get("game_monitor", {}).get("escape_interval_seconds", 15)
 
     def on_press(key):
@@ -1803,13 +1752,18 @@ def create_input_listeners(window, config, running_state, monitor_state):
             log(f"A -> Hastane/Yardim/Asker taramasi: {state}")
             return
 
-        if pressed_key == "q":
-            log("Q -> Sayac zoom/OCR testi baslatildi.")
-            threading.Thread(
-                target=run_sayac_zoom_ocr_test,
-                args=(window, config),
-                daemon=True,
-            ).start()
+        if pressed_key == "y":
+            yardimh_case = config.get("scan_cases", {}).get("yardimh_scan")
+            if yardimh_case is not None:
+                yardimh_case["enabled"] = not yardimh_case.get("enabled", False)
+                state = "acik" if yardimh_case["enabled"] else "kapali"
+                log(f"Y -> Yardimi modu: {state}")
+            return
+
+        if pressed_key == "i":
+            okey_scan_enabled["enabled"] = not okey_scan_enabled["enabled"]
+            state = "acik" if okey_scan_enabled["enabled"] else "kapali"
+            log(f"I -> Ittifak teknoloji modu: {state}")
             return
 
         if pressed_key == controls["coordinate_shortcut"].lower():
@@ -1830,12 +1784,7 @@ def create_input_listeners(window, config, running_state, monitor_state):
         if pressed_key == "l":
             kazi_sayac_mode_enabled["enabled"] = not kazi_sayac_mode_enabled["enabled"]
             state = "acik" if kazi_sayac_mode_enabled["enabled"] else "kapali"
-            log(
-                f"L -> Kazi sayac modu: {state} (acikken kazi normal surecinin "
-                "sonundaki 60sn bekle+240sn tikla yerine, sayac 30sn altina "
-                "ust uste 5 kez dogrulandiginda 40sn boyunca saniyede 10 "
-                "tiklama yapilir; L kapaliyken kazi normal sureciyle calisir)."
-            )
+            log(f"L -> Kazi sayac modu: {state}")
             return
 
         if pressed_key == controls["debug_screenshot_shortcut"].lower():
@@ -1848,7 +1797,7 @@ def create_input_listeners(window, config, running_state, monitor_state):
             escape_monitor_enabled["enabled"] = not escape_monitor_enabled["enabled"]
             state = "acik" if escape_monitor_enabled["enabled"] else "kapali"
             log(
-                f"{pressed_key.upper()} -> {escape_interval} saniyelik periyodik tiklama dongusu: {state}"
+                f"{pressed_key.upper()} -> {escape_interval} saniyelik ESC dongusu: {state}"
             )
             return
 
@@ -1877,6 +1826,7 @@ def create_input_listeners(window, config, running_state, monitor_state):
         debug_capture,
         escape_monitor_enabled,
         uyari_scan_enabled,
+        okey_scan_enabled,
     )
 
 
@@ -1914,6 +1864,50 @@ def check_ralli_screen_timeout(config, uyari_state):
             "uzun suredir acik; ESC basildi."
         )
         uyari_state["ralli_found_at"] = None
+
+
+def run_okey_kirmizi_scan(window, config):
+    """I acikken 8 saatte bir (okey_run_interval_seconds) otomatik
+    calisir. Once paneli acan iki tiklamayi yapar, sonra okeyKirmizi.png'yi
+    tarar; bulursa uzerine tiklar, kisa bir bekleme sonrasi bir noktayi
+    N saniye basili tutar (mouseDown/mouseUp), sonunda ESC basar."""
+    open_coord_1 = config.get("okey_open_coordinate_1", [1661, 692])
+    open_coord_2 = config.get("okey_open_coordinate_2", [1019, 652])
+    open_delay = config.get("okey_open_delay_seconds", 0.5)
+
+    pyautogui.click(open_coord_1[0], open_coord_1[1])
+    time.sleep(open_delay)
+    pyautogui.click(open_coord_2[0], open_coord_2[1])
+    time.sleep(config.get("okey_scan_delay_seconds", 0.5))
+
+    scan_region_cfg = config.get(
+        "okey_scan_region", {"top_left": [619, 182], "bottom_right": [1092, 815]}
+    )
+    region = get_region_tuple(scan_region_cfg)
+    confidence = config.get("okey_confidence", 0.75)
+    screenshot = pyautogui.screenshot(region=region)
+    match = find_template_center(screenshot, PNG_DIR / "okeyKirmizi.png", confidence)
+    if not match:
+        return
+
+    center_x = region[0] + match[0]
+    center_y = region[1] + match[1]
+    pyautogui.click(center_x, center_y)
+
+    time.sleep(config.get("okey_post_click_delay_seconds", 0.5))
+
+    hold_coordinate = config.get("okey_hold_coordinate", [969, 724])
+    hold_duration = config.get("okey_hold_duration_seconds", 10)
+    pyautogui.moveTo(hold_coordinate[0], hold_coordinate[1])
+    pyautogui.mouseDown()
+    time.sleep(hold_duration)
+    pyautogui.mouseUp()
+
+    escape_press_count = config.get("okey_escape_press_count", 3)
+    escape_between = config.get("okey_escape_between_presses_seconds", 0.5)
+    for _ in range(escape_press_count):
+        pyautogui.press("esc")
+        time.sleep(escape_between)
 
 
 def handle_uyari_scan(window, config, debug_capture=False, uyari_state=None):
@@ -2436,12 +2430,14 @@ def run_bot(config):
         debug_capture,
         escape_monitor_enabled,
         uyari_scan_enabled,
+        okey_scan_enabled,
     ) = create_input_listeners(window, config, running_state, monitor_state)
 
     log("Bot calisiyor. Durdurmak icin S basin.")
     next_escape_at = time.monotonic()
     window_check_interval = config["game"].get("window_check_interval_seconds", 300)
     next_window_check_at = time.monotonic() + window_check_interval
+    next_okey_run_at = time.monotonic()
     try:
         while running_state["running"] and keyboard_listener.is_alive():
             try:
@@ -2509,6 +2505,12 @@ def run_bot(config):
                         config.get("ocr", {}),
                     )
 
+                if okey_scan_enabled["enabled"] and time.monotonic() >= next_okey_run_at:
+                    next_okey_run_at = time.monotonic() + config.get(
+                        "okey_run_interval_seconds", 28800
+                    )
+                    run_okey_kirmizi_scan(window, config)
+
                 click_matching_templates(
                     window,
                     config,
@@ -2517,6 +2519,7 @@ def run_bot(config):
                     uyari_scan_enabled,
                     escape_monitor_enabled,
                     kazi_sayac_mode_enabled,
+                    okey_scan_enabled,
                 )
             except pygetwindow.PyGetWindowException:
                 # Oyun penceresi (X'e basma, crash, gorev yoneticisinden
