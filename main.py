@@ -739,16 +739,28 @@ def burst_click_until_paylas(config, coordinate, duration, click_interval):
     log(f"{duration} saniyelik hizli tiklama tamamlandi.")
 
 
-def get_kazi_initial_wait_seconds(config):
-    """Saat 23:00-08:00 arasi gece, 08:00-23:00 arasi gunduz sayilip
-    farkli bekleme sureleri kullanilir (gece daha uzun, 45sn; gunduz
-    daha kisa, 30sn - varsayilanlar)."""
-    post_attack = config["post_attack"]
+def is_kazi_night_hours():
+    """Saat 23:00-08:00 arasi gece, 08:00-23:00 arasi gunduz sayilir."""
     hour = datetime.now().hour
-    is_night = hour >= 23 or hour < 8
-    if is_night:
+    return hour >= 23 or hour < 8
+
+
+def get_kazi_initial_wait_seconds(config):
+    """Gece/gunduz icin farkli bekleme sureleri kullanilir (gece daha
+    uzun, 45sn; gunduz daha kisa, 30sn - varsayilanlar)."""
+    post_attack = config["post_attack"]
+    if is_kazi_night_hours():
         return post_attack.get("initial_wait_seconds_night", 45)
     return post_attack.get("initial_wait_seconds_day", 30)
+
+
+def get_kazi_click_duration_seconds(config):
+    """Gece/gunduz icin farkli hizli tiklama sureleri kullanilir (gece
+    daha uzun, 300sn; gunduz kisa, 150sn - varsayilanlar)."""
+    post_attack = config["post_attack"]
+    if is_kazi_night_hours():
+        return post_attack.get("duration_seconds_night", 300)
+    return post_attack.get("duration_seconds_day", post_attack.get("duration_seconds", 150))
 
 
 def wait_then_burst_click(config):
@@ -764,7 +776,7 @@ def wait_then_burst_click(config):
     log(f"Saldiri sonrasi {initial_wait} saniye sessizce bekleniyor.")
     time.sleep(initial_wait)
 
-    duration = post_attack.get("duration_seconds", 240)
+    duration = get_kazi_click_duration_seconds(config)
     click_interval = post_attack.get("click_interval_seconds", 0.1)
     coordinate = post_attack["click_coordinate"]
     burst_click_until_paylas(config, coordinate, duration, click_interval)
@@ -946,18 +958,24 @@ def wait_for_sayac_then_burst_click(config, window, debug_capture=False):
     scroll_zoom(window, zoom_ticks)
     time.sleep(config.get("kazi_sayac_zoom_settle_seconds", 0.3))
 
+    empty_readings_limit = config.get("kazi_sayac_empty_readings_limit", 10)
+
     poll_deadline = time.time() + max_poll_seconds
     consecutive_low_readings = 0
+    consecutive_empty_readings = 0
     reached_threshold = False
+    empty_limit_exceeded = False
     while time.time() < poll_deadline:
-        # L modunu test ederken T'ye bagli olmadan her okumada ham renkli
-        # goruntuyu kaydediyoruz; sorun cozulunce debug_capture parametresine
-        # geri baglanacak.
-        sayac_text = read_sayac_text(sayac_coords, config.get("ocr", {}), True)
+        sayac_text = read_sayac_text(sayac_coords, config.get("ocr", {}), debug_capture)
         total_seconds = parse_sayac_seconds(sayac_text)
         if total_seconds is None:
             log(f"Kazi sayaci okunamadi: '{sayac_text}'")
+            consecutive_empty_readings += 1
+            if consecutive_empty_readings >= empty_readings_limit:
+                empty_limit_exceeded = True
+                break
         else:
+            consecutive_empty_readings = 0
             log(f"Kazi sayaci okundu: '{sayac_text}' -> {total_seconds} sn")
             if total_seconds <= threshold_seconds:
                 consecutive_low_readings += 1
@@ -974,7 +992,12 @@ def wait_for_sayac_then_burst_click(config, window, debug_capture=False):
                 consecutive_low_readings = 0
         time.sleep(poll_interval)
 
-    if not reached_threshold:
+    if empty_limit_exceeded:
+        log(
+            f"Kazi sayaci ust uste {empty_readings_limit} kez bos okundu; "
+            "guvenlik icin uzun tiklamaya baslaniyor."
+        )
+    elif not reached_threshold:
         log(
             f"Kazi sayaci {max_poll_seconds} sn icinde esige inmedi; "
             "guvenlik icin tiklamaya baslaniyor."
@@ -984,7 +1007,10 @@ def wait_for_sayac_then_burst_click(config, window, debug_capture=False):
     scroll_zoom(window, -zoom_ticks)
     time.sleep(config.get("kazi_sayac_zoom_settle_seconds", 0.3))
 
-    duration = config.get("kazi_sayac_click_duration_seconds", 40)
+    if empty_limit_exceeded:
+        duration = config.get("kazi_sayac_empty_click_duration_seconds", 180)
+    else:
+        duration = config.get("kazi_sayac_click_duration_seconds", 40)
     click_interval = post_attack.get("click_interval_seconds", 0.1)
     coordinate = post_attack["click_coordinate"]
     return burst_click_until_paylas(config, coordinate, duration, click_interval)
@@ -1141,7 +1167,6 @@ def run_scan_case(
             screen_y = region[1] + center_y
             pyautogui.click(screen_x, screen_y)
             time.sleep(case.get("text_scan_delay_seconds", 1.0))
-            perform_pre_ocr_click(case)
             found = scan_text_region(
                 case["text_region"],
                 case.get("ocr", {}),
@@ -1908,7 +1933,7 @@ def handle_uyari_scan(window, config, debug_capture=False, uyari_state=None):
     # degerler kullaniliyor).
     uyari_rows = config.get("uyari_rows", [
         {
-            "ocr_coords": {"top_left": [935, 300], "bottom_right": [1101, 360]},
+            "ocr_coords": {"top_left": [935, 320], "bottom_right": [1101, 360]},
             "arti_coords": {"top_left": [831, 272], "bottom_right": [899, 341]},
         },
         {
@@ -2460,7 +2485,7 @@ def run_bot(config):
                     # kullanma konvansiyonuna uygun); artik her iki satiri
                     # da tarar.
                     ocr_debug_rows = [
-                        {"top_left": [935, 300], "bottom_right": [1101, 360]},
+                        {"top_left": [935, 320], "bottom_right": [1101, 360]},
                         {"top_left": [929, 555], "bottom_right": [1101, 594]},
                     ]
                     for row_index, row_coords in enumerate(ocr_debug_rows, start=1):

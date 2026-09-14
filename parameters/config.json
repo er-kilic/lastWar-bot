@@ -194,13 +194,17 @@
   "kazi_sayac_threshold_seconds": 30,
   "kazi_sayac_confirmations_required": 5,
   "kazi_sayac_click_duration_seconds": 40,
+  "kazi_sayac_empty_readings_limit": 10,
+  "kazi_sayac_empty_click_duration_seconds": 180,
   "kazi_sayac_zoom_ticks": 6,
   "kazi_sayac_zoom_settle_seconds": 0.3,
   "q_test_sayac_coords": {"top_left": [860, 266], "bottom_right": [948, 302]},
   "post_attack": {
-    "initial_wait_seconds_night": 45,
+    "initial_wait_seconds_night": 60,
     "initial_wait_seconds_day": 30,
     "duration_seconds": 150,
+    "duration_seconds_night": 180,
+    "duration_seconds_day": 150,
     "click_coordinate": [856, 460],
     "click_interval_seconds": 0.1,
     "template": "paylas.png"
