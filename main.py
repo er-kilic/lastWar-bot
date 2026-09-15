@@ -182,10 +182,20 @@ def get_target_window_size(config):
 def resize_and_position_game(window, config):
     width, height = get_target_window_size(config)
 
-    window.restore()
+    # bring_game_to_front'taki not gecerli: pygetwindow'un restore()/
+    # activate() metotlari islem basarili olsa bile Windows'un eski/
+    # alakasiz bir GetLastError degeri yuzunden sahte PyGetWindowException
+    # firlatabiliyor; bu yuzden ikisini de yutuyoruz.
+    try:
+        window.restore()
+    except Exception:
+        pass
     window.moveTo(0, 0)
     window.resizeTo(width, height)
-    window.activate()
+    try:
+        window.activate()
+    except Exception:
+        pass
     bring_game_to_front(window)
     log(f"Oyun penceresi {width}x{height} boyutuna sol uste tasindi.")
 
@@ -976,11 +986,12 @@ def run_scan_case(
     kazi_sayac_mode_enabled=None,
     debug_capture=False,
     okey_scan_enabled=None,
+    kacak_scan_enabled=None,
 ):
     pause_escape_monitor_temporarily(escape_monitor_enabled, config, case_name)
     rally_was_paused = pause_rally_mode_temporarily(uyari_scan_enabled, config, case_name)
     pause_hastane_mode_temporarily(config, case_name)
-    pause_y_and_i_temporarily(config, case_name, okey_scan_enabled)
+    pause_y_and_i_temporarily(config, case_name, okey_scan_enabled, kacak_scan_enabled)
 
     # hastane/yardim_asker cok sik tetiklendigi ve calistigi dogrulandigi
     # icin bu ikisinin tespit/tiklama loglari kapatildi (application.log'u
@@ -1174,14 +1185,14 @@ def pause_hastane_mode_temporarily(config, case_name):
     timer.start()
 
 
-def pause_y_and_i_temporarily(config, case_name, okey_scan_enabled):
-    """Kazi veya yonca bulundugunda, o an acik olan Y (yardimh_scan
-    surekli taramasi) ve I (okeyKirmizi periyodik islemi) modlarini
-    kazi/yonca isleminin surdugu tahmini sure kadar pasife alir, sure
-    dolunca otomatik tekrar aktif eder. Ikisi de kapaliysa hicbir sey
-    yapmaz. Y'nin enabled bayragi dogrudan config uzerinde (A modundaki
-    hastane/yardim_asker ile ayni mantik), I'nin bayragi ise ayri bir
-    toggle_state nesnesinde (okey_scan_enabled) tutuluyor."""
+def pause_y_and_i_temporarily(config, case_name, okey_scan_enabled, kacak_scan_enabled=None):
+    """Kazi/yonca 1. oncelikli: bulundugunda, o an acik olan Y (yardimh_scan
+    surekli taramasi), I (okeyKirmizi periyodik islemi) ve Z (Kacak
+    Isyancilar taramasi) modlarini kazi/yonca isleminin surdugu tahmini
+    sure kadar pasife alir, sure dolunca otomatik tekrar aktif eder.
+    Ucu de kapaliysa hicbir sey yapmaz. Y'nin enabled bayragi dogrudan
+    config uzerinde (A modundaki hastane/yardim_asker ile ayni mantik),
+    I ve Z'nin bayraklari ise ayri toggle_state nesnelerinde tutuluyor."""
     if case_name == "excavation":
         duration = config.get("yardimh_scan_pause_seconds_kazi", 250)
     elif case_name == "clover":
@@ -1192,21 +1203,26 @@ def pause_y_and_i_temporarily(config, case_name, okey_scan_enabled):
     yardimh_case = config.get("scan_cases", {}).get("yardimh_scan")
     y_was_on = bool(yardimh_case and yardimh_case.get("enabled"))
     i_was_on = bool(okey_scan_enabled and okey_scan_enabled.get("enabled"))
-    if not (y_was_on or i_was_on):
+    z_was_on = bool(kacak_scan_enabled and kacak_scan_enabled.get("enabled"))
+    if not (y_was_on or i_was_on or z_was_on):
         return
 
     if y_was_on:
         yardimh_case["enabled"] = False
     if i_was_on:
         okey_scan_enabled["enabled"] = False
-    log(f"Y/I modlari {duration} saniyeligine pasife alindi.")
+    if z_was_on:
+        kacak_scan_enabled["enabled"] = False
+    log(f"Y/I/Z modlari {duration} saniyeligine pasife alindi.")
 
     def reactivate():
         if y_was_on:
             yardimh_case["enabled"] = True
         if i_was_on:
             okey_scan_enabled["enabled"] = True
-        log("Y/I modlari tekrar aktif edildi.")
+        if z_was_on:
+            kacak_scan_enabled["enabled"] = True
+        log("Y/I/Z modlari tekrar aktif edildi.")
 
     timer = threading.Timer(duration, reactivate)
     timer.daemon = True
@@ -1512,6 +1528,7 @@ def scan_cases(
     kazi_sayac_mode_enabled=None,
     debug_capture=False,
     okey_scan_enabled=None,
+    kacak_scan_enabled=None,
 ):
     default_region = get_scan_region(config)
     cases = config["scan_cases"]
@@ -1561,6 +1578,7 @@ def scan_cases(
                     kazi_sayac_mode_enabled,
                     debug_capture,
                     okey_scan_enabled,
+                    kacak_scan_enabled,
                 )
 
 def is_screenshot_blank(image, std_threshold=5.0):
@@ -1581,6 +1599,7 @@ def click_matching_templates(
     escape_monitor_enabled=None,
     kazi_sayac_mode_enabled=None,
     okey_scan_enabled=None,
+    kacak_scan_enabled=None,
 ):
     if monitor_state is None:
         monitor_state = {"paused": False}
@@ -1605,7 +1624,7 @@ def click_matching_templates(
         capture_debug_screenshot(window, config)
     scan_cases(
         window, config, monitor_state, uyari_scan_enabled, escape_monitor_enabled,
-        kazi_sayac_mode_enabled, debug_capture, okey_scan_enabled,
+        kazi_sayac_mode_enabled, debug_capture, okey_scan_enabled, kacak_scan_enabled,
     )
 
     for activity_name, activity in config["activities"].items():
@@ -1647,10 +1666,11 @@ def log_shortcuts(config):
         f"{escape_interval} saniyelik ESC dongusunu ac/kapat"
     )
     lines.append("  R -> Uyari ve Arti taramasini ac/kapat")
+    lines.append("  Z -> Kacak Isyancilar taramasini ac/kapat (R gibi calisir ama sadece Kacak Isyancilar arar, seviyeye bakmaz; 15sn'de 1 calisir, gunde 25 bulununca otomatik kapanir - tekrar acilsa da sinira ulasildiysa hemen kapanir, kazi/yonca bulununca gecici pasife alinir)")
     lines.append("  P -> Tren taramasini ac/kapat")
     lines.append("  A -> Hastane/Yardim/Asker taramasini ac/kapat (varsayilan kapali)")
     lines.append("  Y -> Yardimi modunu ac/kapat (varsayilan kapali; kazi/yonca bulununca gecici pasife alinir)")
-    lines.append("  I -> Ittifak teknoloji modunu ac/kapat (varsayilan kapali; acikken 8 saatte bir calisir, kazi/yonca bulununca gecici pasife alinir)")
+    lines.append("  I -> Ittifak teknoloji modunu ac/kapat (varsayilan kapali; acikken 7.5 saatte bir calisir, kazi/yonca bulununca gecici pasife alinir)")
     lines.append("  U -> Sv.NN/Zombi Patronu OCR gri alan taramasini kaydet (paylas.png arama bolgesinin de ekran goruntusunu alir)")
     lines.append("  L -> Kazi sayac modunu ac/kapat")
 
@@ -1705,13 +1725,14 @@ def create_input_listeners(window, config, running_state, monitor_state):
     controls = config["controls"]
     text_scan_requested = {"enabled": False}
     ocr_debug_requested = {"enabled": False}
-    kazi_sayac_mode_enabled = {"enabled": False}
+    kazi_sayac_mode_enabled = {"enabled": True}
     debug_capture = {"enabled": False}
     escape_monitor_enabled = {
         "enabled": config.get("game_monitor", {}).get("escape_enabled", False)
     }
     uyari_scan_enabled = {"enabled": False}
     okey_scan_enabled = {"enabled": False}
+    kacak_scan_enabled = {"enabled": False}
     escape_interval = config.get("game_monitor", {}).get("escape_interval_seconds", 15)
 
     def on_press(key):
@@ -1764,6 +1785,12 @@ def create_input_listeners(window, config, running_state, monitor_state):
             okey_scan_enabled["enabled"] = not okey_scan_enabled["enabled"]
             state = "acik" if okey_scan_enabled["enabled"] else "kapali"
             log(f"I -> Ittifak teknoloji modu: {state}")
+            return
+
+        if pressed_key == "z":
+            kacak_scan_enabled["enabled"] = not kacak_scan_enabled["enabled"]
+            state = "acik" if kacak_scan_enabled["enabled"] else "kapali"
+            log(f"Z -> Kacak Isyancilar taramasi: {state}")
             return
 
         if pressed_key == controls["coordinate_shortcut"].lower():
@@ -1827,6 +1854,7 @@ def create_input_listeners(window, config, running_state, monitor_state):
         escape_monitor_enabled,
         uyari_scan_enabled,
         okey_scan_enabled,
+        kacak_scan_enabled,
     )
 
 
@@ -1867,7 +1895,7 @@ def check_ralli_screen_timeout(config, uyari_state):
 
 
 def run_okey_kirmizi_scan(window, config):
-    """I acikken 8 saatte bir (okey_run_interval_seconds) otomatik
+    """I acikken 7.5 saatte bir (okey_run_interval_seconds) otomatik
     calisir. Once paneli acan iki tiklamayi yapar, sonra okeyKirmizi.png'yi
     tarar; bulursa uzerine tiklar, kisa bir bekleme sonrasi bir noktayi
     N saniye basili tutar (mouseDown/mouseUp), sonunda ESC basar."""
@@ -1910,7 +1938,10 @@ def run_okey_kirmizi_scan(window, config):
         time.sleep(escape_between)
 
 
-def handle_uyari_scan(window, config, debug_capture=False, uyari_state=None):
+def handle_uyari_scan(
+    window, config, debug_capture=False, uyari_state=None,
+    target_name="zombipatronu", check_level=True,
+):
     if uyari_state is None:
         uyari_state = {}
 
@@ -1927,11 +1958,11 @@ def handle_uyari_scan(window, config, debug_capture=False, uyari_state=None):
     # degerler kullaniliyor).
     uyari_rows = config.get("uyari_rows", [
         {
-            "ocr_coords": {"top_left": [935, 320], "bottom_right": [1101, 360]},
+            "ocr_coords": {"top_left": [915, 320], "bottom_right": [1101, 375]},
             "arti_coords": {"top_left": [831, 272], "bottom_right": [899, 341]},
         },
         {
-            "ocr_coords": {"top_left": [929, 555], "bottom_right": [1101, 594]},
+            "ocr_coords": {"top_left": [929, 555], "bottom_right": [1101, 609]},
             "arti_coords": {"top_left": [836, 514], "bottom_right": [892, 566]},
         },
     ])
@@ -1993,7 +2024,7 @@ def handle_uyari_scan(window, config, debug_capture=False, uyari_state=None):
         if not ralli_found:
             pyautogui.press("esc")
             log("[RALLI BULUNAMADI] Ekran acilmadi, ESC basildi.")
-            return
+            return False
 
         log("[RALLI BULUNDU] Ekran acildi.")
 
@@ -2019,7 +2050,10 @@ def handle_uyari_scan(window, config, debug_capture=False, uyari_state=None):
             log(f"--- [SATIR {row_index}] OCR METNI OKUNDU:\n{raw_ocr_text}\n-----------------------")
             log(f"--- [SATIR {row_index}] OCR SEVIYE SATIRI OKUNDU: '{level_text}'")
 
-            if not check_elite_level(raw_ocr_text, level_text, max_zombi_patronu_level):
+            if not check_elite_level(
+                raw_ocr_text, level_text, max_zombi_patronu_level,
+                target_name=target_name, check_level=check_level,
+            ):
                 log(f"[SATIR {row_index}] Kosul saglanmadi, sonraki satira geciliyor.")
                 continue
 
@@ -2062,10 +2096,20 @@ def handle_uyari_scan(window, config, debug_capture=False, uyari_state=None):
             pyautogui.press("esc")
             log("[KOSUL SAGLANMADI] Hicbir satir uygun degil, ESC basildi.")
 
-def check_elite_level(ocr_text, level_text="", max_level=61):
+        return target_found
+
+    return False
+
+def check_elite_level(
+    ocr_text, level_text="", max_level=61, target_name="zombipatronu", check_level=True
+):
     """
-    Metin icinde Zombi Patronu ve seviyenin max_level altinda oldugunu kontrol eder.
-    Gelen ornek: 'Sv.45\nZombi Patronu' (OCR bazen 'ZombilPatronu' olarak okuyor).
+    Metin icinde target_name (varsayilan "zombipatronu") hedefinin gecip
+    gecmedigini, check_level acikken de seviyenin max_level altinda
+    oldugunu kontrol eder. Gelen ornek: 'Sv.45\nZombi Patronu' (OCR bazen
+    'ZombilPatronu' olarak okuyor). R tusu varsayilan degerlerle (Zombi
+    Patronu + seviye kontrolu), Z tusu target_name="kaçakisyancilar" ve
+    check_level=False ile cagirir.
     """
     if not ocr_text:
         log("[OCR RED] Metin bos okundu.")
@@ -2074,20 +2118,26 @@ def check_elite_level(ocr_text, level_text="", max_level=61):
     clean_text = normalize_ocr_text(ocr_text)
     log(f"[DEBUG OCR TEMIZ METIN]: '{clean_text}'")
 
-    # 1. Zombi Patronu kontrolu: katı alt-dize eslesmesi ("zombi" VE "patronu"
-    # ayri ayri metinde olmali) tek harflik OCR hatalarinda bile (orn.
-    # "zombiRatrant", "zomiPatronu") tamamen basarisiz oluyordu - oysa bu
-    # okumalar gercekte hep "Zombi Patronu" idi, gercek DIGER hedef isimlerine
-    # (orn. "Kiyamet Eliti") olan benzerligi ise cok dusuk (~0.15-0.25) kaliyor.
-    # Bu yuzden katı substring yerine butun ada (bosluksuz) bulanik benzerlik
-    # kullaniyoruz; gercek yanlis okumalar hep >=0.75 benzerlik verirken,
-    # gercekten farkli bir hedef adi ~0.25'i gecmiyor - 0.65 esigi guvenli bir ara deger.
-    target_name = "zombipatronu"
+    # 1. Hedef adi kontrolu: katı alt-dize eslesmesi tek harflik OCR
+    # hatalarinda bile (orn. "zombiRatrant", "zomiPatronu") tamamen
+    # basarisiz oluyordu - oysa bu okumalar gercekte hep gecerli bir hedefti;
+    # gercek DIGER (istenmeyen) hedef isimlerine (orn. "Kiyamet Eliti") olan
+    # benzerligi ise cok dusuk (~0.15-0.25) kaliyor. Bu yuzden katı substring
+    # yerine butun ada (bosluksuz) bulanik benzerlik kullaniyoruz; gercek
+    # yanlis okumalar hep >=0.65 benzerlik verirken, gercekten farkli bir
+    # hedef adi ~0.25'i gecmiyor.
     compact_text = clean_text.replace(" ", "")
     similarity = difflib.SequenceMatcher(None, compact_text, target_name).ratio()
     if similarity < 0.65:
-        log(f"[OCR RED] 'zombi patronu' metinde yok (bsenzerlik={similarity:.2f}): '{clean_text}'")
+        log(
+            f"[OCR RED] '{target_name}' metinde yok (benzerlik={similarity:.2f}): "
+            f"'{clean_text}'"
+        )
         return False
+
+    if not check_level:
+        log(f"[OCR ONAY] '{target_name}' bulundu, seviye kontrolu atlandi (check_level=False).")
+        return True
 
     # 2. Seviye kontrolu: OCR iyilestirmesiyle (satir bazli kirpma + gurultu
     # temizligi + rakam whitelist) seviye artik guvenilir okunabildigi icin
@@ -2127,7 +2177,7 @@ def check_elite_level(ocr_text, level_text="", max_level=61):
         log(f"[OCR RED] Seviye {parsed_level} >= {max_level}, hedef uygun degil.")
         return False
 
-    log(f"[OCR ONAY] 'zombi patronu' bulundu ve seviye {parsed_level} < {max_level}, hedef uygun.")
+    log(f"[OCR ONAY] '{target_name}' bulundu ve seviye {parsed_level} < {max_level}, hedef uygun.")
     return True
 
 def find_text_bands(otsu_image, high=35, low=15, gap_needed=4):
@@ -2284,12 +2334,16 @@ def read_level_text(processed_image, language="tur+eng"):
 
 def read_name_text(processed_image, language="tur+eng"):
     """Get_text_from_region'in urettigi olceklenmis+esiklenmis goruntudeki
-    "Zombi Patronu" isim satirini ayri bir OCR gecisiyle okur. Butun-blok
-    OCR'i (varsayilan psm 6, tum bolge) bu isim icin cok gurultulu sonuc
-    veriyordu ("are Ni i" gibi); satiri tek basina kirpip gurultuyu temiz-
-    leyip, harf whitelist'i uygulayip, olceklendirmeyi geriye (0.75x) cekmek
-    (asiri buyutulmus ic-bosluklu font, kucultulunce OCR icin daha normal
-    gorunuyor) 'ZombiPatronu' seklinde dogru sonuc verdi."""
+    hedef isim satirini ("Zombi Patronu" veya "Kaçak İsyancılar") ayri bir
+    OCR gecisiyle okur. Butun-blok OCR'i (varsayilan psm 6, tum bolge) bu
+    isim icin cok gurultulu sonuc veriyordu ("are Ni i" gibi); satiri tek
+    basina kirpip gurultuyu temizleyip, harf whitelist'i uygulayip,
+    olceklendirmeyi geriye (0.75x) cekmek (asiri buyutulmus ic-bosluklu
+    font, kucultulunce OCR icin daha normal gorunuyor) 'ZombiPatronu'
+    seklinde dogru sonuc verdi. Whitelist, ikinci gecerli hedef adi
+    "Kaçak İsyancılar" icin gereken harfleri de (K, Ç, İ/ı, S, Y, C, L)
+    icerecek sekilde genisletildi - aksi halde bu isim tamamen anlamsiz
+    ("Trirnaiir" gibi) okunuyordu."""
     line = extract_name_line(processed_image)
     despeckled = despeckle_relative(line, min_ratio=0.05)
     resized = cv2.resize(despeckled, None, fx=0.75, fy=0.75, interpolation=cv2.INTER_CUBIC)
@@ -2299,7 +2353,10 @@ def read_name_text(processed_image, language="tur+eng"):
         return pytesseract.image_to_string(
             padded,
             lang=language,
-            config="--psm 7 -c tessedit_char_whitelist=ZOMBIPATRONUzombipatronu",
+            config=(
+                "--psm 7 -c tessedit_char_whitelist="
+                "ZOMBIPATRONUKÇİSYCLzombipatronukçısycl"
+            ),
         ).strip()
     except Exception:
         return ""
@@ -2421,6 +2478,7 @@ def run_bot(config):
     running_state = {"running": True}
     monitor_state = {"paused": False}
     uyari_state = {"ralli_found_at": None}
+    kacak_uyari_state = {"ralli_found_at": None}
     escape_state = {"first_done": False}
     (
         keyboard_listener,
@@ -2431,6 +2489,7 @@ def run_bot(config):
         escape_monitor_enabled,
         uyari_scan_enabled,
         okey_scan_enabled,
+        kacak_scan_enabled,
     ) = create_input_listeners(window, config, running_state, monitor_state)
 
     log("Bot calisiyor. Durdurmak icin S basin.")
@@ -2438,11 +2497,53 @@ def run_bot(config):
     window_check_interval = config["game"].get("window_check_interval_seconds", 300)
     next_window_check_at = time.monotonic() + window_check_interval
     next_okey_run_at = time.monotonic()
+    next_kacak_run_at = time.monotonic()
+    kacak_daily_state = {"date": None, "count": 0}
     try:
         while running_state["running"] and keyboard_listener.is_alive():
             try:
                 if uyari_scan_enabled["enabled"]:
                     handle_uyari_scan(window, config, debug_capture["enabled"], uyari_state)
+
+                    if not running_state["running"]:
+                        break
+
+                if kacak_scan_enabled["enabled"]:
+                    today = datetime.now().date()
+                    if kacak_daily_state["date"] != today:
+                        kacak_daily_state["date"] = today
+                        kacak_daily_state["count"] = 0
+
+                    kacak_daily_limit = config.get("kacak_daily_limit", 25)
+                    if kacak_daily_state["count"] >= kacak_daily_limit:
+                        kacak_scan_enabled["enabled"] = False
+                        log(
+                            f"Z modu: bugunluk sinira ulasildi "
+                            f"({kacak_daily_state['count']}/{kacak_daily_limit}), "
+                            "parametre tekrar false yapildi."
+                        )
+                    elif time.monotonic() >= next_kacak_run_at:
+                        next_kacak_run_at = time.monotonic() + config.get(
+                            "kacak_run_interval_seconds", 15
+                        )
+                        kacak_found = handle_uyari_scan(
+                            window, config, debug_capture["enabled"], kacak_uyari_state,
+                            target_name="kaçakisyancilar", check_level=False,
+                        )
+
+                        if kacak_found:
+                            kacak_daily_state["count"] += 1
+                            log(
+                                f"Z modu: bugun {kacak_daily_state['count']}/"
+                                f"{kacak_daily_limit} Kacak Isyancilar bulundu."
+                            )
+                            if kacak_daily_state["count"] >= kacak_daily_limit:
+                                kacak_scan_enabled["enabled"] = False
+                                log(
+                                    f"Z modu: bugunluk sinira ulasildi "
+                                    f"({kacak_daily_state['count']}/{kacak_daily_limit}), "
+                                    "parametre tekrar false yapildi."
+                                )
 
                     if not running_state["running"]:
                         break
@@ -2507,7 +2608,7 @@ def run_bot(config):
 
                 if okey_scan_enabled["enabled"] and time.monotonic() >= next_okey_run_at:
                     next_okey_run_at = time.monotonic() + config.get(
-                        "okey_run_interval_seconds", 28800
+                        "okey_run_interval_seconds", 27000
                     )
                     run_okey_kirmizi_scan(window, config)
 
@@ -2520,6 +2621,7 @@ def run_bot(config):
                     escape_monitor_enabled,
                     kazi_sayac_mode_enabled,
                     okey_scan_enabled,
+                    kacak_scan_enabled,
                 )
             except pygetwindow.PyGetWindowException:
                 # Oyun penceresi (X'e basma, crash, gorev yoneticisinden
