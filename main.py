@@ -689,7 +689,7 @@ def capture_debug_screenshot(window, config, custom_regions=None):
             cv2.LINE_AA,
         )
 
-        timestamp = datetime.now().strftime("%d%m%Y_%H%M%S")
+        timestamp = datetime.now().strftime("%d.%m_%H.%M")
         path = SCREENSHOTS_DIR / f"{region_name}_{timestamp}.png"
         cv2.imwrite(str(path), image)
         log(f"{region_name} icin kirmizi cerceveli ekran goruntusu: {path}")
@@ -1866,7 +1866,7 @@ def check_ralli_screen_timeout(config, uyari_state):
     5 saniye sonra zorla kapatilir."""
     ralli_region = (602, 38, 818 - 602, 96 - 38)
     ralli_confidence = config.get("ralli_confidence", 0.7)
-    ralli_scales = [0.9, 0.95, 1.0, 1.05]
+    ralli_scales = [0.8, 0.85, 0.9, 0.95, 1.0, 1.05]
     ralli_timeout = config.get("ralli_timeout_seconds", 5)
 
     screenshot_ralli = pyautogui.screenshot(region=ralli_region)
@@ -2012,9 +2012,11 @@ def handle_uyari_scan(
 
         ralli_region = (602, 38, 818 - 602, 96 - 38)
         ralli_confidence = config.get("ralli_confidence", 0.7)
-        ralli_scales = [0.9, 0.95, 1.0, 1.05]
+        ralli_scales = [0.8, 0.85, 0.9, 0.95, 1.0, 1.05]
+        ralli_open_retry_count = config.get("ralli_open_retry_count", 12)
+        ralli_open_retry_delay = config.get("ralli_open_retry_delay_seconds", 0.5)
         ralli_found = False
-        for _ in range(6):
+        for _ in range(ralli_open_retry_count):
             screenshot_ralli = pyautogui.screenshot(region=ralli_region)
             ralli_match = find_template_center(
                 screenshot_ralli,
@@ -2025,7 +2027,7 @@ def handle_uyari_scan(
             if ralli_match:
                 ralli_found = True
                 break
-            time.sleep(0.5)
+            time.sleep(ralli_open_retry_delay)
 
         if not ralli_found:
             pyautogui.press("esc")
@@ -2075,7 +2077,7 @@ def handle_uyari_scan(
                 screenshot_arti,
                 PNG_DIR / "arti.png",
                 arti_confidence,
-                template_scales=[0.9, 0.95, 1.0, 1.05, 1.1],
+                template_scales=[0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1],
                 debug_label=f"arti.png (satir {row_index})",
             )
 
@@ -2295,7 +2297,7 @@ def read_sayac_text(region, ocr_config=None, debug_capture=False):
 
     if debug_capture:
         SCREENSHOTS_DIR.mkdir(parents=True, exist_ok=True)
-        timestamp = datetime.now().strftime("%d%m%Y_%H%M%S")
+        timestamp = datetime.now().strftime("%d.%m_%H.%M")
         raw_path = SCREENSHOTS_DIR / f"sayac_ham_{timestamp}.png"
         cv2.imwrite(str(raw_path), image)
         log(f"Sayac icin ham (islenmemis) renkli goruntu kaydedildi: {raw_path}")
@@ -2397,10 +2399,10 @@ def get_text_from_region(text_region, ocr_config, debug_capture=False, debug_lab
 
     if debug_capture:
         SCREENSHOTS_DIR.mkdir(parents=True, exist_ok=True)
-        # Mikrosaniye dahil ediliyor; ayni saniye icinde birden fazla satir
-        # (orn. satir1+satir2) taranirsa dosya adlari cakisip biri digerinin
-        # uzerine yazmasin diye.
-        timestamp = datetime.now().strftime("%d%m%Y_%H%M%S_%f")
+        # Ayni dakika icinde birden fazla satir (orn. satir1+satir2) taranirsa
+        # debug_label (satir1/satir2) dosya adlarini zaten birbirinden ayirt
+        # ediyor, cakisma olmuyor.
+        timestamp = datetime.now().strftime("%d.%m_%H.%M")
         suffix = f"_{debug_label}" if debug_label else ""
         path = SCREENSHOTS_DIR / f"ocr_gri_taranan{suffix}_{timestamp}.png"
         cv2.imwrite(str(path), processed)
