@@ -1938,6 +1938,21 @@ def run_okey_kirmizi_scan(window, config):
         time.sleep(escape_between)
 
 
+# U tuşu (manuel OCR debug) da bu satirlari tarar; iki yer birbirinden
+# kopup (bkz. gecmiste yasanan) taralı alan degisikliklerinin U ile test
+# edilirken hic yansimamasi sorununa yol acmasin diye tek kaynaktan okunuyor.
+DEFAULT_UYARI_ROWS = [
+    {
+        "ocr_coords": {"top_left": [930, 315], "bottom_right": [1088, 363]},
+        "arti_coords": {"top_left": [831, 272], "bottom_right": [899, 341]},
+    },
+    {
+        "ocr_coords": {"top_left": [929, 542], "bottom_right": [1086, 605]},
+        "arti_coords": {"top_left": [836, 514], "bottom_right": [892, 566]},
+    },
+]
+
+
 def handle_uyari_scan(
     window, config, debug_capture=False, uyari_state=None,
     target_name="zombipatronu", check_level=True,
@@ -1956,16 +1971,7 @@ def handle_uyari_scan(
     # satirin kendi olcumlenmis koordinatlari var (satir yukseklikleri
     # birbirinden farkli oldugu icin sabit bir offset yerine gercek
     # degerler kullaniliyor).
-    uyari_rows = config.get("uyari_rows", [
-        {
-            "ocr_coords": {"top_left": [915, 320], "bottom_right": [1101, 375]},
-            "arti_coords": {"top_left": [831, 272], "bottom_right": [899, 341]},
-        },
-        {
-            "ocr_coords": {"top_left": [929, 555], "bottom_right": [1101, 609]},
-            "arti_coords": {"top_left": [836, 514], "bottom_right": [892, 566]},
-        },
-    ])
+    uyari_rows = config.get("uyari_rows", DEFAULT_UYARI_ROWS)
 
     if debug_capture:
         capture_debug_screenshot(window, config, [("uyari_alani", uyari_coords)])
@@ -2577,13 +2583,13 @@ def run_bot(config):
                     ocr_debug_requested["enabled"] = False
                     # Sv.NN/Zombi Patronu OCR'inin gordugu gri/esiklenmis
                     # goruntuyu, handle_uyari_scan disinda manuel test icin
-                    # kaydeder. Koordinatlar handle_uyari_scan'in uyari_rows
-                    # varsayilaniyla ayni (uzun suredir hardcoded literal
-                    # kullanma konvansiyonuna uygun); artik her iki satiri
-                    # da tarar.
+                    # kaydeder. DEFAULT_UYARI_ROWS'tan okunuyor ki taralı
+                    # alan degisiklikleri iki yerde ayri ayri guncellenmek
+                    # zorunda kalinmasin (bu drift daha once U ile test
+                    # ederken degisikliklerin hic yansimamasina sebep oldu).
                     ocr_debug_rows = [
-                        {"top_left": [935, 320], "bottom_right": [1101, 360]},
-                        {"top_left": [929, 555], "bottom_right": [1101, 594]},
+                        row["ocr_coords"]
+                        for row in config.get("uyari_rows", DEFAULT_UYARI_ROWS)
                     ]
                     for row_index, row_coords in enumerate(ocr_debug_rows, start=1):
                         raw_ocr_text, level_text = get_text_from_region(
